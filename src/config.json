@@ -266,14 +266,6 @@
       "wiki": "https://minecraft.wiki/w/Custom_biome"
     },
     {
-      "id": "worldgen/configured_carver",
-      "url": "worldgen/carver",
-      "tags": ["worldgen"],
-      "schema": "configured_carver",
-      "minVersion": "1.16",
-      "wiki": "https://minecraft.wiki/w/Custom_carver"
-    },
-    {
       "id": "worldgen/configured_feature",
       "url": "worldgen/feature",
       "tags": ["worldgen"],

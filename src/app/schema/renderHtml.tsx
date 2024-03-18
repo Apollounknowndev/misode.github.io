@@ -21,7 +21,7 @@ const hiddenFields = ['number_provider.type', 'score_provider.type', 'nbt_provid
 const flattenedFields = ['feature.config', 'decorator.config', 'int_provider.value', 'float_provider.value', 'block_state_provider.simple_state_provider.state', 'block_state_provider.rotated_block_provider.state', 'block_state_provider.weighted_state_provider.entries.entry.data', 'rule_test.block_state', 'structure_feature.config', 'surface_builder.config', 'template_pool.elements.entry.element', 'decorator.block_survives_filter.state', 'material_rule.block.result_state']
 const inlineFields = ['loot_entry.type', 'function.function', 'condition.condition', 'criterion.trigger', 'dimension.generator.type', 'dimension.generator.biome_source.type', 'feature.type', 'decorator.type', 'block_state_provider.type', 'feature.tree.minimum_size.type', 'trunk_placer.type', 'foliage_placer.type', 'tree_decorator.type', 'block_placer.type', 'rule_test.predicate_type', 'processor.processor_type', 'template_element.element_type', 'nbt_operation.op', 'number_provider.value', 'score_provider.name', 'score_provider.target', 'nbt_provider.source', 'nbt_provider.target', 'generator_biome.biome', 'block_predicate.type', 'material_rule.type', 'material_condition.type', 'density_function.type', 'root_placer.type', 'entity.type_specific.type', 'glyph_provider.type', 'sprite_source.type', 'rule_block_entity_modifier.type', 'immersive_weathering.area_condition.type', 'immersive_weathering.block_growth.growth_for_face.entry.direction', 'immersive_weathering.position_test.predicate_type', 'pool_alias_binding.type', 'item_stack.id', 'data_component.banner_patterns.entry.pattern', 'data_component.container.entry.slot', 'map_decoration.type', 'suspicious_stew_effect_instance.id']
 const nbtFields = ['function.set_nbt.tag', 'advancement.display.icon.nbt', 'text_component_object.nbt', 'entity.nbt', 'block.nbt', 'item.nbt']
-const fixedLists = ['generator_biome.parameters.temperature', 'generator_biome.parameters.humidity', 'generator_biome.parameters.continentalness', 'generator_biome.parameters.erosion', 'generator_biome.parameters.depth', 'generator_biome.parameters.weirdness', 'feature.end_spike.crystal_beam_target', 'feature.end_gateway.exit', 'decorator.block_filter.offset', 'block_predicate.has_sturdy_face.offset', 'block_predicate.inside_world_bounds.offset', 'block_predicate.matching_block_tag.offset', 'block_predicate.matching_blocks.offset', 'block_predicate.matching_fluids.offset', 'block_predicate.would_survive.offset', 'model_element.from', 'model_element.to', 'model_element.rotation.origin', 'model_element.faces.uv', 'item_transform.rotation', 'item_transform.translation', 'item_transform.scale', 'generator_structure.random_spread.locate_offset', 'pack_overlay.formats', 'data_component.profile.id']
+const fixedLists = ['generator_biome.parameters.temperature', 'generator_biome.parameters.humidity', 'generator_biome.parameters.continentalness', 'generator_biome.parameters.erosion', 'generator_biome.parameters.depth', 'generator_biome.parameters.weirdness', 'feature.end_spike.crystal_beam_target', 'feature.end_gateway.exit', 'decorator.block_filter.offset', 'block_predicate.has_sturdy_face.offset', 'block_predicate.inside_world_bounds.offset', 'block_predicate.matching_block_tag.offset', 'block_predicate.matching_blocks.offset', 'block_predicate.matching_fluids.offset', 'block_predicate.would_survive.offset', 'model_element.from', 'model_element.to', 'model_element.rotation.origin', 'model_element.faces.uv', 'item_transform.rotation', 'item_transform.translation', 'item_transform.scale', 'generator_structure.random_spread.locate_offset', 'pack_overlay.formats', 'data_component.profile.id', 'data_component.lodestone_tracker.tracker.pos']
 const collapsedFields = ['noise_settings.surface_rule', 'noise_settings.noise.terrain_shaper']
 const collapsableFields = ['density_function.argument', 'density_function.argument1', 'density_function.argument2', 'density_function.input', 'density_function.when_in_range', 'density_function.when_out_of_range']
 const itemPreviewFields = ['loot_pool.entries.entry', 'loot_entry.alternatives.children.entry', 'loot_entry.group.children.entry', 'loot_entry.sequence.children.entry', 'function.set_contents.entries.entry']
@@ -208,6 +208,7 @@ const renderHtml: RenderHook = {
 			if (path.model.get(path.push(key)) === undefined) {
 				path.model.set(path.push(key), DataModel.wrapLists(children.default()))
 			}
+			keyPath.set('')
 		}
 		const blockState = config.validation?.validator === 'block_state_map' ? states?.[relativePath(path, config.validation.params.id).get()] : null
 		const keysSchema = blockState?.properties
@@ -277,11 +278,12 @@ const renderHtml: RenderHook = {
 
 		let prefix: JSX.Element | null = null
 		let suffix: JSX.Element | null = null
+		let body: JSX.Element | null = null
 		if (node.optional()) {
 			if (value === undefined) {
 				const onExpand = () => path.set(DataModel.wrapLists(node.default()))
 				suffix = <button class="node-collapse closed tooltipped tip-se" aria-label={localize(lang, 'expand')} onClick={onExpand}>{Octicon.plus_circle}</button>
-			} else {
+			} else if (typeof value === 'object' && value !== null){
 				const onCollapse = () => path.set(undefined)
 				suffix = <button class="node-collapse open tooltipped tip-se" aria-label={localize(lang, 'remove')} onClick={onCollapse}>{Octicon.trashcan}</button>
 			}
@@ -297,12 +299,11 @@ const renderHtml: RenderHook = {
 				return [prefix, suffix, null]
 			}
 		}
-
-		const newCtx = (typeof value === 'object' && value !== null && node.default()?.pools)
-			? { ...ctx, loot: value?.type } : ctx
-		const body = <>
-			{(typeof value === 'object' && value !== null && !(node.optional() && value === undefined)) &&
-				Object.entries(getActiveFields(path))
+		if (!(node.optional() && value === undefined)) {
+			if (typeof value === 'object' && value !== null) {
+				const newCtx = (typeof value === 'object' && value !== null && node.default()?.pools)
+					? { ...ctx, loot: value?.type } : ctx
+				body = <>{Object.entries(getActiveFields(path))
 					.filter(([_, child]) => child.enabled(path))
 					.map(([key, child]) => {
 						const cPath = getChildModelPath(path, key)
@@ -317,9 +318,12 @@ const renderHtml: RenderHook = {
 							return isFlattened ? cBody : null
 						}
 						return <MemoedTreeNode key={key} schema={child} path={cPath} value={value[key]} {...{lang, version, states, ctx: newCtx}} />
-					})
+					})}</>
+			} else {
+				const onReset = () => path.set(DataModel.wrapLists(node.default()))
+				suffix = <>{suffix}<button class="add tooltipped tip-se" aria-label={localize(lang, 'reset')} onClick={onReset}>{Octicon.history}</button></>
 			}
-		</>
+		}
 		return [prefix, suffix, body]
 	},
 

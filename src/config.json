@@ -199,12 +199,6 @@
       "wiki": "https://minecraft.wiki/w/Raw_JSON_text_format#Java_Edition"
     },
     {
-      "id": "banner_pattern",
-      "url": "banner-pattern",
-      "schema": "banner_pattern",
-      "minVersion": "1.20.5"
-    },
-    {
       "id": "damage_type",
       "url": "damage-type",
       "schema": "damage_type",
@@ -215,7 +209,8 @@
       "id": "chat_type",
       "url": "chat-type",
       "schema": "chat_type",
-      "minVersion": "1.19"
+      "minVersion": "1.19",
+      "wiki": "https://minecraft.wiki/w/Chat_type"
     },
     {
       "id": "trim_material",
@@ -228,6 +223,12 @@
       "url": "trim-pattern",
       "schema": "trim_pattern",
       "minVersion": "1.19.4"
+    },
+    {
+      "id": "banner_pattern",
+      "url": "banner-pattern",
+      "schema": "banner_pattern",
+      "minVersion": "1.20.5"
     },
     {
       "id": "wolf_variant",
@@ -264,6 +265,14 @@
       "schema": "biome",
       "minVersion": "1.16",
       "wiki": "https://minecraft.wiki/w/Custom_biome"
+    },
+    {
+      "id": "worldgen/configured_carver",
+      "url": "worldgen/carver",
+      "tags": ["worldgen"],
+      "schema": "configured_carver",
+      "minVersion": "1.16",
+      "wiki": "https://minecraft.wiki/w/Custom_carver"
     },
     {
       "id": "worldgen/configured_feature",
@@ -513,7 +522,7 @@
     },
     {
       "id": "tag/point_of_interest_type",
-      "url": "tags/painting-variant",
+      "url": "tags/point-of-interest-type",
       "tags": ["tags"],
       "path": "tags/point_of_interest_type",
       "schema": "point_of_interest_type_tag",

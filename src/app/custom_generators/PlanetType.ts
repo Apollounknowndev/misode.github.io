@@ -42,6 +42,7 @@ export function initPlanetTypes(schemas: SchemaRegistry, collections: Collection
 	})
 
 	schemas.register(`${ID}:planet_type`, ObjectNode({
+		generator: StringNode({ validator: 'resource', params: { pool: '$worldgen/noise_settings' } }),
 		biomes: ListNode(ObjectNode({
 			biome: StringNode({ validator: 'resource', params: { pool: '$worldgen/biome' } }),
 			weight: ObjectNode({

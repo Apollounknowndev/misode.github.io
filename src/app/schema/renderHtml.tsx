@@ -1,21 +1,21 @@
 import type { BooleanHookParams, EnumOption, Hook, INode, NodeChildren, NumberHookParams, StringHookParams, ValidationOption } from '@mcschema/core'
-import { DataModel, ListNode, MapNode, ModelPath, ObjectNode, Path, relativePath, StringNode } from '@mcschema/core'
+import { DataModel, ListNode, MapNode, ModelPath, ObjectNode, Path, StringNode, relativePath } from '@mcschema/core'
 import { Identifier, ItemStack } from 'deepslate/core'
 import type { ComponentChildren, JSX } from 'preact'
 import { memo } from 'preact/compat'
 import { useState } from 'preact/hooks'
-import { Btn, Octicon } from '../components/index.js'
-import { ItemDisplay } from '../components/ItemDisplay.jsx'
-import { VanillaColors } from '../components/previews/BiomeSourcePreview.jsx'
 import config from '../Config.js'
+import { deepClone, deepEqual, generateColor, generateUUID, hexId, hexToRgb, isObject, newSeed, rgbToHex, stringToColor } from '../Utils.js'
+import { ItemDisplay } from '../components/ItemDisplay.jsx'
+import { Btn, Octicon } from '../components/index.js'
+import { VanillaColors } from '../components/previews/BiomeSourcePreview.jsx'
 import { localize, useLocale, useStore } from '../contexts/index.js'
 import { useFocus } from '../hooks/index.js'
 import type { BlockStateRegistry, VersionId } from '../services/index.js'
 import { CachedDecorator, CachedFeature } from '../services/index.js'
-import { deepClone, deepEqual, generateColor, generateUUID, hexId, hexToRgb, isObject, newSeed, rgbToHex, stringToColor } from '../Utils.js'
 import { ModelWrapper } from './ModelWrapper.js'
 
-const selectRegistries = ['loot_table.type', 'loot_entry.type', 'function.function', 'condition.condition', 'criterion.trigger', 'recipe.type', 'dimension.generator.type', 'dimension.generator.biome_source.type', 'dimension.generator.biome_source.preset', 'carver.type', 'feature.type', 'decorator.type', 'feature.tree.minimum_size.type', 'block_state_provider.type', 'trunk_placer.type', 'foliage_placer.type', 'tree_decorator.type', 'int_provider.type', 'float_provider.type', 'height_provider.type', 'structure_feature.type', 'surface_builder.type', 'processor.processor_type', 'rule_test.predicate_type', 'pos_rule_test.predicate_type', 'template_element.element_type', 'block_placer.type', 'block_predicate.type', 'material_rule.type', 'material_condition.type', 'structure_placement.type', 'density_function.type', 'root_placer.type', 'entity.type_specific.cat.variant', 'entity.type_specific.frog.variant', 'rule_block_entity_modifier.type', 'pool_alias_binding.type', 'lithostitched.worldgen_modifier.type', 'lithostitched.modifier_predicate.type', 'ohthetreesyoullgrow.configured_feature.type']
+const selectRegistries = ['loot_table.type', 'loot_entry.type', 'function.function', 'condition.condition', 'criterion.trigger', 'recipe.type', 'dimension.generator.type', 'dimension.generator.biome_source.type', 'dimension.generator.biome_source.preset', 'carver.type', 'feature.type', 'decorator.type', 'feature.tree.minimum_size.type', 'block_state_provider.type', 'trunk_placer.type', 'foliage_placer.type', 'tree_decorator.type', 'int_provider.type', 'float_provider.type', 'height_provider.type', 'structure_feature.type', 'surface_builder.type', 'processor.processor_type', 'rule_test.predicate_type', 'pos_rule_test.predicate_type', 'template_element.element_type', 'block_placer.type', 'block_predicate.type', 'material_rule.type', 'material_condition.type', 'structure_placement.type', 'density_function.type', 'root_placer.type', 'entity.type_specific.cat.variant', 'entity.type_specific.frog.variant', 'rule_block_entity_modifier.type', 'pool_alias_binding.type', 'lithostitched.worldgen_modifier.type', 'lithostitched.modifier_predicate.type', 'lithostitched.structure.type', 'lithostitched.structure_condition.type', 'ohthetreesyoullgrow.configured_feature.type']
 const datalistEnums = ['item_stack.components', 'function.set_components.components']
 const hiddenFields = ['number_provider.type', 'score_provider.type', 'nbt_provider.type', 'int_provider.type', 'float_provider.type', 'height_provider.type']
 const flattenedFields = ['feature.config', 'decorator.config', 'int_provider.value', 'float_provider.value', 'block_state_provider.simple_state_provider.state', 'block_state_provider.rotated_block_provider.state', 'block_state_provider.weighted_state_provider.entries.entry.data', 'rule_test.block_state', 'structure_feature.config', 'surface_builder.config', 'template_pool.elements.entry.element', 'decorator.block_survives_filter.state', 'material_rule.block.result_state']
@@ -152,7 +152,18 @@ const renderHtml: RenderHook = {
 					}
 				}
 
-				if (canToggle && (toggle === false || (toggle === undefined && value.length > 20))) {
+				if (canToggle && (toggle === false || (toggle === undefined && value.length > 5))) {
+					if (cPath.getContext().join('.').includes('biolith.biome_placement.sub_biomes')) {
+						if (isObject(cValue) && typeof cValue.biome === 'string') {
+							return <div class="node node-header" data-category={children.category(cPath)}>
+								<ErrorPopup lang={lang} path={cPath} nested />
+								<button class="toggle tooltipped tip-se" aria-label={`${localize(lang, 'expand')}\n${localize(lang, 'expand_all', 'Ctrl')}`} onClick={expand(cId)}>{Octicon.chevron_right}</button>
+								<label>{label ?? pathLocale(lang, cPath, `${index}`)}</label>
+								<label>{toTitleCase(Identifier.parse(cValue.biome).path)}</label>
+							</div>
+						}
+					}
+
 					return <div class="node node-header" data-category={children.category(cPath)}>
 						<ErrorPopup lang={lang} path={cPath} nested />
 						<button class="toggle tooltipped tip-se" aria-label={`${localize(lang, 'expand')}\n${localize(lang, 'expand_all', 'Ctrl')}`} onClick={expand(cId)}>{Octicon.chevron_right}</button>
@@ -354,6 +365,15 @@ function Collapsed({ path, value }: { path: ModelPath, value: any, schema: INode
 		}
 	}
 	return null
+}
+
+function toTitleCase(str: String) {
+	return str.replace(
+    /\w\S*/g,
+    function(txt) {
+      return (txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()).replaceAll('_', ' ');
+    }
+  );
 }
 
 function useToggles() {

@@ -4,7 +4,7 @@ import { BooleanNode, Case, ChoiceNode, ListNode, Mod, NumberNode, ObjectNode, O
 
 const ID = 'lithostitched'
 
-export function initLithostitched(schemas: SchemaRegistry, collections: CollectionRegistry) {
+export function initWorldgenModifiers(schemas: SchemaRegistry, collections: CollectionRegistry) {
 	const Reference = RawReference.bind(undefined, schemas)
 	const StringNode = RawStringNode.bind(undefined, collections)
 

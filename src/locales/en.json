@@ -1,4 +1,15 @@
 {
+  "generator.available": "Available Generators",
+  "generator.lithostitched.worldgen_modifier": "Worldgen Modifier",
+  "generator.lithostitched.structure": "Structure",
+  "generator.biolith.biome_placement": "Biome Placement",
+  "generator.expedition.planet_type": "Planet Type",
+  
+  "additions": "Additions",
+  "removals": "Removals",
+  "replacements": "Replacements",
+  "sub_biomes": "Sub-Biomes",
+  
   "2d": "2D",
   "3d": "3D",
   "add": "Add",
@@ -66,7 +77,6 @@
   "generator.font": "Font",
   "generator.immersive_weathering.block_growth": "Block Growth",
   "generator.item_modifier": "Item Modifier",
-  "generator.lithostitched.worldgen_modifier": "Worldgen Modifier",
   "generator.loot_table": "Loot Table",
   "generator.model": "Model",
   "generator.not_found": "Cannot find generator \"%0%\"",

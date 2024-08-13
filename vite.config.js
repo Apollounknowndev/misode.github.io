@@ -28,11 +28,6 @@ export default defineConfig({
 					title: '404',
 					template,
 				}),
-				...['generators', 'worldgen', 'partners', 'sounds', 'changelog', 'versions', 'guides', 'transformation', 'customized'].map(id => html({
-					fileName: `${id}/index.html`,
-					title: `${English[`title.${id}`] ?? ''} - ${getVersions()}`,
-					template,
-				})),
 				...config.generators.map(m => html({
 					fileName: `${m.url}/index.html`,
 					title: `${English[m.id] ?? ''} Generator${m.category === true ? 's' : ''} - ${getVersions(m)}`,

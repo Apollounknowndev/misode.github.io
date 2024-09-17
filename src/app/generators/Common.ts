@@ -68,8 +68,7 @@ export function initCommon(schemas: SchemaRegistry, collections: CollectionRegis
           const keys = v ? Object.keys(v) : []
           return typeof v === 'object' && (keys?.length === 0 || (keys?.length === 1 && keys?.[0] === 'type'))
         },
-        node: provider,
-        change: (v: any) => ({type: k})
+        node: provider
       })
     })
     return ChoiceNode(choices, { context, choiceContext: `${context}.type` })

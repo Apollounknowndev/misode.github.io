@@ -9,7 +9,6 @@ export function initTemplateElements(schemas: SchemaRegistry, collections: Colle
     {
       type: 'string',
       node: StringNode({ validator: 'resource', params: { pool: '$worldgen/processor_list' }}),
-      change: v => undefined
     },
     {
       type: 'list',

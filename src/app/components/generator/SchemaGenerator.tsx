@@ -11,7 +11,7 @@ import type { VersionId } from '../../services/index.js'
 import { checkVersion, fetchPreset, getBlockStates, getCollections, getModel, getSnippet, shareSnippet } from '../../services/index.js'
 import { Store } from '../../Store.js'
 import { cleanUrl, deepEqual, genPath } from '../../Utils.js'
-import { Ad, Btn, BtnMenu, ErrorPanel, FileCreation, FileRenaming, Footer, HasPreview, Octicon, PreviewPanel, ProjectCreation, ProjectDeletion, ProjectPanel, SearchList, SourcePanel, TextInput, Tree, VersionSwitcher } from '../index.js'
+import { Btn, BtnMenu, ErrorPanel, FileCreation, FileRenaming, Footer, HasPreview, Octicon, PreviewPanel, ProjectCreation, ProjectDeletion, ProjectPanel, SearchList, SourcePanel, TextInput, Tree, VersionSwitcher } from '../index.js'
 
 export const SHARE_KEY = 'share'
 
@@ -315,7 +315,7 @@ export function SchemaGenerator({ gen, allowedVersions }: Props) {
 
 	return <>
 		<main class={`generator${previewShown ? ' has-preview' : ''}${projectShown ? ' has-project' : ''}`}>
-			{!gen.tags?.includes('partners') && <Ad id="data-pack-generator" type="text" />}
+			{!gen.tags?.includes('partners')}
 			<div class="controls generator-controls">
 				{gen.wiki && <a class="btn btn-link tooltipped tip-se" aria-label={locale('learn_on_the_wiki')} href={gen.wiki} target="_blank">
 					{Octicon.mortar_board}

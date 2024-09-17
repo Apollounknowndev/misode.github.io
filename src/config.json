@@ -125,6 +125,7 @@
     {
       "id": "lithostitched/worldgen_modifier",
       "url": "lithostitched/worldgen-modifier",
+      "tags": ["worldgen"],
       "path": "lithostitched/worldgen_modifier",
       "schema": "lithostitched:worldgen_modifier",
       "minVersion": "1.20",

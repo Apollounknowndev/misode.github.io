@@ -42,7 +42,7 @@ export function ErrorPanel({ error, prefix, reportable, onDismiss, body: body_, 
 	}, [error])
 
 	const url = useMemo(() => {
-		let url ='https://github.com/misode/misode.github.io/issues/new'
+		let url ='https://github.com/apollounknowndev/misode.github.io/issues/new'
 		const fullName = (error instanceof Error ? `${error.name}: ` : '') + name
 		url += `?title=${encodeURIComponent(fullName)}`
 		let body = ''

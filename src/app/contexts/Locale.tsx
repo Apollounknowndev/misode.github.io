@@ -48,11 +48,11 @@ async function loadLocale(language: string) {
 	const data = await import(`../../locales/${language}.json`)
 	const schema = langConfig.schemas !== false
 		&& await import(`../../../node_modules/@mcschema/locales/src/${language}.json`)
-	let partners = { default: {} }
+	let generators = { default: {} }
 	if (language === 'en') {
-		partners = await import('../partners/locales/en.json')
+		generators = await import('../generators/locales/en.json')
 	}
-	Locales[language] = { ...data.default, ...schema.default, ...partners.default }
+	Locales[language] = { ...data.default, ...schema.default, ...generators.default }
 }
 
 export function useLocale() {

@@ -129,12 +129,17 @@ header {
 	z-index: 5;
 	position: fixed;
 	box-shadow: 0 0 9px -3px #000;
-	background-color: var(--background-2);
+	background-color: #252D25;
 }
 
 .title {
 	display: flex;
 	align-items: center;
+}
+
+.title img {
+	width: 48px;
+	height: 48px;
 }
 
 .title h1 {

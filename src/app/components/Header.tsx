@@ -3,7 +3,7 @@ import config from '../Config.js'
 import { useLocale, useProject, useTheme, useTitle, useVersion } from '../contexts/index.js'
 import { checkVersion } from '../services/index.js'
 import { cleanUrl, getGenerator } from '../Utils.js'
-import { Btn, BtnMenu, Icons, Octicon } from './index.js'
+import { Btn, BtnMenu, Octicon } from './index.js'
 
 const Themes: Record<string, keyof typeof Octicon> = {
 	system: 'device_desktop',
@@ -22,7 +22,10 @@ export function Header() {
 
 	return <header>
 		<div class="title">
-			<Link class="home-link" href="/" aria-label={locale('home')} data-cy="home-link">{Icons.home}</Link>
+			
+			<Link class="home-link" href="/" aria-label={locale('home')} data-cy="home-link">
+				<img src="/images/lithostitched.png" alt="Container background" class="pixelated" draggable={false} />
+			</Link>
 			<h1 class="font-bold">{title}</h1>
 			{gen && <BtnMenu icon="chevron_down" tooltip={locale('switch_generator')} data-cy="generator-switcher">
 				{config.generators
@@ -56,7 +59,7 @@ export function Header() {
 					</BtnMenu>
 				</li>
 				<li class="dimmed">
-					<a href="https://github.com/misode/misode.github.io" target="_blank" rel="noreferrer" class="tooltipped tip-sw" aria-label={locale('github')}>
+					<a href="https://github.com/apollounknowndev/misode.github.io" target="_blank" rel="noreferrer" class="tooltipped tip-sw" aria-label={locale('github')}>
 						{Octicon.mark_github}
 					</a>
 				</li>

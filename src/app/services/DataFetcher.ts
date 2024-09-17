@@ -223,6 +223,19 @@ export async function fetchVersions(): Promise<VersionMeta[]> {
 	}
 }
 
+export type ModVersionMeta = {
+	version_number: string,
+	changelog: string,
+}
+export async function fetchModVersions(): Promise<ModVersionMeta[]> {
+	await validateCache({ dynamic: true })
+	try {
+		return cachedFetch(`https://api.modrinth.com/v2/project/lithostitched/version`, { refresh: true })
+	} catch (e) {
+		throw new Error(`Error occured while fetching versions: ${message(e)}`)
+	}
+}
+
 export function getAssetUrl(versionId: VersionId, type: string, path: string): string {
 	const version = config.versions.find(v => v.id === versionId)!
 	return `${mcmeta(version, 'assets')}/assets/minecraft/${type}/${path}.png`

@@ -205,8 +205,8 @@ export function initWorldgenModifiers(schemas: SchemaRegistry, collections: Coll
 	])
 
 	schemas.register(`fabric:load_condition`, ObjectNode({
-		type: StringNode({ validator: 'resource', params: { pool: `fabric:load_condition` as any } }),
-		[Switch]: [{ push: 'type' }],
+		condition: StringNode({ validator: 'resource', params: { pool: `fabric:load_condition` as any } }),
+		[Switch]: [{ push: 'condition' }],
 		[Case]: {
 			'fabric:and': {
 				value: ListNode(Reference(`fabric:load_condition`)),

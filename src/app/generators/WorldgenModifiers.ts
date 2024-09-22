@@ -157,6 +157,7 @@ export function initWorldgenModifiers(schemas: SchemaRegistry, collections: Coll
 			},
 			'lithostitched:wrap_noise_router': {
 				priority: Opt(NumberNode({ integer: true, min: 0 })),
+				dimension: StringNode({ validator: 'resource', params: { pool: '$dimension' } }),
 				target: StringNode({ enum: ['barrier', 'fluid_level_floodedness', 'fluid_level_spread', 'lava', 'temperature', 'vegetation', 'continents', 'erosion', 'depth', 'ridges', 'initial_density_without_jaggedness', 'final_density', 'vein_toggle', 'vein_ridged', 'vein_gap'] }),
 				wrapper_function: DensityFunction,
 			},

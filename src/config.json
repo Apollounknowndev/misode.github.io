@@ -115,6 +115,14 @@
       "wiki": "https://minecraft.wiki/w/Template_pool"
     },
     {
+      "id": "worldgen/density_function",
+      "url": "worldgen/density_function",
+      "tags": ["worldgen"],
+      "schema": "density_function",
+      "minVersion": "1.18.2",
+      "wiki": "https://minecraft.wiki/w/Density_function"
+    },
+    {
       "id": "worldgen/configured_feature",
       "url": "worldgen/feature",
       "tags": ["worldgen"],

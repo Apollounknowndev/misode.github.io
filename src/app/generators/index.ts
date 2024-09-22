@@ -2,6 +2,7 @@ import type { CollectionRegistry, SchemaRegistry } from '@mcschema/core'
 import type { VersionId } from '../services/Schemas.js'
 import { initCommon } from './Common.js'
 import { initConfiguredFeatures } from './ConfiguredFeatures.js'
+import { initDensityFunctions } from './DensityFunctions.js'
 import { initProcessors } from './Processors.js'
 import { initStructures } from './Structures.js'
 import { initTemplateElements } from './TemplateElements.js'
@@ -16,6 +17,7 @@ export * from './WorldgenModifiers.js'
 export function initGenerators(schemas: SchemaRegistry, collections: CollectionRegistry, version: VersionId) {
 	initCommon(schemas, collections)
 	initConfiguredFeatures(schemas, collections, version)
+	initDensityFunctions(schemas, collections)
 	initProcessors(schemas, collections)
 	initStructures(schemas, collections, version)
 	initTemplateElements(schemas, collections)

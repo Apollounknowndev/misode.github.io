@@ -26,6 +26,8 @@
   "lithostitched:modifier_type.lithostitched:replace_climate": "Replace climate",
   "lithostitched:modifier_type.lithostitched:replace_effects": "Replace effects",
   "lithostitched:modifier_type.lithostitched:set_pool_aliases": "Set pool aliases",
+  "lithostitched:modifier_type.lithostitched:wrap_density_function": "Wrap density function",
+  "lithostitched:modifier_type.lithostitched:wrap_noise_router": "Wrap noise router",
 
   "lithostitched:modifier_predicate_type.lithostitched:all_of": "All of",
   "lithostitched:modifier_predicate_type.lithostitched:any_of": "Any of",
@@ -61,6 +63,9 @@
   "lithostitched:root_element_type.legacy_single_pool_element": "Legacy single",
   "lithostitched:root_element_type.list_pool_element": "List",
   "lithostitched:root_element_type.single_pool_element": "Single",
+
+  "worldgen/density_function_type.lithostitched:original_marker": "✨ Original marker",
+  "worldgen/density_function_type.lithostitched:wrapped_marker": "✨ Wrapped marker",
 
   "worldgen/structure_type.lithostitched:delegating": "✨ Delegating",
   "worldgen/structure_type.buried_treasure": "Buried treasure",

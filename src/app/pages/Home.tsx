@@ -45,6 +45,7 @@ function AvailableGenerators() {
 		<GeneratorCard minimal id="worldgen/structure" />
 		<GeneratorCard minimal id="worldgen/template_pool" />
 		<GeneratorCard minimal id="worldgen/processor_list" />
+		<GeneratorCard minimal id="worldgen/density_function" />
 	</ToolGroup>
 }
 

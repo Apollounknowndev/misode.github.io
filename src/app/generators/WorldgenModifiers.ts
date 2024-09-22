@@ -2,6 +2,7 @@ import type { CollectionRegistry, NodeChildren, SchemaRegistry } from '@mcschema
 import { BooleanNode, Case, ChoiceNode, ListNode, Mod, NumberNode, ObjectNode, Opt, Reference as RawReference, StringNode as RawStringNode, Switch } from '@mcschema/core'
 import type { VersionId } from '../services/Schemas.js'
 import { HolderSet, MobCategorySpawnSettings } from './Common.js'
+import { DensityFunction } from './DensityFunctions.js'
 
 export function initWorldgenModifiers(schemas: SchemaRegistry, collections: CollectionRegistry, version: VersionId) {
 	const Reference = RawReference.bind(undefined, schemas)
@@ -21,9 +22,9 @@ export function initWorldgenModifiers(schemas: SchemaRegistry, collections: Coll
 		'lithostitched:remove_structures_from_structure_set',
 		'lithostitched:replace_climate',
 		'lithostitched:replace_effects',
-		...(version === '1.21')
-			? ['lithostitched:set_pool_aliases']
-			: [],
+		...(version === '1.21') ? ['lithostitched:set_pool_aliases']: [],
+		'lithostitched:wrap_density_function',
+		'lithostitched:wrap_noise_router',
 	])
 
   const Conditions: NodeChildren = version === '1.21' ? {
@@ -148,6 +149,16 @@ export function initWorldgenModifiers(schemas: SchemaRegistry, collections: Coll
 				structure: StringNode({ validator: 'resource', params: { pool: '$worldgen/structure' } }),
 				pool_aliases: Reference('pool_alias_binding'),
 				append: BooleanNode()
+			},
+			'lithostitched:wrap_density_function': {
+				priority: Opt(NumberNode({ integer: true, min: 0 })),
+				target_function: StringNode({ validator: 'resource', params: { pool: '$worldgen/density_function' }}),
+				wrapper_function: DensityFunction,
+			},
+			'lithostitched:wrap_noise_router': {
+				priority: Opt(NumberNode({ integer: true, min: 0 })),
+				target: StringNode({ enum: ['barrier', 'fluid_level_floodedness', 'fluid_level_spread', 'lava', 'temperature', 'vegetation', 'continents', 'erosion', 'depth', 'ridges', 'initial_density_without_jaggedness', 'final_density', 'vein_toggle', 'vein_ridged', 'vein_gap'] }),
+				wrapper_function: DensityFunction,
 			},
 		},
 	}, { context: `lithostitched.worldgen_modifier`, disableSwitchContext: true }), {

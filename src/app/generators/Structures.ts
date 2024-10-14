@@ -26,17 +26,6 @@ export function initStructures(schemas: SchemaRegistry, collections: CollectionR
     pool_aliases: Opt(ListNode(Reference('pool_alias_binding')))
   } : {}
 
-  const Structure = ChoiceNode([
-    {
-      type: 'string',
-      node: StringNode({ validator: 'resource', params: { pool: '$worldgen/structure' } })
-    },
-    {
-      type: 'object',
-      node: Reference('structure')
-    }
-  ], { choiceContext: 'structure' })
-
   let structureTypes = [
     'lithostitched:delegating',
 		...collections.get('worldgen/structure_type'),
@@ -50,7 +39,7 @@ export function initStructures(schemas: SchemaRegistry, collections: CollectionR
     [Switch]: [{ push: 'type' }],
     [Case]: {
       'lithostitched:delegating': {
-        delegate: Structure,
+        delegate: Reference('structure'),
         spawn_condition: Reference('lithostitched:structure_condition')
       },
       'minecraft:buried_treasure': {

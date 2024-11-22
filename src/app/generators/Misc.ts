@@ -1,10 +1,9 @@
 import type { CollectionRegistry, NodeChildren, SchemaRegistry } from '@mcschema/core'
 import { Case, ChoiceNode, ListNode, Mod, NumberNode, ObjectNode, Opt, Reference as RawReference, StringNode as RawStringNode, Switch } from '@mcschema/core'
-import { VersionId } from '../services/index.js'
 import { HolderSet, IntProvider } from './Common.js'
 
 
-export function initMisc(schemas: SchemaRegistry, collections: CollectionRegistry, version: VersionId) {
+export function initMisc(schemas: SchemaRegistry, collections: CollectionRegistry) {
 	const Reference = RawReference.bind(undefined, schemas)
 	const StringNode = RawStringNode.bind(undefined, collections)
 

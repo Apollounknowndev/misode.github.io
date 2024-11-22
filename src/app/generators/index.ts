@@ -19,7 +19,7 @@ export function initGenerators(schemas: SchemaRegistry, collections: CollectionR
 	initCommon(schemas, collections, version)
 	initConfiguredFeatures(schemas, collections, version)
 	initDensityFunctions(schemas, collections)
-	initMisc(schemas, collections, version)
+	initMisc(schemas, collections)
 	initProcessors(schemas, collections)
 	initStructures(schemas, collections, version)
 	initTemplateElements(schemas, collections)

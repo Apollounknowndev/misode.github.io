@@ -86,13 +86,21 @@ export function initConfiguredFeatures(schemas: SchemaRegistry, collections: Col
     liquid_settings: Opt(StringNode({ enum: ['apply_waterlogging', 'ignore_waterlogging'] }))
   } : {}
 
+  let BlockSet = HolderSet({ resource: 'block' })
+
   let featureTypes = [
 		...collections.get('worldgen/feature'),
+    'lithostitched:weighted_selector',
     'lithostitched:well'
 	]
 
+  featureTypes.splice(59, 0, 'lithostitched:vines')
+  featureTypes.splice(53, 0, 'lithostitched:structure_template')
+  featureTypes.splice(50, 0, 'lithostitched:select')
+  featureTypes.splice(41, 0, 'lithostitched:ore')
+  featureTypes.splice(34, 0, 'lithostitched:large_dripstone')
   featureTypes.splice(15, 0, 'lithostitched:dungeon')
-  featureTypes.splice(55, 0, 'lithostitched:structure_template')
+  featureTypes.splice(8, 0, 'lithostitched:composite')
 
 	collections.register(`worldgen/feature`, featureTypes)
 
@@ -101,6 +109,10 @@ export function initConfiguredFeatures(schemas: SchemaRegistry, collections: Col
     config: ObjectNode({
       [Switch]: ['pop', { push: 'type' }],
       [Case]: {
+        'lithostitched:composite': {
+          features: HolderSet({ resource: '$worldgen/placed_feature', inlineSchema: 'placed_feature' }),
+          placement_type: Opt(StringNode({ enum: ['never_cancel', 'cancel_on_failure', 'cancel_on_success'] }))
+        },
         'lithostitched:dungeon': {
           min_openings: Opt(NumberNode({ integer: true, min: 0 })),
           max_openings: Opt(NumberNode({ integer: true, min: 0 })),
@@ -121,12 +133,63 @@ export function initConfiguredFeatures(schemas: SchemaRegistry, collections: Col
           dungeon_invalid_blocks: Opt(StringNode({ validator: 'resource', params: { pool: 'block', requireTag: true } })),
           loot_table: Opt(StringNode()),
         },
+        'lithostitched:large_dripstone': {
+          state_provider: Reference('block_state_provider'),
+          replaceable_blocks: BlockSet,
+          floor_to_ceiling_search_range: Opt(NumberNode({ integer: true, min: 1, max: 512 })),
+          column_radius: IntProvider({ min: 0, max: 60 }),
+          height_scale: FloatProvider({ min: 0, max: 20 }),
+          max_column_radius_to_cave_height_ratio: NumberNode({ min: 0, max: 1 }),
+          stalactite_bluntness: FloatProvider({ min: 0.1, max: 10 }),
+          stalagmite_bluntness: FloatProvider({ min: 0.1, max: 10 }),
+          wind_speed: FloatProvider({ min: 0, max: 2 }),
+          min_radius_for_wind: NumberNode({ integer: true, min: 0, max: 100 }),
+          min_bluntness_for_wind: NumberNode({ min: 0, max: 5 })
+        },
+        'lithostitched:ore': {
+          size: NumberNode({ integer: true, min: 1, max: 128 }),
+          targets: ListNode(ObjectNode({
+            predicate: Reference('block_predicate_worldgen'),
+            state_provider: Reference('block_state_provider')
+          }))
+        },
+        'lithostitched:select': {
+          features: ListNode(ObjectNode({
+            predicate: Reference('block_predicate_worldgen'),
+            feature: PlacedFeature
+          }))
+        },
         'lithostitched:structure_template': {
           template: StringNode({ validator: 'resource', params: { pool: '$structure' }}),
           processors: Processors,
           rotation: Opt(StringNode({ enum: ['none', 'clockwise_90', '180', 'counterclockwise_90'] })),
           ...LiquidSettings,
           start_jigsaw_name: Opt(StringNode()),
+        },
+        'lithostitched:vines': {
+          state: Opt(ChoiceNode([
+            {
+              type: 'string',
+              node: StringNode({ validator: 'resource', params: { pool: 'block' } }),
+              change: v => v[0].data
+            },
+            {
+              type: 'list',
+              node: ListNode(ObjectNode({
+                data: StringNode({ validator: 'resource', params: { pool: 'block' } }),
+                weight: NumberNode({ integer: true, min: 1 })
+              })),
+              change: v => [{ data: v, weight: 1 }]
+            }
+          ])),
+          can_place_on: Opt(BlockSet),
+          max_length: Opt(IntProvider({ min: 0, max: 256 }))
+        },
+        'lithostitched:weighted_selector': {
+          features: ListNode(ObjectNode({
+            data: PlacedFeature,
+            weight: NumberNode({ integer: true, min: 1 })
+          }))
         },
         'lithostitched:well': {
           standard_provider: Opt(Reference('block_state_provider')),
@@ -262,7 +325,7 @@ export function initConfiguredFeatures(schemas: SchemaRegistry, collections: Col
           can_place_on_floor: Opt(BooleanNode()),
           can_place_on_ceiling: Opt(BooleanNode()),
           can_place_on_wall: Opt(BooleanNode()),
-          can_be_placed_on: HolderSet({ resource: 'block' })
+          can_be_placed_on: BlockSet
         },
         'minecraft:huge_brown_mushroom': HugeMushroomConfig,
         'minecraft:huge_fungus': {
@@ -371,7 +434,7 @@ export function initConfiguredFeatures(schemas: SchemaRegistry, collections: Col
           rock_count: NumberNode({ integer: true }),
           hole_count: NumberNode({ integer: true }),
           requires_block_below: BooleanNode(),
-          valid_blocks: HolderSet({ resource: 'block' })
+          valid_blocks: BlockSet
         },
         'minecraft:tree': {
           ignore_vines: Opt(BooleanNode()),
@@ -395,8 +458,8 @@ export function initConfiguredFeatures(schemas: SchemaRegistry, collections: Col
                   max_root_width: NumberNode({ integer: true, min: 1, max: 12 }),
                   max_root_length: NumberNode({ integer: true, min: 1, max: 64 }),
                   random_skew_chance: NumberNode({ min: 0, max: 1 }),
-                  can_grow_through: HolderSet({ resource: 'block' }),
-                  muddy_roots_in: HolderSet({ resource: 'block' }),
+                  can_grow_through: BlockSet,
+                  muddy_roots_in: BlockSet,
                   muddy_roots_provider: Reference('block_state_provider'),
                 })
               }
@@ -426,7 +489,7 @@ export function initConfiguredFeatures(schemas: SchemaRegistry, collections: Col
                 extra_branch_steps: IntProvider({ min: 1 }),
                 extra_branch_length: IntProvider({ min: 0 }),
                 place_branch_per_log_probability: NumberNode({ min: 0, max: 1 }),
-                can_grow_through: HolderSet({ resource: 'block' })
+                can_grow_through: BlockSet
               }
             }
           }, { context: 'trunk_placer' }),

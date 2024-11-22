@@ -42,6 +42,7 @@ function AvailableGenerators() {
 	return <ToolGroup title={locale('generators.all')} link="/generators/">
 		<GeneratorCard minimal id="lithostitched/worldgen_modifier" />
 		<GeneratorCard minimal id="worldgen/configured_feature" />
+		<GeneratorCard minimal id="worldgen/placed_feature" />
 		<GeneratorCard minimal id="worldgen/structure" />
 		<GeneratorCard minimal id="worldgen/template_pool" />
 		<GeneratorCard minimal id="worldgen/processor_list" />

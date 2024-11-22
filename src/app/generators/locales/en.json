@@ -1,6 +1,12 @@
 {
+  "worldgen/feature.lithostitched:composite": "✨ Composite",
   "worldgen/feature.lithostitched:dungeon": "✨ Dungeon",
+  "worldgen/feature.lithostitched:large_dripstone": "✨ Large Dripstone",
+  "worldgen/feature.lithostitched:ore": "✨ Ore",
+  "worldgen/feature.lithostitched:select": "✨ Select",
   "worldgen/feature.lithostitched:structure_template": "✨ Structure template",
+  "worldgen/feature.lithostitched:vines": "✨ Vines",
+  "worldgen/feature.lithostitched:weighted_selector": "✨ Weighted selector",
   "worldgen/feature.lithostitched:well": "✨ Well",
   "feature.lithostitched:dungeon.min_openings": "Min openings",
   "feature.lithostitched:dungeon.max_openings": "Max openings",
@@ -11,6 +17,12 @@
   "feature.lithostitched:dungeon.wall_provider": "Wall provider",
   "feature.lithostitched:dungeon.dungeon_invalid_blocks": "Dungeon invalid blocks",
   "feature.lithostitched:dungeon.loot_table": "Loot table",
+  
+  "worldgen/block_state_provider_type.lithostitched:random_block": "✨ Random block",
+  "worldgen/block_state_provider_type.lithostitched:weighted": "✨ Weighted",
+
+  "block_predicate_type.lithostitched:multiple_of": "✨ Multiple of",
+  "block_predicate_type.lithostitched:random_chance": "✨ Random chance",
 
   "lithostitched:modifier_type.lithostitched:add_biome_spawns": "Add biome spawns",
   "lithostitched:modifier_type.lithostitched:add_features": "Add features",
@@ -19,13 +31,15 @@
   "lithostitched:modifier_type.lithostitched:add_surface_rule": "Add surface rule",
   "lithostitched:modifier_type.lithostitched:add_template_pool_elements": "Add template pool elements",
   "lithostitched:modifier_type.lithostitched:no_op": "Nothing",
-  "lithostitched:modifier_type.lithostitched:redirect_feature": "Redirect feature",
   "lithostitched:modifier_type.lithostitched:remove_biome_spawns": "Remove biome spawns",
   "lithostitched:modifier_type.lithostitched:remove_features": "Remove features",
   "lithostitched:modifier_type.lithostitched:remove_structures_from_structure_set": "Remove structures from set",
   "lithostitched:modifier_type.lithostitched:replace_climate": "Replace climate",
   "lithostitched:modifier_type.lithostitched:replace_effects": "Replace effects",
   "lithostitched:modifier_type.lithostitched:set_pool_aliases": "Set pool aliases",
+  "lithostitched:modifier_type.lithostitched:set_pool_element_processors": "Set pool element processors",
+  "lithostitched:modifier_type.lithostitched:set_structure_spawn_condition": "Set structure spawn condition",
+  "lithostitched:modifier_type.lithostitched:stack_feature": "Stack feature",
   "lithostitched:modifier_type.lithostitched:wrap_density_function": "Wrap density function",
   "lithostitched:modifier_type.lithostitched:wrap_noise_router": "Wrap noise router",
 
@@ -104,16 +118,27 @@
   "lithostitched:structure_condition_type.lithostitched:any_of": "Any of",
   "lithostitched:structure_condition_type.lithostitched:height_filter": "Height filter",
   "lithostitched:structure_condition_type.lithostitched:in_biome": "In biome",
+  "lithostitched:structure_condition_type.lithostitched:multiple_of": "Multiple of",
   "lithostitched:structure_condition_type.lithostitched:not": "Not",
   "lithostitched:structure_condition_type.lithostitched:offset": "Offset",
   "lithostitched:structure_condition_type.lithostitched:sample_density": "Sample density",
   "lithostitched:structure_condition_type.lithostitched:true": "True",
 
+  "lithostitched:processor_condition_type.lithostitched:all_of": "All of",
+  "lithostitched:processor_condition_type.lithostitched:any_of": "Any of",
+  "lithostitched:processor_condition_type.lithostitched:matching_blocks": "Matching blocks",
+  "lithostitched:processor_condition_type.lithostitched:not": "Not",
+  "lithostitched:processor_condition_type.lithostitched:position": "Position",
+  "lithostitched:processor_condition_type.lithostitched:random_chance": "Random chance",
+  "lithostitched:processor_condition_type.lithostitched:true": "True",
+
   "worldgen/structure_processor.lithostitched:apply_random": "✨ Apply random",
   "worldgen/structure_processor.lithostitched:block_swap": "✨ Block swap",
+  "worldgen/structure_processor.lithostitched:condition": "✨ Condition",
+  "worldgen/structure_processor.lithostitched:discard_input": "✨ Discard input",
   "worldgen/structure_processor.lithostitched:reference": "✨ Reference",
-
-  "rule_test.lithostitched:matching_blocks": "✨ Matching blocks",
+  "worldgen/structure_processor.lithostitched:set_block": "✨ Set block",
+  "worldgen/structure_processor.protected_blocks": "Protected blocks",
 
   "rule_block_entity_modifier.lithostitched:apply_all": "✨ Apply all",
   "rule_block_entity_modifier.lithostitched:apply_random": "✨ Apply random"

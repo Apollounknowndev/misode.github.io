@@ -91,6 +91,31 @@
   ],
   "generators": [
     {
+      "id": "lithostitched/worldgen_modifier",
+      "url": "lithostitched/worldgen-modifier",
+      "tags": ["worldgen"],
+      "path": "lithostitched/worldgen_modifier",
+      "schema": "lithostitched:worldgen_modifier",
+      "minVersion": "1.20",
+      "wiki": "https://github.com/Apollounknowndev/lithostitched/wiki/Worldgen-Modifiers"
+    },
+    {
+      "id": "worldgen/configured_feature",
+      "url": "worldgen/feature",
+      "tags": ["worldgen"],
+      "schema": "configured_feature",
+      "minVersion": "1.16",
+      "wiki": "https://minecraft.wiki/w/Configured_feature"
+    },
+    {
+      "id": "worldgen/placed_feature",
+      "url": "worldgen/placed-feature",
+      "tags": ["worldgen"],
+      "schema": "placed_feature",
+      "minVersion": "1.18",
+      "wiki": "https://minecraft.wiki/w/Placed_feature"
+    },
+    {
       "id": "worldgen/structure",
       "url": "worldgen/structure",
       "tags": ["worldgen"],
@@ -121,23 +146,6 @@
       "schema": "density_function",
       "minVersion": "1.18.2",
       "wiki": "https://minecraft.wiki/w/Density_function"
-    },
-    {
-      "id": "worldgen/configured_feature",
-      "url": "worldgen/feature",
-      "tags": ["worldgen"],
-      "schema": "configured_feature",
-      "minVersion": "1.16",
-      "wiki": "https://minecraft.wiki/w/Configured_feature"
-    },
-    {
-      "id": "lithostitched/worldgen_modifier",
-      "url": "lithostitched/worldgen-modifier",
-      "tags": ["worldgen"],
-      "path": "lithostitched/worldgen_modifier",
-      "schema": "lithostitched:worldgen_modifier",
-      "minVersion": "1.20",
-      "wiki": "https://github.com/Apollounknowndev/lithostitched/wiki/Worldgen-Modifiers"
     }
   ],
   "legacyGuides": [

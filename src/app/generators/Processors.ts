@@ -1,18 +1,37 @@
 import type { CollectionRegistry, SchemaRegistry } from '@mcschema/core'
-import { Case, ChoiceNode, ListNode, MapNode, Mod, NumberNode, ObjectNode, Opt, Reference as RawReference, StringNode as RawStringNode, Switch } from '@mcschema/core'
+import { BooleanNode, Case, ChoiceNode, ListNode, MapNode, Mod, NumberNode, ObjectNode, Opt, Reference as RawReference, StringNode as RawStringNode, Switch } from '@mcschema/core'
 import { HolderSet, IntProvider } from './Common.js'
 
 export function initProcessors(schemas: SchemaRegistry, collections: CollectionRegistry) {
 	const Reference = RawReference.bind(undefined, schemas)
 	const StringNode = RawStringNode.bind(undefined, collections)
 
+  let RandomSettings = ChoiceNode([
+    {
+      type: 'string',
+      node: StringNode({ enum: ['per_block', 'per_piece'] })
+    },
+    {
+      type: 'object',
+      node: ObjectNode({
+        mode: Opt(StringNode({ enum: ['per_block', 'per_piece'] })),
+        name: StringNode()
+      })
+    }
+  ])
+
 
   let processorTypes = [
     'lithostitched:apply_random',
 		...collections.get('worldgen/structure_processor'),
+    'lithostitched:set_block',
 	]
+
+  processorTypes.splice(11, 0, 'lithostitched:reference')
+  processorTypes.splice(6, 0, 'lithostitched:discard_input')
+  processorTypes.splice(6, 0, 'lithostitched:condition')
   processorTypes.splice(4, 0, 'lithostitched:block_swap')
-  processorTypes.splice(7, 0, 'lithostitched:reference')
+
 	collections.register(`worldgen/structure_processor`, processorTypes)
   
   schemas.register('processor', Mod(ObjectNode({
@@ -20,7 +39,7 @@ export function initProcessors(schemas: SchemaRegistry, collections: CollectionR
     [Switch]: [{ push: 'processor_type' }],
     [Case]: {
       'lithostitched:apply_random': {
-        mode: StringNode({ enum: ['per_block', 'per_piece'] }),
+        mode: RandomSettings,
         processor_lists: ListNode(ObjectNode({
           weight: NumberNode({ integer: true, min: 1 }),
           data: ChoiceNode([
@@ -41,9 +60,44 @@ export function initProcessors(schemas: SchemaRegistry, collections: CollectionR
           StringNode({ validator: 'resource', params: { pool: 'block' } })
         ),
       },
+      'lithostitched:condition': {
+        random_mode: RandomSettings,
+        if_true: ChoiceNode([
+          {
+            type: 'object',
+            node: Reference('lithostitched:processor_condition'),
+            change: v => Array.isArray(v) && v.length > 0 ? v[0] : ""
+          },
+          {
+            type: 'list',
+            node: ListNode(Reference('lithostitched:processor_condition')),
+            change: v => typeof v === 'object' ? [v] : []
+          }
+        ]),
+        then: ChoiceNode([
+          {
+            type: 'object',
+            node: Reference('processor'),
+            change: v => Array.isArray(v) && v.length > 0 ? v[0] : ""
+          },
+          {
+            type: 'list',
+            node: ListNode(Reference('processor')),
+            change: v => typeof v === 'object' ? [v] : []
+          }
+        ]),
+      },
       'lithostitched:reference': {
         processor_lists: HolderSet({ resource: '$worldgen/processor_list' }),
       },
+      'lithostitched:set_block': {
+        state_provider: Reference('block_state_provider'),
+        preserve_state: Opt(BooleanNode()),
+        random_mode: Opt(StringNode({ enum: ['per_block', 'per_piece'] })),
+        block_entity_modifier: Opt(Reference('rule_block_entity_modifier'))
+			},
+
+
 
       'minecraft:block_age': {
         mossiness: NumberNode()
@@ -88,45 +142,49 @@ export function initProcessors(schemas: SchemaRegistry, collections: CollectionR
     })
   }))
 
-  // Rule tests
-
-  let ruleTestTypes = collections.get('rule_test')
-
-  ruleTestTypes.splice(3, 0, 'lithostitched:matching_blocks')
-	collections.register(`rule_test`, ruleTestTypes)
+  // Processor conditions
   
-  schemas.register('rule_test', ObjectNode({
-    predicate_type: StringNode({ validator: 'resource', params: { pool: 'rule_test' } }),
-    [Switch]: [{ push: 'predicate_type' }],
-    [Case]: {
+  collections.register(`lithostitched:processor_condition_type`, [
+		'lithostitched:all_of',
+		'lithostitched:any_of',
+		'lithostitched:matching_blocks',
+		'lithostitched:not',
+		'lithostitched:position',
+		'lithostitched:random_chance',
+		'lithostitched:true',
+	])
+
+	schemas.register(`lithostitched:processor_condition`, ObjectNode({
+		type: StringNode({ validator: 'resource', params: { pool: `lithostitched:processor_condition_type` as any } }),
+		[Switch]: [{ push: 'type' }],
+		[Case]: {
+			'lithostitched:all_of': {
+				conditions: ListNode(Reference(`lithostitched:processor_condition`)),
+			},
+			'lithostitched:any_of': {
+				conditions: ListNode(Reference(`lithostitched:processor_condition`)),
+			},
       'lithostitched:matching_blocks': {
         blocks: HolderSet({ resource: 'block' }),
         properties: Opt(MapNode(
           StringNode(),
           StringNode()
         )),
-        chance: Opt(NumberNode({ min: 0, max: 1 }))
-      },
-
-      'minecraft:block_match': {
-        block: StringNode({ validator: 'resource', params: { pool: 'block' } })
-      },
-      'minecraft:blockstate_match': {
-        block_state: Reference('block_state')
-      },
-      'minecraft:random_block_match': {
-        block: StringNode({ validator: 'resource', params: { pool: 'block' } }),
-        probability: NumberNode({ min: 0, max: 1 })
-      },
-      'minecraft:random_blockstate_match': {
-        block_state: Reference('block_state'),
-        probability: NumberNode({ min: 0, max: 1 })
-      },
-      'minecraft:tag_match': {
-        tag: StringNode({ validator: 'resource', params: { pool: '$tag/block' }})
-      }
-    }
-  }, { context: 'rule_test', disableSwitchContext: true }))
+        match_type: StringNode({ enum: ['input', 'location'] })
+			},
+			'lithostitched:not': {
+				condition: Reference(`lithostitched:processor_condition`),
+			},
+			'lithostitched:position': {
+				predicate: Reference('pos_rule_test')
+			},
+      'lithostitched:random_chance': {
+				chance: NumberNode({ min: 0, max: 1 })
+			},
+		},
+	}, {
+		context: `lithostitched.structure_condition`, disableSwitchContext: true,
+	}))
 
   // Block entity modifiers
 

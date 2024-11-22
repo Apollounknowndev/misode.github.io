@@ -1,5 +1,6 @@
 import type { CollectionRegistry, INode, NestedNodeChildren, NodeChildren, ResourceType, SchemaRegistry } from '@mcschema/core'
 import { Case, ChoiceNode, ListNode, Mod, NumberNode, ObjectNode, Opt, Reference as RawReference, StringNode as RawStringNode, Switch } from '@mcschema/core'
+import { VersionId } from '../services/Schemas.js'
 
 type MinMaxConfig = {
   min?: number
@@ -26,7 +27,7 @@ export let HolderSet: (config: HolderSetConfig) => INode
 export let MobCategorySpawnSettings: INode
 
 
-export function initCommon(schemas: SchemaRegistry, collections: CollectionRegistry) {
+export function initCommon(schemas: SchemaRegistry, collections: CollectionRegistry, version: VersionId) {
   const StringNode = RawStringNode.bind(undefined, collections)
   const Reference = RawReference.bind(undefined, schemas)
 	
@@ -79,7 +80,7 @@ export function initCommon(schemas: SchemaRegistry, collections: CollectionRegis
     'number', 'value', 'minecraft:constant',
     null,
     'float_provider',
-    {
+    version === '1.21' ? {
       'minecraft:constant': {
         value: NumberNode(config)
       },
@@ -98,6 +99,31 @@ export function initCommon(schemas: SchemaRegistry, collections: CollectionRegis
         max: NumberNode(),
         plateau: NumberNode()
       }
+    } : {
+      'minecraft:constant': {
+        value: NumberNode(config)
+      },
+      'minecraft:uniform': {
+        value: ObjectNode({
+          min_inclusive: NumberNode(config),
+          max_exclusive: NumberNode(config)
+        })
+      },
+      'minecraft:clamped_normal': {
+        value: ObjectNode({
+          min: NumberNode(),
+          max: NumberNode(),
+          mean: NumberNode(),
+          deviation: NumberNode()
+        })
+      },
+      'minecraft:trapezoid': {
+        value: ObjectNode({
+          min: NumberNode(),
+          max: NumberNode(),
+          plateau: NumberNode()
+        })
+      }
     }
   )
 
@@ -106,7 +132,7 @@ export function initCommon(schemas: SchemaRegistry, collections: CollectionRegis
     'number', 'value', 'minecraft:constant',
     null,
     'int_provider',
-    {
+    version === '1.21' ? {
       'minecraft:constant': {
         value: NumberNode({ integer: true, ...config })
       },
@@ -128,6 +154,45 @@ export function initCommon(schemas: SchemaRegistry, collections: CollectionRegis
         max_inclusive: NumberNode({ integer: true, ...config }),
         mean: NumberNode(),
         deviation: NumberNode()
+      },
+      'minecraft:weighted_list': {
+        distribution: ListNode(
+          ObjectNode({
+            weight: NumberNode({ integer: true }),
+            data: Reference('int_provider'),
+          })
+        )
+      }
+    } : {
+      'minecraft:constant': {
+        value: NumberNode({ integer: true, ...config })
+      },
+      'minecraft:uniform': {
+        value: ObjectNode({
+          min_inclusive: NumberNode({ integer: true, ...config }),
+          max_inclusive: NumberNode({ integer: true, ...config })
+        })
+      },
+      'minecraft:biased_to_bottom': {
+        value: ObjectNode({
+          min_inclusive: NumberNode({ integer: true, ...config }),
+          max_inclusive: NumberNode({ integer: true, ...config })
+        })
+      },
+      'minecraft:clamped': {
+        value: ObjectNode({
+          min_inclusive: NumberNode({ integer: true, ...config }),
+          max_inclusive: NumberNode({ integer: true, ...config }),
+          source: Reference('int_provider')
+        })
+      },
+      'minecraft:clamped_normal': {
+        value: ObjectNode({
+          min_inclusive: NumberNode({ integer: true, ...config }),
+          max_inclusive: NumberNode({ integer: true, ...config }),
+          mean: NumberNode(),
+          deviation: NumberNode()
+        })
       },
       'minecraft:weighted_list': {
         distribution: ListNode(

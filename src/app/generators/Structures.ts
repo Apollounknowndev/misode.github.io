@@ -142,6 +142,7 @@ export function initStructures(schemas: SchemaRegistry, collections: CollectionR
 		'lithostitched:any_of',
 		'lithostitched:height_filter',
 		'lithostitched:in_biome',
+		'lithostitched:multiple_of',
 		'lithostitched:not',
 		'lithostitched:offset',
 		'lithostitched:sample_density',
@@ -159,9 +160,13 @@ export function initStructures(schemas: SchemaRegistry, collections: CollectionR
 				conditions: ListNode(Reference(`lithostitched:structure_condition`)),
 			},
       'lithostitched:height_filter': {
+        range_type: StringNode({ enum: ['absolute', 'heightmap_relative'] }),
         heightmap: Opt(StringNode({ enum: 'heightmap_type' })),
-        min_inclusive: Opt(Reference('vertical_anchor')),
-        max_inclusive: Opt(Reference('vertical_anchor')),
+        permitted_range: Reference('lithostitched:integer_range'),
+			},
+			'lithostitched:multiple_of': {
+				conditions: ListNode(Reference(`lithostitched:structure_condition`)),
+        allowed_count: Reference('lithostitched:integer_range')
 			},
       'lithostitched:in_biome': {
         biomes: HolderSet({ resource: '$worldgen/biome' })

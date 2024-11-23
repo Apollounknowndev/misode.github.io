@@ -54,7 +54,7 @@ function Tools() {
 	return <ToolGroup title='Links'>
 		<ToolCard title="Wiki"
 			link="https://github.com/Apollounknowndev/lithostitched/wiki"
-			desc="Learn what Lithostitched provides" />
+			desc="Learn about Lithostitched's features" />
 		<ToolCard title="Modrinth Page" icon="modrinth"
 			link="https://modrinth.com/mod/lithostitched"
 			desc="Download Lithostitched" />

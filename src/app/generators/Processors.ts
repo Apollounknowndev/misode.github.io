@@ -24,6 +24,7 @@ export function initProcessors(schemas: SchemaRegistry, collections: CollectionR
   let processorTypes = [
     'lithostitched:apply_random',
 		...collections.get('worldgen/structure_processor'),
+    'lithostitched:schedule_tick',
     'lithostitched:set_block',
 	]
 
@@ -61,7 +62,7 @@ export function initProcessors(schemas: SchemaRegistry, collections: CollectionR
         ),
       },
       'lithostitched:condition': {
-        random_mode: RandomSettings,
+        random_mode: Opt(RandomSettings),
         if_true: ChoiceNode([
           {
             type: 'object',
@@ -170,7 +171,7 @@ export function initProcessors(schemas: SchemaRegistry, collections: CollectionR
           StringNode(),
           StringNode()
         )),
-        match_type: StringNode({ enum: ['input', 'location'] })
+        match_type: Opt(StringNode({ enum: ['input', 'location'] }))
 			},
 			'lithostitched:not': {
 				condition: Reference(`lithostitched:processor_condition`),

@@ -137,6 +137,7 @@
   "worldgen/structure_processor.lithostitched:condition": "✨ Condition",
   "worldgen/structure_processor.lithostitched:discard_input": "✨ Discard input",
   "worldgen/structure_processor.lithostitched:reference": "✨ Reference",
+  "worldgen/structure_processor.lithostitched:schedule_tick": "✨ Schedule tick",
   "worldgen/structure_processor.lithostitched:set_block": "✨ Set block",
   "worldgen/structure_processor.protected_blocks": "Protected blocks",
 

@@ -18,7 +18,7 @@ export function initWorldgenModifiers(schemas: SchemaRegistry, collections: Coll
 		'lithostitched:no_op',
 		'lithostitched:remove_biome_spawns',
 		'lithostitched:remove_features',
-		'lithostitched:remove_structures_from_structure_set',
+		'lithostitched:remove_structure_set_entries',
 		'lithostitched:replace_climate',
 		'lithostitched:replace_effects',
 		'lithostitched:set_pool_element_processors',
@@ -62,11 +62,11 @@ export function initWorldgenModifiers(schemas: SchemaRegistry, collections: Coll
 				step: StringNode({ enum: 'decoration_step' }),
 			},
 			'lithostitched:add_processor_list_processors': {
-				processor_list: StringNode({ validator: 'resource', params: { pool: '$worldgen/processor_list' } }),
+				processor_lists: HolderSet({ resource: '$worldgen/processor_list' }),
 				processors: ListNode(Reference('processor')),
 			},
 			'lithostitched:add_structure_set_entries': {
-				structure_set: StringNode({ validator: 'resource', params: { pool: '$worldgen/structure_set' } }),
+				structure_sets: HolderSet({ resource: '$worldgen/structure_set' }),
 				entries: ListNode(
 					ObjectNode({
 						structure: StringNode({ validator: 'resource', params: { pool: '$worldgen/structure' } }),
@@ -79,7 +79,7 @@ export function initWorldgenModifiers(schemas: SchemaRegistry, collections: Coll
 				surface_rule: Reference('material_rule'),
 			},
 			'lithostitched:add_template_pool_elements': {
-				template_pool: StringNode({ validator: 'resource', params: { pool: '$worldgen/template_pool' } }),
+				template_pools: HolderSet({ resource: '$worldgen/template_pool' }),
 				elements: ListNode(
 					Reference('template_weighted_element')
 				),
@@ -93,8 +93,8 @@ export function initWorldgenModifiers(schemas: SchemaRegistry, collections: Coll
 				features: HolderSet({ resource: '$worldgen/placed_feature', inlineSchema: 'placed_feature' }),
 				step: StringNode({ enum: 'decoration_step' }),
 			},
-			'lithostitched:remove_structures_from_structure_set': {
-				structure_set: StringNode({ validator: 'resource', params: { pool: '$worldgen/structure_set' } }),
+			'lithostitched:remove_structure_set_entries': {
+				structure_sets: HolderSet({ resource: '$worldgen/structure_set' }),
 				structures: ListNode(
 					StringNode({ validator: 'resource', params: { pool: '$worldgen/structure' } })
 				),
@@ -144,12 +144,12 @@ export function initWorldgenModifiers(schemas: SchemaRegistry, collections: Coll
 				}),
 			},
 			'lithostitched:set_pool_aliases': {
-				structure: StringNode({ validator: 'resource', params: { pool: '$worldgen/structure' } }),
+				structures: HolderSet({ resource: '$worldgen/structure' }),
 				pool_aliases: Reference('pool_alias_binding'),
 				append: Opt(BooleanNode())
 			},
 			'lithostitched:set_pool_element_processors': {
-				template_pool: StringNode({ validator: 'resource', params: { pool: '$worldgen/template_pool' } }),
+				template_pools: HolderSet({ resource: '$worldgen/template_pool' }),
 				locations: Opt(ChoiceNode([
 					{
 						type: 'string',
@@ -166,12 +166,12 @@ export function initWorldgenModifiers(schemas: SchemaRegistry, collections: Coll
 				append: Opt(BooleanNode())
 			},
 			'lithostitched:set_structure_spawn_condition': {
-				structure: StringNode({ validator: 'resource', params: { pool: '$worldgen/structure' } }),
+				structures: HolderSet({ resource: '$worldgen/structure' }),
 				spawn_condition: Reference('lithostitched:structure_condition'),
 				append: Opt(BooleanNode())
 			},
 			'lithostitched:stack_feature': {
-				base_feature: StringNode({ validator: 'resource', params: { pool: '$worldgen/configured_feature' } }),
+				base_features: HolderSet({ resource: '$worldgen/configured_feature' }),
 				stacked_feature: StringNode({ validator: 'resource', params: { pool: '$worldgen/placed_feature' } }),
 			},
 			'lithostitched:wrap_density_function': {

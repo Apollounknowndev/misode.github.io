@@ -1,5 +1,5 @@
 import type { CollectionRegistry, NodeChildren, SchemaRegistry } from '@mcschema/core'
-import { Case, ChoiceNode, ListNode, Mod, NumberNode, ObjectNode, Opt, Reference as RawReference, StringNode as RawStringNode, Switch } from '@mcschema/core'
+import { Case, ChoiceNode, ListNode, MapNode, Mod, NumberNode, ObjectNode, Opt, Reference as RawReference, StringNode as RawStringNode, Switch } from '@mcschema/core'
 import { HolderSet, IntProvider } from './Common.js'
 
 
@@ -139,6 +139,7 @@ export function initMisc(schemas: SchemaRegistry, collections: CollectionRegistr
 
   blockPredicateTypes.splice(8, 0, 'lithostitched:random_chance')
   blockPredicateTypes.splice(7, 0, 'lithostitched:multiple_of')
+  blockPredicateTypes.splice(2, 0, 'lithostitched:block_state')
 
 	collections.register(`block_predicate_type`, blockPredicateTypes)
 
@@ -161,6 +162,12 @@ export function initMisc(schemas: SchemaRegistry, collections: CollectionRegistr
           Reference('block_predicate_worldgen')
         ),
         allowed_count: Reference('lithostitched:integer_range')
+      },
+      'lithostitched:block_state': {
+        properties: MapNode(
+          StringNode(),
+          StringNode()
+        )
       },
 
       'minecraft:all_of': {

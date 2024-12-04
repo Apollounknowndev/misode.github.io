@@ -33,7 +33,7 @@
   "lithostitched:modifier_type.lithostitched:no_op": "Nothing",
   "lithostitched:modifier_type.lithostitched:remove_biome_spawns": "Remove biome spawns",
   "lithostitched:modifier_type.lithostitched:remove_features": "Remove features",
-  "lithostitched:modifier_type.lithostitched:remove_structures_from_structure_set": "Remove structures from set",
+  "lithostitched:modifier_type.lithostitched:remove_structure_set_entries": "Remove structure set entries",
   "lithostitched:modifier_type.lithostitched:replace_climate": "Replace climate",
   "lithostitched:modifier_type.lithostitched:replace_effects": "Replace effects",
   "lithostitched:modifier_type.lithostitched:set_pool_aliases": "Set pool aliases",

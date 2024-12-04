@@ -87,6 +87,18 @@ export function initProcessors(schemas: SchemaRegistry, collections: CollectionR
             change: v => typeof v === 'object' ? [v] : []
           }
         ]),
+        else: ChoiceNode([
+          {
+            type: 'object',
+            node: Reference('processor'),
+            change: v => Array.isArray(v) && v.length > 0 ? v[0] : ""
+          },
+          {
+            type: 'list',
+            node: ListNode(Reference('processor')),
+            change: v => typeof v === 'object' ? [v] : []
+          }
+        ]),
       },
       'lithostitched:reference': {
         processor_lists: HolderSet({ resource: '$worldgen/processor_list' }),

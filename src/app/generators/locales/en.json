@@ -24,6 +24,8 @@
   "block_predicate_type.lithostitched:multiple_of": "✨ Multiple of",
   "block_predicate_type.lithostitched:random_chance": "✨ Random chance",
 
+  "worldgen/placement_modifier_type.lithostitched:offset": "✨ Offset",
+
   "lithostitched:modifier_type.lithostitched:add_biome_spawns": "Add biome spawns",
   "lithostitched:modifier_type.lithostitched:add_features": "Add features",
   "lithostitched:modifier_type.lithostitched:add_processor_list_processors": "Add processor list processors",

@@ -122,8 +122,7 @@
       "id": "1.19.4",
       "ref": "1.19.4",
       "name": "1.19.4",
-      "pack_format": 12,
-      "show": true
+      "pack_format": 12
     },
     {
       "id": "1.20",
@@ -161,9 +160,16 @@
     },
     {
       "id": "1.21.2",
+      "ref": "1.21.3",
+      "name": "1.21.2 — 1.21.3",
+      "pack_format": 57,
+      "show": true
+    },
+    {
+      "id": "1.21.4",
       "dynamic": true,
-      "name": "1.21.2",
-      "pack_format": 52,
+      "name": "1.21.4",
+      "pack_format": 58,
       "show": true
     }
   ],
@@ -200,25 +206,11 @@
       "wiki": "https://minecraft.wiki/w/Recipe#JSON_format"
     },
     {
-      "id": "enchantment",
-      "url": "enchantment",
-      "schema": "enchantment",
-      "minVersion": "1.21",
-      "wiki": "https://minecraft.wiki/w/Custom_enchantment"
-    },
-    {
-      "id": "enchantment_provider",
-      "url": "enchantment-provider",
-      "schema": "enchantment_provider",
-      "minVersion": "1.21",
-      "wiki": "https://minecraft.wiki/w/Enchantment_provider"
-    },
-    {
-      "id": "text_component",
-      "url": "text-component",
-      "schema": "text_component",
-      "noPath": true,
-      "wiki": "https://minecraft.wiki/w/Raw_JSON_text_format#Java_Edition"
+      "id": "chat_type",
+      "url": "chat-type",
+      "schema": "chat_type",
+      "minVersion": "1.19",
+      "wiki": "https://minecraft.wiki/w/Chat_type"
     },
     {
       "id": "damage_type",
@@ -226,13 +218,6 @@
       "schema": "damage_type",
       "minVersion": "1.19.4",
       "wiki": "https://minecraft.wiki/w/Damage_type"
-    },
-    {
-      "id": "chat_type",
-      "url": "chat-type",
-      "schema": "chat_type",
-      "minVersion": "1.19",
-      "wiki": "https://minecraft.wiki/w/Chat_type"
     },
     {
       "id": "trim_material",
@@ -259,6 +244,20 @@
       "minVersion": "1.20.5"
     },
     {
+      "id": "enchantment",
+      "url": "enchantment",
+      "schema": "enchantment",
+      "minVersion": "1.21",
+      "wiki": "https://minecraft.wiki/w/Custom_enchantment"
+    },
+    {
+      "id": "enchantment_provider",
+      "url": "enchantment-provider",
+      "schema": "enchantment_provider",
+      "minVersion": "1.21",
+      "wiki": "https://minecraft.wiki/w/Enchantment_provider"
+    },
+    {
       "id": "painting_variant",
       "url": "painting-variant",
       "schema": "painting_variant",
@@ -283,6 +282,13 @@
       "url": "trial-spawner",
       "schema": "trial_spawner",
       "minVersion": "1.21.2"
+    },
+    {
+      "id": "text_component",
+      "url": "text-component",
+      "schema": "text_component",
+      "noPath": true,
+      "wiki": "https://minecraft.wiki/w/Raw_JSON_text_format#Java_Edition"
     },
     {
       "id": "pack_mcmeta",
@@ -604,6 +610,14 @@
       "wiki": "https://minecraft.wiki/w/Tutorials/Models#Block_states"
     },
     {
+      "id": "item_definition",
+      "url": "assets/item",
+      "path": "items",
+      "tags": ["assets"],
+      "schema": "item_definition",
+      "minVersion": "1.21.4"
+    },
+    {
       "id": "model",
       "url": "assets/model",
       "path": "models",
@@ -645,6 +659,96 @@
       "schema": "lithostitched:worldgen_modifier",
       "minVersion": "1.20.2",
       "wiki": "https://github.com/Apollounknowndev/lithostitched/wiki/Worldgen-Modifiers"
+    },
+    {
+      "id": "neoforge.biome_modifier",
+      "url": "neoforge/biome-modifier",
+      "path": "neoforge/biome_modifier",
+      "tags": ["partners"],
+      "schema": "neoforge:biome_modifier",
+      "minVersion": "1.20.2",
+      "wiki": "https://docs.neoforged.net/docs/worldgen/biomemodifier"
+    },
+    {
+      "id": "neoforge.data_map_compostables",
+      "url": "neoforge/data-map-compostables",
+      "path": "neoforge/data_map_compostables",
+      "tags": ["partners"],
+      "schema": "neoforge:data_map_compostables",
+      "minVersion": "1.20.4",
+      "wiki": "https://docs.neoforged.net/docs/resources/server/datamaps/builtin#neoforgecompostables"
+    },
+    {
+      "id": "neoforge.data_map_furnace_fuels",
+      "url": "neoforge/data-map-furnace-fuels",
+      "path": "neoforge/data_map_furnace_fuels",
+      "tags": ["partners"],
+      "schema": "neoforge:data_map_furnace_fuels",
+      "minVersion": "1.20.4",
+      "wiki": "https://docs.neoforged.net/docs/resources/server/datamaps/builtin#neoforgefurnace_fuels"
+    },
+    {
+      "id": "neoforge.data_map_monster_room_mobs",
+      "url": "neoforge/data-map-monster-room-mobs",
+      "path": "neoforge/data_map_monster_room_mobs",
+      "tags": ["partners"],
+      "schema": "neoforge:data_map_monster_room_mobs",
+      "minVersion": "1.20.6",
+      "wiki": "https://docs.neoforged.net/docs/resources/server/datamaps/builtin#neoforgemonster_room_mobs"
+    },
+    {
+      "id": "neoforge.data_map_oxidizables",
+      "url": "neoforge/data-map-oxidizables",
+      "path": "neoforge/data_map_oxidizables",
+      "tags": ["partners"],
+      "schema": "neoforge:data_map_oxidizables",
+      "minVersion": "1.21",
+      "wiki": "https://docs.neoforged.net/docs/resources/server/datamaps/builtin#neoforgeoxidizables"
+    },
+    {
+      "id": "neoforge.data_map_parrot_imitations",
+      "url": "neoforge/data-map-parrot-imitations",
+      "path": "neoforge/data_map_parrot_imitations",
+      "tags": ["partners"],
+      "schema": "neoforge:data_map_parrot_imitations",
+      "minVersion": "1.20.4",
+      "wiki": "https://docs.neoforged.net/docs/resources/server/datamaps/builtin#neoforgeparrot_imitations"
+    },
+    {
+      "id": "neoforge.data_map_raid_hero_gifts",
+      "url": "neoforge/data-map-raid-hero-gifts",
+      "path": "neoforge/data_map_raid_hero_gifts",
+      "tags": ["partners"],
+      "schema": "neoforge:data_map_raid_hero_gifts",
+      "minVersion": "1.20.4",
+      "wiki": "https://docs.neoforged.net/docs/resources/server/datamaps/builtin#neoforgeraid_hero_gifts"
+    },
+    {
+      "id": "neoforge.data_map_vibration_frequencies",
+      "url": "neoforge/data-map-vibration-frequencies",
+      "path": "neoforge/data_map_vibration_frequencies",
+      "tags": ["partners"],
+      "schema": "neoforge:data_map_vibration_frequencies",
+      "minVersion": "1.20.4",
+      "wiki": "https://docs.neoforged.net/docs/resources/server/datamaps/builtin#neoforgevibration_frequencies"
+    },
+    {
+      "id": "neoforge.data_map_waxables",
+      "url": "neoforge/data-map-waxables",
+      "path": "neoforge/data_map_waxables",
+      "tags": ["partners"],
+      "schema": "neoforge:data_map_waxables",
+      "minVersion": "1.21",
+      "wiki": "https://docs.neoforged.net/docs/resources/server/datamaps/builtin#neoforgewaxables"
+    },
+    {
+      "id": "neoforge.structure_modifier",
+      "url": "neoforge/structure-modifier",
+      "path": "neoforge/structure_modifier",
+      "tags": ["partners"],
+      "schema": "neoforge:structure_modifier",
+      "minVersion": "1.20.2",
+      "wiki": "https://github.com/neoforged/NeoForge/blob/1.21.x/src/main/java/net/neoforged/neoforge/common/world/StructureModifiers.java"
     },
     {
       "id": "obsidian.item",

@@ -30,7 +30,13 @@ const FORMATS: Record<string, {
 	},
 	snbt: {
 		parse: async (v) => NbtTag.fromString(v).toSimplifiedJson(),
-		stringify: (v, _i) => jsonToNbt(v).toPrettyString(),
+		stringify: (v, i) => {
+			const tag = jsonToNbt(v)
+			if (i === undefined) {
+				return tag.toString()
+			}
+			return tag.toPrettyString(typeof i === 'number' ? ' '.repeat(i) : i)
+		},
 	},
 	yaml: {
 		parse: async (v) => yaml.load(v),
@@ -59,4 +65,28 @@ export function getSourceIndents() {
 
 export function getSourceFormats() {
 	return Object.keys(FORMATS)
+}
+
+export function sortData(data: any): any {
+	if (typeof data !== 'object' || data === null) {
+		return data
+	}
+	if (Array.isArray(data)) {
+		return data.map(sortData)
+	}
+	const ordered = Object.create(null)
+	for (const symbol of Object.getOwnPropertySymbols(data)) {
+		ordered[symbol] = data[symbol]
+	}
+	const orderedKeys = Object.keys(data).sort(customOrder)
+	for (const key of orderedKeys) {
+		ordered[key] = sortData(data[key])
+	}
+	return ordered
+}
+
+const priority = ['type', 'parent']
+function customOrder(a: string, b: string) {
+	return (priority.indexOf(a) + 1 || Infinity) - (priority.indexOf(b) + 1 || Infinity)
+		|| a.localeCompare(b)
 }

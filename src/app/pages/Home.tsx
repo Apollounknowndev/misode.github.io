@@ -1,6 +1,6 @@
 import { useMemo } from 'preact/hooks'
 import contributors from '../../contributors.json'
-import { Card, ChangelogEntry, Footer, GeneratorCard, Giscus, Octicon, ToolCard, ToolGroup } from '../components/index.js'
+import { Card, ChangelogEntry, Footer, GeneratorCard, Giscus, ToolCard, ToolGroup } from '../components/index.js'
 import { WhatsNewTime } from '../components/whatsnew/WhatsNewTime.jsx'
 import { useLocale, useTitle } from '../contexts/index.js'
 import { useAsync } from '../hooks/useAsync.js'
@@ -27,7 +27,6 @@ export function Home({}: Props) {
 				{smallScreen ? /* mobile */ <>
 					<PopularGenerators />
 					<FavoriteGenerators />
-					<Spyglass />
 					<WhatsNew />
 					<Changelog />
 					<Versions />
@@ -40,7 +39,6 @@ export function Home({}: Props) {
 					</div>
 					{!smallScreen && <div class="card-column">
 						<FavoriteGenerators />
-						<Spyglass />
 						<WhatsNew />
 						<Tools />
 					</div>}
@@ -58,7 +56,7 @@ function PopularGenerators() {
 	return <ToolGroup title={locale('generators.popular')} link="/generators/">
 		<GeneratorCard minimal id="loot_table" />
 		<GeneratorCard minimal id="advancement" />
-		<GeneratorCard minimal id="predicate" />
+		<GeneratorCard minimal id="recipe" />
 		<ToolCard title={locale('worldgen')} link="/worldgen/" titleIcon="worldgen" />
 		<ToolCard title={locale('generators.all')} link="/generators/" titleIcon="arrow_right" />
 		<ToolCard title={locale('generators.partners')} link="/partners/" titleIcon="arrow_right" />
@@ -83,19 +81,6 @@ function FavoriteGenerators() {
 	return <ToolGroup title={locale('generators.recent')}>
 		{favorites.map(f => <GeneratorCard minimal id={f} />)}
 	</ToolGroup>
-}
-
-function Spyglass() {
-	return <a class="tool-group tool-card p-[10px] no-underline" href="https://marketplace.visualstudio.com/items?itemName=SPGoding.datapack-language-server" target="_blank">
-		<div class="flex items-center">
-			<img src="/images/spyglass.png" alt="Spyglass Logo" width="42" height="42" />
-			<h3 class="ml-2 text-[1.17em]">
-				Datapack Helper Plus
-				{Octicon.arrow_right}
-			</h3>
-		</div>
-		<p class="mt-2">VSCode extension with heavy language features, updated to Minecraft 1.21</p>
-	</a>
 }
 
 function Tools() {
@@ -145,7 +130,12 @@ function Changelog() {
 	const hugeScreen = useMediaQuery('(min-width: 960px)')
 
 	const { value: changes } = useAsync(fetchChangelogs, [])
-	const latestChanges = useMemo(() => changes?.sort((a, b) => b.order - a.order).slice(0, 2), [changes])
+	const latestChanges = useMemo(() => {
+		return changes
+			?.sort((a, b) => b.order - a.order)
+			.filter(c => !(c.tags.includes('pack') && c.tags.includes('breaking')))
+			.slice(0, 2)
+	}, [changes])
 
 	return <ToolGroup title={locale('changelog')} link="/changelog/" titleIcon="git_commit">
 		{latestChanges?.map(change => <ChangelogEntry minimal={!hugeScreen} short={true} change={change} />)}

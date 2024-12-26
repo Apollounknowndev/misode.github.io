@@ -3,6 +3,7 @@ import config from '../Config.js'
 import { Store } from '../Store.js'
 import { message } from '../Utils.js'
 import type { BlockStateRegistry, VersionId } from './Schemas.js'
+import { checkVersion } from './Schemas.js'
 
 const CACHE_NAME = 'misode-v2'
 const CACHE_LATEST_VERSION = 'cached_latest_version'
@@ -124,6 +125,9 @@ export async function fetchItemComponents(versionId: VersionId) {
 	console.debug(`[fetchItemComponents] ${versionId}`)
 	const version = config.versions.find(v => v.id === versionId)!
 	const result = new Map<string, Map<string, unknown>>()
+	if (!checkVersion(versionId, '1.20.5')) {
+		return result
+	}
 	try {
 		const data = await cachedFetch<Record<string, Record<string, unknown>>>(`${mcmeta(version, 'summary')}/item_components/data.min.json`)
 		for (const [id, components] of Object.entries(data)) {
@@ -153,7 +157,7 @@ export async function fetchPreset(versionId: VersionId, registry: string, id: st
 		if (id.startsWith('immersive_weathering:')) {
 			url = `https://raw.githubusercontent.com/AstralOrdana/Immersive-Weathering/main/src/main/resources/data/immersive_weathering/block_growths/${id.slice(21)}.json`
 		} else {
-			const type = ['atlases', 'blockstates', 'models', 'font'].includes(registry) ? 'assets' : 'data'
+			const type = ['atlases', 'blockstates', 'items', 'models', 'font'].includes(registry) ? 'assets' : 'data'
 			url = `${mcmeta(version, type)}/${type}/minecraft/${registry}/${id}.json`
 		}
 		const res = await fetch(url)
@@ -168,7 +172,7 @@ export async function fetchAllPresets(versionId: VersionId, registry: string) {
 	const version = config.versions.find(v => v.id === versionId)!
 	await validateCache(version)
 	try {
-		const type = ['atlas', 'block_definition', 'model', 'font'].includes(registry) ? 'assets' : 'data'
+		const type = ['atlas', 'block_definition', 'item_definition', 'model', 'font'].includes(registry) ? 'assets' : 'data'
 		return new Map<string, unknown>(Object.entries(await cachedFetch(`${mcmeta(version, 'summary')}/${type}/${registry}/data.min.json`)))
 	} catch (e) {
 		throw new Error(`Error occurred while fetching all ${registry} presets: ${message(e)}`)
@@ -267,11 +271,28 @@ async function loadImage(src: string) {
 }
 */
 
+interface DeprecatedInfo {
+	removed: string[]
+	renamed: Record<string, string>
+}
+
 export async function fetchLanguage(versionId: VersionId, lang: string = 'en_us') {
 	const version = config.versions.find(v => v.id === versionId)!
 	await validateCache(version)
 	try {
-		return await cachedFetch<Record<string, string>>(`${mcmeta(version, 'assets')}/assets/minecraft/lang/${lang}.json`)
+		const translations = await cachedFetch<Record<string, string>>(`${mcmeta(version, 'assets')}/assets/minecraft/lang/${lang}.json`)
+		if (checkVersion(versionId, '1.21.2')) {
+			const deprecated = await cachedFetch<DeprecatedInfo>(`${mcmeta(version, 'assets')}/assets/minecraft/lang/deprecated.json`)
+			for (const key of deprecated.removed) {
+				delete translations[key]
+			}
+			for (const [oldKey, newKey] of Object.entries(deprecated.renamed)) {
+				const value = translations[oldKey]
+				delete translations[oldKey]
+				translations[newKey] = value
+			}
+		}
+		return translations
 	} catch (e) {
 		throw new Error(`Error occured while fetching language: ${message(e)}`)
 	}

@@ -11,10 +11,6 @@ interface Props {
 	resolver: (item: ItemStack) => ResolvedItem,
 }
 export function ItemTooltip({ item, advanced, resolver }: Props) {
-	if (item.has('hide_tooltip')) {
-		return <></>
-	}
-
 	return <>
 		<TextComponent component={item.getStyledHoverName()} />
 		{!advanced && !item.has('custom_name') && item.is('filled_map') && item.has('map_id') && (
@@ -265,7 +261,7 @@ function AttributeModifiersTooltip({ data }: { data: NbtTag | undefined }) {
 				const operation = MODIFIER_OPERATIONS.indexOf(e.getString('operation'))
 				let absolute = false
 				if (id.equals(Identifier.create('base_attack_damage'))) {
-					amount += 2
+					amount += 1
 					absolute = true
 				} else if (id.equals(Identifier.create('base_attack_speed'))) {
 					amount += 4

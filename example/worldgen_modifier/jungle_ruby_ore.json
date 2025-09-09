@@ -1,6 +1,6 @@
 {
   "type": "lithostitched:add_features",
-  "biomes": "#minecraft:is_overworld",
+  "biomes": "#minecraft:is_jungle",
   "features": "example:ore_ruby",
   "step": "underground_ores"
 }

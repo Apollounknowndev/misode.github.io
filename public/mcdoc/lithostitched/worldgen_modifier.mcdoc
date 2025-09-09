@@ -1,0 +1,25 @@
+
+dispatch minecraft:resource[lithostitched:worldgen_modifier] to struct Recipes {
+	type: Type,
+	...lithostitched:worldgen_modifier[[type]],
+}
+
+enum(string) Type {
+	AddProcessorListProcessors = "lithostitched:add_processor_list_processors",
+	AddStructureSetEntries = "lithostitched:add_structure_set_entries",
+	AddStructureTemplates = "lithostitched:add_structure_templates",
+	AddSurfaceRule = "lithostitched:add_surface_rule",
+	AddTemplatePoolElements = "lithostitched:add_template_pool_elements",
+	Nothing = "lithostitched:no_op",
+	RemoveStructureSetEntries = "lithostitched:remove_structure_set_entries",
+	SetPoolAliases = "lithostitched:set_pool_aliases",
+	SetPoolElementProcessors = "lithostitched:set_pool_element_processors",
+	SetStructureSpawnCondition = "lithostitched:set_structure_spawn_condition",
+	StackFeature = "lithostitched:stack_feature",
+	WrapDensityFunction = "lithostitched:wrap_density_function",
+	WrapNoiseRouter = "lithostitched:wrap_noise_router",
+}
+
+dispatch lithostitched:worldgen_modifier[lithostitched:add_processor_list_processors] to struct {
+	processor_lists: (#[id(registry="worldgen/processor_list",tags="allowed")] string | [#[id="worldgen/processor_list"] string])
+}

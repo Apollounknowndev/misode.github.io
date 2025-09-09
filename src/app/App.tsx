@@ -4,7 +4,7 @@ import '../styles/global.css'
 import '../styles/nodes.css'
 import { Analytics } from './Analytics.js'
 import { Header } from './components/index.js'
-import { Changelog, Convert, Customized, Generator, Generators, Guide, Guides, Home, LegacyPartners, Partners, Sounds, Transformation, Versions, WhatsNew, Worldgen } from './pages/index.js'
+import { Changelog, Convert, Customized, Generator, Generators, Guide, Guides, Home, LegacyPartners, Mod, Sounds, Transformation, Versions, WhatsNew, Worldgen } from './pages/index.js'
 import { cleanUrl } from './Utils.js'
 
 export function App() {
@@ -20,7 +20,6 @@ export function App() {
 			<Home path="/" />
 			<Generators path="/generators" />
 			<Worldgen path="/worldgen" />
-			<Partners path="/partners" />
 			<LegacyPartners path="/partners/:id" />
 			<Sounds path="/sounds" />
 			<Changelog path="/changelog" />
@@ -33,6 +32,8 @@ export function App() {
 			<Guides path="/guides" />
 			<Guide path="/guides/:id" />
 			<Generator default />
+
+			<Mod path="/lithostitched" />
 		</Router>
 	</>
 }

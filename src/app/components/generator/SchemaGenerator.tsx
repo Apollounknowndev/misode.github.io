@@ -14,7 +14,7 @@ import { DEPENDENCY_URI } from '../../services/Spyglass.js'
 import { Store } from '../../Store.js'
 import { cleanUrl, genPath } from '../../Utils.js'
 import { FancyMenu } from '../FancyMenu.jsx'
-import { Ad, Btn, BtnMenu, ErrorPanel, FileCreation, FileView, Footer, HasPreview, Octicon, PreviewPanel, ProjectPanel, SourcePanel, TextInput, VersionSwitcher } from '../index.js'
+import { Btn, BtnMenu, ErrorPanel, FileCreation, FileView, Footer, HasPreview, Octicon, PreviewPanel, ProjectPanel, SourcePanel, TextInput, VersionSwitcher } from '../index.js'
 import { getRootDefault } from './McdocHelpers.js'
 
 export const SHARE_KEY = 'share'
@@ -197,8 +197,16 @@ export function SchemaGenerator({ gen, allowedVersions }: Props) {
 	const { value: presets } = useAsync(async () => {
 		const registries = await fetchRegistries(version)
 		const entries = registries.get(gen.id) ?? []
+		applyModdedEntries(entries)
 		return entries.map(e => e.startsWith('minecraft:') ? e.slice(10) : e)
 	}, [version, gen.id])
+
+	function applyModdedEntries(entries: string[]) {
+		if (gen.id == 'lithostitched:worldgen_modifier') {
+			entries.push('lithostitched:set_trial_chambers_pool_aliases')
+		}
+		return entries
+	}
 
 	const getPresets = useCallback((search: string, close: () => void) => {
 		if (presets === undefined) {
@@ -382,7 +390,6 @@ export function SchemaGenerator({ gen, allowedVersions }: Props) {
 
 	return <>
 		<main class={`${previewShown ? 'has-preview' : ''} ${projectShown ? 'has-project' : ''}`} style={`--project-panel-width: ${realPanelWidth}px`}>
-			{!gen.tags?.includes('partners') && <Ad id="data-pack-generator" type="text" />}
 			<div class="controls generator-controls">
 				{gen.wiki && <a class="btn btn-link tooltipped tip-se" aria-label={locale('learn_on_the_wiki')} href={gen.wiki} target="_blank">
 					{Octicon.mortar_board}

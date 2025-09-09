@@ -1,4 +1,10 @@
 {
+  "title.lithostitched": "Lithostitched Generators",
+  "title.wikiful": "Wikiful Generators",
+  "title.remapped": "Remapped Generators",
+
+  "generator.lithostitched:worldgen_modifier": "Worldgen Modifier",
+
   "2d": "2D",
   "3d": "3D",
   "add": "Add",
@@ -40,9 +46,10 @@
   "customized.ores": "Ores",
   "customized.structures": "Structures",
   "cutoff": "Cutoff",
-  "developed_by": "Developed by",
+  "developed_by": "Developed by ",
+  "modified_by": ", modified by ",
   "disabled": "Disabled",
-  "donate": "Donate",
+  "donate": "Donate to Misode",
   "download": "Download",
   "duplicate": "Duplicate",
   "enabled": "Enabled",
@@ -172,7 +179,7 @@
   "generator.worldgen/structure_set": "Structure Set",
   "generator.worldgen/template_pool": "Template Pool",
   "generator.worldgen/world_preset": "World Preset",
-  "generators.all": "All generators",
+  "generators.all": "All Generators",
   "generators.no_results": "No generators for this query",
   "generators.partners": "Modded Generators",
   "generators.popular": "Popular Generators",

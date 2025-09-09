@@ -1,4 +1,5 @@
 :root {
+	--header: #e2eDe2;
 	--background-1: #fafafa;
 	--background-2: #e2e2e2;
 	--background-2-shimmer: #d9d9d9;
@@ -53,6 +54,7 @@
 }
 
 :root.dark {
+	--header: #252D25;
 	--background-1: #1b1b1b;
 	--background-2: #252525;
 	--background-2-shimmer: #2c2c2c;
@@ -133,7 +135,7 @@ header {
 	z-index: 5;
 	position: fixed;
 	box-shadow: 0 0 9px -3px #000;
-	background-color: var(--background-2);
+	background-color: var(--header);
 }
 
 .title h1 {

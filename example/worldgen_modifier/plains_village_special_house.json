@@ -1,6 +1,15 @@
 {
-  "type": "lithostitched:add_features",
-  "biomes": "#minecraft:is_jungle",
-  "features": "example:ore_ruby",
-  "step": "underground_ores"
+  "type": "lithostitched:add_template_pool_elements",
+  "template_pools": "minecraft:village/plains/houses",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "projection": "rigid",
+        "location": "example:village_plains/special_house",
+        "processors": "minecraft:mossify_10_percent"
+      }
+    }
+  ]
 }

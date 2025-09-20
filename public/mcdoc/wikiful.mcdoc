@@ -1,0 +1,99 @@
+use ::java::util::text::Text
+use ::java::world::item::ItemStack
+
+
+
+
+
+// EVENT TRIGGER
+
+
+
+
+
+dispatch minecraft:resource[wikiful:event_trigger] to struct EventTrigger {
+	type: EventTriggerType,
+	...wikiful:event_trigger[[type]]
+}
+
+enum(string) EventTriggerType {
+	AnyOf = "wikiful:any_of",
+	HitBlock = "wikiful:hit_block",
+	InventoryChanged = "wikiful:inventory_changed",
+	LocationChanged = "wikiful:location_changed"
+}
+
+
+
+
+
+// BODY ELEMENT
+
+
+
+
+
+dispatch minecraft:resource[wikiful:body_element] to struct BodyElement {
+	type: BodyElementType,
+	...wikiful:body_element[[type]]
+}
+
+enum(string) BodyElementType {
+	Text = "wikiful:text",
+	Item = "wikiful:item",
+	Sprite = "wikiful:sprite",
+	Empty = "wikiful:empty",
+	HorizontalLine = "wikiful:horizontal_line"
+}
+
+dispatch wikiful:body_element[wikiful:text] to struct {
+	contents: Text
+}
+
+dispatch wikiful:body_element[wikiful:item] to struct {
+	item: ([ItemStack] @ 1.. | ItemStack),
+	show_decorations?: boolean,
+	show_slot?: boolean,
+	centered?: boolean
+}
+
+dispatch wikiful:body_element[wikiful:sprite] to struct {
+	sprite: string,
+	texture_width: int @ 1..,
+	texture_height: int @ 1..,
+	scale?: float @ 0.001..1,
+	centered?: boolean
+}
+
+dispatch wikiful:body_element[wikiful:empty] to struct {
+	spacing: int @ 0..
+}
+
+dispatch wikiful:body_element[wikiful:horizontal_line] to struct {
+	height?: int @ 1..,
+	spacing?: int @ 0..,
+	color? : #[color="hex_rgb"] string
+}
+
+
+
+
+
+// TIP
+
+
+
+
+
+dispatch minecraft:resource[wikiful:tip] to struct Tip {
+	sprite?: BuiltInTipSprites,
+	width?: int @ 1..,
+	padding?: int @ 0..,
+	display_time_multiplier?: float @ 0.01..,
+	body: [BodyElement]
+}
+
+enum(string) BuiltInTipSprites {
+	Default = "wikiful:tip/default",
+	Console = "wikiful:tip/console",
+}

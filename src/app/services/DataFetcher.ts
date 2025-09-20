@@ -18,6 +18,43 @@ const fixesUrl = 'https://raw.githubusercontent.com/misode/mcfixes'
 const versionDiffUrl = 'https://mcmeta-diff.misode.workers.dev'
 const whatsNewUrl = 'https://whats-new.misode.workers.dev'
 
+export const REGISTRY_ADDONS = new Map([
+	[
+		"lithostitched:worldgen_modifier", [
+			"example:jungle_ruby_ore",
+			"example:plains_village_special_house"
+		]
+	],
+	[
+		"worldgen/biome", [
+    	"lithostitched:corrupted_forest"
+		]
+	],
+	[
+		"worldgen/feature", [
+    	"lithostitched:weighted_selector"
+		]
+	],
+	[
+		"worldgen/processor_list", [
+    	"lithostitched:end_city",
+    	"lithostitched:igloo",
+    	"lithostitched:nether_fossil",
+    	"lithostitched:ruined_portal",
+    	"lithostitched:shipwreck",
+    	"lithostitched:shipwreck_palette/dark_oak_and_jungle",
+    	"lithostitched:shipwreck_palette/dark_oak_and_spruce",
+    	"lithostitched:shipwreck_palette/jungle_and_spruce",
+    	"lithostitched:shipwreck_palette/oak_and_birch",
+    	"lithostitched:shipwreck_palette/oak_and_spruce",
+    	"lithostitched:shipwreck_palette/spruce_and_dark_oak",
+    	"lithostitched:shipwreck_palette/spruce_and_jungle",
+    	"lithostitched:shipwreck_palette/spruce_and_oak",
+    	"lithostitched:woodland_mansion",
+		]
+	]
+])
+
 type McmetaTypes = 'summary' | 'data' | 'data-json' | 'assets' | 'assets-json' | 'registries' | 'atlas'
 
 interface RefInfo {
@@ -71,6 +108,7 @@ export async function fetchDependencyMcdoc(dependency: string) {
 
 export async function fetchRegistries(versionId: VersionId) {
 	console.debug(`[fetchRegistries] ${versionId}`)
+	caches.delete(CACHE_NAME)
 	const version = config.versions.find(v => v.id === versionId)!
 	await validateCache(version)
 	try {
@@ -78,6 +116,9 @@ export async function fetchRegistries(versionId: VersionId) {
 		const result = new Map<string, string[]>()
 		for (const id in data) {
 			result.set(id, data[id].map((e: string) => 'minecraft:' + e))
+		}
+		for (const [id, entries] of REGISTRY_ADDONS) {
+			result.set(id, entries.concat(result.get(id) ?? []))
 		}
 		return result
 	} catch (e) {
@@ -138,8 +179,10 @@ export async function fetchPreset(versionId: VersionId, registry: string, id: st
 	await validateCache(version)
 	try {
 		let url
-		if (id.startsWith('immersive_weathering:')) {
-			url = `https://raw.githubusercontent.com/AstralOrdana/Immersive-Weathering/main/src/main/resources/data/immersive_weathering/block_growths/${id.slice(21)}.json`
+		if (id.startsWith('example')) {
+			url = `https://raw.githubusercontent.com/Apollounknowndev/misode.github.io/refs/heads/data/example/${registry.split("/")[1]}/${id.substring(8)}.json`
+		} else if (id.startsWith('lithostitched')) {
+			url = `https://raw.githubusercontent.com/Apollounknowndev/misode.github.io/refs/heads/data/lithostitched/${registry.split("/")[1]}/${id.substring(14)}.json`
 		} else {
 			const type = ['atlases', 'blockstates', 'items', 'font', 'lang', 'models', 'equipment', 'post_effect'].includes(registry) ? 'assets' : 'data'
 			url = `${mcmeta(version, type)}/${type}/minecraft/${registry}/${id}.json`
@@ -157,7 +200,11 @@ export async function fetchAllPresets(versionId: VersionId, registry: string) {
 	await validateCache(version)
 	try {
 		const type = ['atlas', 'block_definition', 'item_definition', 'model', 'font', 'lang', 'equipment', 'post_effect'].includes(registry) ? 'assets' : 'data'
-		return new Map<string, unknown>(Object.entries(await cachedFetch(`${mcmeta(version, 'summary')}/${type}/${registry}/data.min.json`)))
+		const entries = new Map<string, unknown>(Object.entries(await cachedFetch(`${mcmeta(version, 'summary')}/${type}/${registry}/data.min.json`)))
+		for (const entry of REGISTRY_ADDONS.get(registry) ?? []) {
+			entries.set(entry, null)
+		}
+		return entries;
 	} catch (e) {
 		throw new Error(`Error occurred while fetching all ${registry} presets: ${message(e)}`)
 	}
@@ -400,7 +447,7 @@ interface FetchOptions<D> {
 
 const REFRESHED = new Set<string>()
 
-async function cachedFetch<D = unknown>(url: string, { decode = (r => r.json()), refresh }: FetchOptions<D> = {}): Promise<D> {
+export async function cachedFetch<D = unknown>(url: string, { decode = (r => r.json()), refresh }: FetchOptions<D> = {}): Promise<D> {
 	try {
 		const cache = await caches.open(CACHE_NAME)
 		console.debug(`[cachedFetch] Opened cache ${CACHE_NAME} ${url}`)

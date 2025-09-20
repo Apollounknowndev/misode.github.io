@@ -1,0 +1,10 @@
+use ::java::data::worldgen::feature::placement::PlacedFeatureRef
+
+dispatch minecraft:feature_config["lithostitched:weighted_selector"] to struct WeightedSelectorConfig {
+	features: [WeightedEntry]
+}
+
+struct WeightedEntry {
+	weight: int @ 1..,
+	data: PlacedFeatureRef,
+}

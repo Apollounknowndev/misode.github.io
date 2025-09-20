@@ -34,6 +34,8 @@ export function App() {
 			<Generator default />
 
 			<Mod path="/lithostitched" />
+			<Mod path="/wikiful" />
+			<Mod path="/abridged" />
 		</Router>
 	</>
 }

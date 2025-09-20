@@ -15,6 +15,7 @@ import { useCallback, useEffect, useMemo, useState } from 'preact/hooks'
 import config from '../../Config.js'
 import { useLocale } from '../../contexts/Locale.jsx'
 import { useFocus } from '../../hooks/useFocus.js'
+import { REGISTRY_ADDONS } from '../../services/DataFetcher.js'
 import { generateColor, hexId, intToHexRgb, randomInt, randomSeed } from '../../Utils.js'
 import { Btn } from '../Btn.jsx'
 import { ItemDisplay } from '../ItemDisplay.jsx'
@@ -180,10 +181,24 @@ function StringHead({ type, optional, excludeStrings, node, ctx }: Props<StringT
 		onChangeValue(value ?? '')
 	}, [value, onChangeValue])
 
-	const completions = useMemo(() => {
+ 	const completions = useMemo(() => {
 		const values = getValues(type, { ...ctx, offset: node?.range.start ?? 0 })
 			.filter(c => c.kind === 'string' && c.value !== 'THIS')
 			.filter(c => !excludeStrings?.includes(c.value))
+		if (type.attributes?.length != 0) {
+			let attribute = type.attributes?.at(0)
+			if (attribute?.name == "id" && attribute.value != null) {
+				let registryId
+				if (attribute.value.values != null) {
+					registryId = String(attribute.value.values.registry.value.value)
+				} else {
+					registryId = String(attribute.value.value.value);
+				}
+				for (const id of REGISTRY_ADDONS.get(registryId) ?? []) {
+					values.push({value: id})
+				}
+			}
+		}
 		values.sort((a, b) => a.value.localeCompare(b.value))
 		return values
 	}, [type, excludeStrings, node, ctx])

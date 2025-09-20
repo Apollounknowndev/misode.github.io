@@ -1,9 +1,10 @@
 {
   "title.lithostitched": "Lithostitched Generators",
   "title.wikiful": "Wikiful Generators",
-  "title.remapped": "Remapped Generators",
+  "title.abridged": "Abridged Generators",
 
   "generator.lithostitched:worldgen_modifier": "Worldgen Modifier",
+  "generator.wikiful:tip": "Tip",
 
   "2d": "2D",
   "3d": "3D",

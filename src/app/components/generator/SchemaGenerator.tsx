@@ -197,16 +197,9 @@ export function SchemaGenerator({ gen, allowedVersions }: Props) {
 	const { value: presets } = useAsync(async () => {
 		const registries = await fetchRegistries(version)
 		const entries = registries.get(gen.id) ?? []
-		applyModdedEntries(entries)
 		return entries.map(e => e.startsWith('minecraft:') ? e.slice(10) : e)
 	}, [version, gen.id])
 
-	function applyModdedEntries(entries: string[]) {
-		if (gen.id == 'lithostitched:worldgen_modifier') {
-			entries.push('lithostitched:set_trial_chambers_pool_aliases')
-		}
-		return entries
-	}
 
 	const getPresets = useCallback((search: string, close: () => void) => {
 		if (presets === undefined) {

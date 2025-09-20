@@ -107,13 +107,6 @@
       "name": "1.21.6 — 1.21.8",
       "pack_format": 81,
       "show": true
-    },
-    {
-      "id": "1.21.9",
-      "dynamic": true,
-      "name": "1.21.9",
-      "pack_format": 83,
-      "show": true
     }
   ],
   "generators": [
@@ -310,6 +303,7 @@
       "url": "worldgen/feature",
       "tags": ["worldgen"],
       "minVersion": "1.16",
+      "dependency": "lithostitched_addons",
       "wiki": "https://minecraft.wiki/w/Configured_feature"
     },
     {
@@ -547,93 +541,22 @@
       "wiki": "https://minecraft.wiki/w/Tag#Java_Edition"
     },
     {
-      "id": "block_definition",
-      "url": "assets/blockstate",
-      "path": "blockstates",
-      "tags": ["assets"],
-      "wiki": "https://minecraft.wiki/w/Blockstates_definition"
-    },
-    {
-      "id": "item_definition",
-      "url": "assets/item",
-      "path": "items",
-      "tags": ["assets"],
-      "aliases": ["item model"],
-      "minVersion": "1.21.4",
-      "wiki": "https://minecraft.wiki/w/Items_model_definition"
-    },
-    {
-      "id": "model",
-      "url": "assets/model",
-      "path": "models",
-      "tags": ["assets"],
-      "wiki": "https://minecraft.wiki/w/Model#Item_models"
-    },
-    {
-      "id": "texture_meta",
-      "url": "assets/texture-meta",
-      "path": "textures",
-      "ext": ".png.mcmeta",
-      "tags": ["assets"],
-      "wiki": "https://minecraft.wiki/w/Resource_pack#Texture_animation"
-    },
-    {
-      "id": "equipment",
-      "url": "assets/equipment",
-      "path": "equipment",
-      "tags": ["assets"],
-      "minVersion": "1.21.4",
-      "wiki": "https://minecraft.wiki/w/Model#Equipment_models"
-    },
-    {
-      "id": "lang",
-      "url": "assets/lang",
-      "path": "lang",
-      "tags": ["assets"],
-      "wiki": "https://minecraft.wiki/w/Resource_pack#Language"
-    },
-    {
-      "id": "font",
-      "url": "assets/font",
-      "path": "font",
-      "tags": ["assets"],
-      "minVersion": "1.16",
-      "wiki": "https://minecraft.wiki/w/Resource_pack#Fonts"
-    },
-    {
-      "id": "atlas",
-      "url": "assets/atlas",
-      "path": "atlases",
-      "tags": ["assets"],
-      "minVersion": "1.19.3",
-      "wiki": "https://minecraft.wiki/w/Resource_pack#Atlases"
-    },
-    {
-      "id": "post_effect",
-      "url": "assets/post-effect",
-      "path": "post_effect",
-      "tags": ["assets"],
-      "minVersion": "1.21.2",
-      "wiki": "https://minecraft.wiki/w/Shader#Post-processing_effects"
-    },
-    {
-      "id": "ad_astra:planets",
-      "url": "ad-astra/planets",
-      "path": "planets",
-      "tags": ["partners"],
-      "dependency": "ad_astra",
-      "minVersion": "1.20",
-      "maxVersion": "1.21",
-      "wiki": "https://ad-astra.terrarium.wiki/datapack.html"
-    },
-    {
       "id": "lithostitched:worldgen_modifier",
       "url": "lithostitched/worldgen-modifier",
       "path": "lithostitched/worldgen_modifier",
       "tags": ["lithostitched"],
-      "dependency": "lithostitched/worldgen_modifier",
+      "dependency": "lithostitched_base",
       "minVersion": "1.20",
       "wiki": "https://github.com/Apollounknowndev/lithostitched/wiki/Worldgen-Modifier-Types"
+    },
+    {
+      "id": "wikiful:tip",
+      "url": "wikiful/tip",
+      "path": "wikiful/tip",
+      "tags": ["wikiful"],
+      "dependency": "wikiful",
+      "minVersion": "1.21.6",
+      "wiki": "https://github.com/Apollounknowndev/wikiful/wiki/Tip"
     }
   ],
   "legacyGuides": []

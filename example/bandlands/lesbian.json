@@ -1,0 +1,59 @@
+{
+  "base": {
+    "Name": "minecraft:white_terracotta"
+  },
+  "bands": [
+    {
+      "type": "lithostitched:repeating",
+      "interval": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 2,
+        "max_inclusive": 6
+      },
+      "size": 3,
+      "state": {
+        "Name": "minecraft:red_terracotta"
+      }
+    },
+    {
+      "type": "lithostitched:repeating",
+      "interval": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 5,
+        "max_inclusive": 7
+      },
+      "size": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 2,
+        "max_inclusive": 3
+      },
+      "state": {
+        "Name": "minecraft:orange_terracotta"
+      }
+    },
+    {
+      "type": "lithostitched:repeating",
+      "interval": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 8,
+        "max_inclusive": 9
+      },
+      "size": 2,
+      "state": {
+        "Name": "minecraft:magenta_terracotta"
+      }
+    },
+    {
+      "type": "lithostitched:repeating",
+      "interval": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 11,
+        "max_inclusive": 12
+      },
+      "size": 2,
+      "state": {
+        "Name": "minecraft:pink_terracotta"
+      }
+    }
+  ]
+}

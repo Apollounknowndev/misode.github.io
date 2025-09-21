@@ -1,0 +1,87 @@
+{
+  "base_state": {
+    "Name": "minecraft:terracotta"
+  },
+  "bands": [
+    {
+      "type": "lithostitched:repeating",
+      "interval": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 1,
+        "max_inclusive": 5
+      },
+      "size": 1,
+      "state": {
+        "Name": "minecraft:orange_terracotta"
+      }
+    },
+    {
+      "type": "lithostitched:base",
+      "count": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 6,
+        "max_inclusive": 15
+      },
+      "size": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 1,
+        "max_inclusive": 3
+      },
+      "state": {
+        "Name": "minecraft:yellow_terracotta"
+      }
+    },
+    {
+      "type": "lithostitched:base",
+      "count": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 6,
+        "max_inclusive": 15
+      },
+      "size": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 2,
+        "max_inclusive": 4
+      },
+      "state": {
+        "Name": "minecraft:brown_terracotta"
+      }
+    },
+    {
+      "type": "lithostitched:base",
+      "count": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 6,
+        "max_inclusive": 15
+      },
+      "size": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 1,
+        "max_inclusive": 3
+      },
+      "state": {
+        "Name": "minecraft:red_terracotta"
+      }
+    },
+    {
+      "type": "lithostitched:wrapped",
+      "interval": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 4,
+        "max_inclusive": 19
+      },
+      "max_count": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 9,
+        "max_inclusive": 15
+      },
+      "wrapper_chance": 0.5,
+      "wrapper_state": {
+        "Name": "minecraft:light_gray_terracotta"
+      },
+      "wrapped_state": {
+        "Name": "minecraft:white_terracotta"
+      }
+    }
+  ]
+}

@@ -4,7 +4,7 @@ import { message } from '../Utils.js'
 import type { VersionId } from './Versions.js'
 import { checkVersion } from './Versions.js'
 
-const CACHE_NAME = 'misode-v2'
+const CACHE_NAME = 'misode-v22'
 const CACHE_LATEST_VERSION = 'cached_latest_version'
 const CACHE_PATCH = 'misode_cache_patch'
 
@@ -26,13 +26,39 @@ export const REGISTRY_ADDONS = new Map([
 		]
 	],
 	[
+		"lithostitched:bandlands", [
+			"example:vanilla",
+			"example:lesbian",
+		]
+	],
+	[
+		"block_predicate_type", [
+			"lithostitched:multiple_of",
+			"lithostitched:random_chance",
+		]
+	],
+	[
+		"worldgen/block_state_provider_type", [
+			"lithostitched:random_block",
+			"lithostitched:weighted",
+		]
+	],
+	[
 		"worldgen/biome", [
     	"lithostitched:corrupted_forest"
 		]
 	],
 	[
 		"worldgen/feature", [
-    	"lithostitched:weighted_selector"
+    	"lithostitched:composite",
+    	"lithostitched:dungeon",
+    	"lithostitched:large_dripstone",
+    	"lithostitched:ore",
+    	"lithostitched:select",
+    	"lithostitched:structure_template",
+    	"lithostitched:vines",
+    	"lithostitched:weighted_selector",
+    	"lithostitched:well",
 		]
 	],
 	[
@@ -108,7 +134,6 @@ export async function fetchDependencyMcdoc(dependency: string) {
 
 export async function fetchRegistries(versionId: VersionId) {
 	console.debug(`[fetchRegistries] ${versionId}`)
-	caches.delete(CACHE_NAME)
 	const version = config.versions.find(v => v.id === versionId)!
 	await validateCache(version)
 	try {

@@ -1,10 +1,184 @@
+use ::java::data::gametest::Rotation
 use ::java::data::worldgen::feature::placement::PlacedFeatureRef
+use ::java::data::worldgen::feature::block_predicate::BlockPredicate
+use ::java::data::worldgen::feature::block_state_provider::BlockStateProvider
+use ::java::data::worldgen::processor_list::ProcessorListRef
+use ::java::data::worldgen::structure::LiquidSettings
+use ::java::data::worldgen::IntProvider
+use ::java::data::worldgen::FloatProvider
 
-dispatch minecraft:feature_config["lithostitched:weighted_selector"] to struct WeightedSelectorConfig {
-	features: [WeightedEntry]
+
+
+
+
+// UTILS
+
+
+
+
+
+type WeightedList<T> = [struct {
+	weight: int @ 1..,
+	data: T,
+}]
+
+type InclusiveRange<T> = (
+	T |
+	[T] @ 2 |
+	struct ExplicitInclusiveRange {
+		min_inclusive?: T,
+		max_inclusive?: T,
+	}
+)
+
+
+
+
+
+// CONFIGURED FEATURES
+
+
+
+
+
+dispatch minecraft:feature_config["lithostitched:composite"] to struct CompositeConfig {
+	features: (#[id(registry="worldgen/placed_feature",tags="required")] string | [#[id="worldgen/placed_feature"] string]),
+	placement_type?: PlacementType
 }
 
-struct WeightedEntry {
-	weight: int @ 1..,
-	data: PlacedFeatureRef,
+enum(string) PlacementType {
+	NeverCancel = "never_cancel",
+	CancelOnFailure = "cancel_on_failure",
+	CancelOnSuccess = "cancel_on_success",
+}
+
+dispatch minecraft:feature_config["lithostitched:dungeon"] to struct DungeonConfig {
+	/// The minimum number of openings in the walls of the dungeon. Defaults to 1.
+	min_openings?: int @ 0..,
+	/// The maximum number of openings in the walls of the dungeon. Defaults to 5.
+	max_openings?: int @ 0..,
+	/// The radius of the interior on each axis. Defaults to a uniform int provider between 2 and 3.
+	radius?: IntProvider<int @ 1..16>,
+	/// The maximum number of chest placements. Defaults to 2.
+	max_chests?: int @ 0..,
+	/// A weighted list of entities that can be in the spawner. Defaults to the vanilla spawner mob chances (50% zombie, 25% skeleton, 25% spider)
+	spawner_entity?: WeightedList<#[id="entity_type"] string>,
+	/// The block state provider for the floor of the dungeon. Defaults to the vanilla dungeon floor (75% mossy cobblestone, 25% cobblestone)
+	floor_provider?: BlockStateProvider,
+	/// The block state provider for the walls of the dungeon. Defaults to just cobblestone.
+	wall_provider?: BlockStateProvider,
+	/// The blocks that the dungeon cannot override. Defaults to #minecraft:features_cannot_replace.
+	dungeon_invalid_blocks?: (#[id(registry="block",tags="required")] string | [#[id="block"] string]),
+	/// The loot table for the chests to use. Defaults to minecraft:chests/simple_dungeon.
+	loot_table?: #[id="loot_table"] string
+}
+
+dispatch minecraft:feature_config["lithostitched:large_dripstone"] to struct AltLargeDripstoneConfig {
+	floor_to_ceiling_search_range?: int @ 1..512,
+	column_radius: IntProvider<int @ 0..60>,
+	height_scale: FloatProvider<float @ 0..20>,
+	max_column_radius_to_cave_height_ratio: float @ 0..1,
+	stalactite_bluntness: FloatProvider<float @ 0.1..10>,
+	stalagmite_bluntness: FloatProvider<float @ 0.1..10>,
+	wind_speed: FloatProvider<float @ 0..2>,
+	min_radius_for_wind: int @ 0..100,
+	min_bluntness_for_wind: float @ 0..1,
+	/// The block state provider to use.
+	state_provider: BlockStateProvider,
+	/// The blocks that can be replaced by the blocks in the state_provider.
+	replaceable_blocks: (#[id(registry="block",tags="required")] string | [#[id="block"] string])
+}
+
+dispatch minecraft:feature_config["lithostitched:ore"] to struct AltOreConfig {
+	size: int @ 0..128,
+	targets: [AltOreTarget]
+}
+
+struct AltOreTarget {
+	predicate: BlockPredicate,
+	state_provider: BlockStateProvider
+}
+
+dispatch minecraft:feature_config["lithostitched:select"] to struct SelectConfig {
+	/// A list of block predicates and their corresponding placed features. The first entry in the list with the block predicate met will place its feature. 
+	features: [SelectEntry]
+}
+
+struct SelectEntry {
+	predicate: BlockPredicate,
+	feature: PlacedFeatureRef
+}
+
+dispatch minecraft:feature_config["lithostitched:structure_template"] to struct StructureTemplateConfig {
+	/// The structure template nbt to place.
+	template: #[id="structure"] string,
+	/// The processors to apply to the structure template.
+	processors: ProcessorListRef,
+	/// The rotation for the template to be placed relative to its rotation when saved. If left empty, a random rotation will be applied.
+	rotation?: Rotation,
+	/// Defaults to apply_waterlogging.
+	liquid_settings?: LiquidSettings,
+	/// If set, the jigsaw block in the structure with this name will be where the template is placed relative to.
+	start_jigsaw_name?: #[id] string
+}
+
+dispatch minecraft:feature_config["lithostitched:vines"] to struct VinesConfig {
+	/// All blocks here MUST be vine blocks! Defaults to the vanilla vine block.
+	state?: (#[id="block"] string | WeightedList<#[id="block"] string>),
+	/// The blocks the vines can start growing from. If empty, any blocks are allowed.
+	can_place_on?: (#[id(registry="block",tags="required")] string | [#[id="block"] string]),
+	/// The length the vines will grow. Defaults to a constant of one.
+	max_length?: IntProvider<int @ 1..256>
+}
+
+dispatch minecraft:feature_config["lithostitched:weighted_selector"] to struct WeightedSelectorConfig {
+	features: WeightedList<PlacedFeatureRef>
+}
+
+dispatch minecraft:feature_config["lithostitched:well"] to struct WellConfig {
+	ground_provider?: BlockStateProvider,
+	suspicious_provider?: BlockStateProvider,
+	standard_provider?: BlockStateProvider,
+	slab_provider?: BlockStateProvider,
+	fluid_provider?: BlockStateProvider,
+	/// The number of suspicious blocks to place per layer.
+	suspicious_block_placements?: IntProvider<int @ 0..4>,
+	suspicious_loot_table?: #[id="loot_table"] string
+}
+
+
+
+
+
+// BLOCK PREDICATE
+
+
+
+
+
+dispatch minecraft:block_predicate["lithostitched:multiple_of"] to struct MultipleOfPredicate {
+	predicates: [BlockPredicate],
+	allowed_count: InclusiveRange<int @ 0..>
+}
+
+dispatch minecraft:block_predicate["lithostitched:random_chance"] to struct RandomChancePredicate {
+	chance: float @ 0..1
+}
+
+
+
+
+
+// BLOCK STATE PROVIDER
+
+
+
+
+
+dispatch minecraft:block_state_provider["lithostitched:random_block"] to struct RandomBlockProvider {
+	blocks: (#[id(registry="block",tags="required")] string | [#[id="block"] string])
+}
+
+dispatch minecraft:block_state_provider["lithostitched:weighted"] to struct WeightedProvider {
+	entries: WeightedList<BlockStateProvider>
 }

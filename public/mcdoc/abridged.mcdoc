@@ -1,0 +1,48 @@
+use ::java::data::util::SoundEventRef
+use ::java::data::worldgen::DecorationStep
+use ::java::data::worldgen::HeightmapType
+use ::java::data::worldgen::IntProvider
+use ::java::data::worldgen::biome::BiomeMusic
+use ::java::data::worldgen::biome::GrassColorModifier
+use ::java::data::worldgen::biome::SpawnerData
+use ::java::data::worldgen::biome::TemperatureModifier
+use ::java::data::worldgen::density_function::DensityFunction
+use ::java::data::worldgen::density_function::DensityFunctionRef
+use ::java::data::worldgen::feature::block_state_provider::BlockStateProvider
+use ::java::data::worldgen::feature::placement::PlacedFeatureRef
+use ::java::data::worldgen::processor_list::Processor
+use ::java::data::worldgen::processor_list::ProcessorList
+use ::java::data::worldgen::structure::PoolAlias
+use ::java::data::worldgen::structure_set::StructureSetElement
+use ::java::data::worldgen::surface_rule::SurfaceRule
+use ::java::data::worldgen::template_pool::WeightedElement
+use ::java::util::block_state::BlockState
+use ::java::util::particle::Particle
+use ::java::util::InclusiveRange
+use super::lithostitched_base::PlacementCondition
+
+
+
+
+
+// BRIDGE CONFIGS
+
+
+
+
+
+dispatch minecraft:resource[abridged:bridge_config] to struct BridgeConfig {
+	condition: PlacementCondition,
+	height: InclusiveRange<int>,
+	segments: InclusiveRange<int @ 2..12>,
+	max_height_difference: int,
+	base_template: (#[id("structure")] string | [#[id("structure")] string]),
+	edge_template: (#[id("structure")] string | [#[id("structure")] string]),
+	processors: (#[id="worldgen/processor_list"] string | ProcessorList),
+	extensions: [BridgeExtension] 
+}
+
+struct BridgeExtension {
+	blocks: (#[id(registry="block")] string | [#[id="block"] string]),
+	extended_state: BlockStateProvider
+}

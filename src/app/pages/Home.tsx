@@ -52,6 +52,7 @@ function PopularGenerators() {
 		<ToolCard title={locale('title.lithostitched')} link="/lithostitched/" titleIcon="arrow_right" />
 		<ToolCard title={locale('title.wikiful')} link="/wikiful/" titleIcon="arrow_right" />
 		<ToolCard title={locale('title.abridged')} link="/abridged/" titleIcon="arrow_right" />
+		<ToolCard title={locale('generator.pack_mcmeta')} link="/pack-mcmeta/"/>
 	</ToolGroup>
 }
 

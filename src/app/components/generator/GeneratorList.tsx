@@ -55,6 +55,8 @@ export function searchGenerators(generators: (ConfigGenerator & { name: string})
 			|| parts.some(p => g.aliases?.some(a => a.includes(p)) ?? false))
 	}
 	generators.sort((a, b) => a.name.localeCompare(b.name))
+	generators.sort((a, b) => (b.id.startsWith("lithostitched") ? 1 : 0) - (a.id.startsWith("lithostitched") ? 1 : 0))
+	generators.sort((a, b) => (b.name.startsWith("worldgen") ? 1 : 0) - (a.name.startsWith("worldgen") ? 1 : 0))
 	if (search) {
 		generators.sort((a, b) => (b.name.startsWith(search) ? 1 : 0) - (a.name.startsWith(search) ? 1 : 0))
 	}

@@ -1,6 +1,7 @@
 use ::java::data::util::SoundEventRef
 use ::java::data::worldgen::DecorationStep
 use ::java::data::worldgen::HeightmapType
+use ::java::data::worldgen::IntProvider
 use ::java::data::worldgen::biome::BiomeMusic
 use ::java::data::worldgen::biome::GrassColorModifier
 use ::java::data::worldgen::biome::SpawnerData
@@ -14,6 +15,7 @@ use ::java::data::worldgen::structure::PoolAlias
 use ::java::data::worldgen::structure_set::StructureSetElement
 use ::java::data::worldgen::surface_rule::SurfaceRule
 use ::java::data::worldgen::template_pool::WeightedElement
+use ::java::util::block_state::BlockState
 use ::java::util::particle::Particle
 use ::java::util::InclusiveRange
 
@@ -74,18 +76,18 @@ enum(string) PlacementConditionType {
 	True = "lithostitched:true"
 }
 
-dispatch lithostitched:placement_condition[lithostitched:all_of] to struct {
-	conditions: [PlacementCondition]
-}
+//dispatch lithostitched:placement_condition[lithostitched:all_of] to struct {
+//	conditions: [PlacementCondition]
+//}
 
-dispatch lithostitched:placement_condition[lithostitched:any_of] to struct {
-	conditions: [PlacementCondition]
-}
+//dispatch lithostitched:placement_condition[lithostitched:any_of] to struct {
+//	conditions: [PlacementCondition]
+//}
 
 dispatch lithostitched:placement_condition[lithostitched:grid] to struct {
 	radius: int @ 1..,
 	distance_between_points: int @ 4..1024,
-	conditions: PlacementCondition,
+	condition: PlacementCondition,
 	allowed_count: InclusiveRange<int>
 }
 
@@ -192,7 +194,7 @@ dispatch lithostitched:worldgen_modifier[lithostitched:add_structure_set_entries
 
 dispatch lithostitched:worldgen_modifier[lithostitched:add_structure_templates] to struct {
 	targets: (TemplateList | [TemplateList]),
-	templates: (string | [string])
+	templates: (#[id="structure"] string | [#[id="structure"] string])
 }
 
 enum(string) TemplateList {
@@ -312,7 +314,7 @@ dispatch lithostitched:worldgen_modifier[lithostitched:set_pool_aliases] to stru
 
 dispatch lithostitched:worldgen_modifier[lithostitched:set_pool_element_processors] to struct {
 	template_pools: (#[id(registry="worldgen/template_pool",tags="allowed")] string | [#[id="worldgen/template_pool"] string]),
-	locations?: (string | [string]),
+	locations?: (#[id="structure"] string | [#[id="structure"] string]),
 	processor_list: (#[id="worldgen/processor_list"] string | ProcessorList),
 	append?: boolean
 }
@@ -337,4 +339,50 @@ dispatch lithostitched:worldgen_modifier[lithostitched:wrap_noise_router] to str
 	dimension: #[id="dimension"] string,
 	target: NoiseRouterTarget,
 	wrapper_function: DensityFunction
+}
+
+
+
+
+
+// BANDLANDS
+
+
+
+
+
+dispatch minecraft:resource[lithostitched:bandlands] to struct Bandlands {
+	base: BlockState,
+	bands: [BandlandsBand]
+}
+
+struct BandlandsBand {
+	type: BandType,
+	...lithostitched:band_type[[type]],
+}
+
+enum(string) BandType {
+	Base = "lithostitched:base",
+	Repeating = "lithostitched:repeating",
+	Wrapped = "lithostitched:wrapped",
+}
+
+dispatch lithostitched:band_type[lithostitched:base] to struct {
+	count: IntProvider<int @ 0..>,
+	size: IntProvider<int @ 1..>,
+	state: BlockState,
+}
+
+dispatch lithostitched:band_type[lithostitched:repeating] to struct {
+	interval: IntProvider<int @ 1..>,
+	size: IntProvider<int @ 1..>,
+	state: BlockState,
+}
+
+dispatch lithostitched:band_type[lithostitched:wrapped] to struct {
+	interval: IntProvider<int @ 1..>,
+	max_count: IntProvider<int @ 1..>,
+	wrapper_chance: float @ 0..1,
+	wrapper_state: BlockState,
+	wrapped_state: BlockState,
 }

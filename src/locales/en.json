@@ -4,7 +4,14 @@
   "title.abridged": "Abridged Generators",
 
   "generator.lithostitched:worldgen_modifier": "Worldgen Modifier",
+  "generator.lithostitched:bandlands": "Bandlands",
   "generator.wikiful:tip": "Tip",
+  "generator.abridged:bridge_config": "Bridge Config",
+
+  "partner.lithostitched_base": "From Lithostitched",
+  "partner.lithostitched_addons": "Enhanced by Lithostitched",
+  "partner.wikiful": "Wikiful",
+  "partner.abridged": "Abridged",
 
   "2d": "2D",
   "3d": "3D",
@@ -225,7 +232,6 @@
   "partner.create": "Create",
   "partner.fabric": "Fabric",
   "partner.immersive_weathering": "Immersive Weathering",
-  "partner.lithostitched": "Lithostitched",
   "partner.neoforge": "NeoForge",
   "partner.obsidian": "Obsidian",
   "partner.ohthetreesyoullgrow": "Oh The Trees You'll Grow",

@@ -111,159 +111,40 @@
   ],
   "generators": [
     {
-      "id": "loot_table",
-      "url": "loot-table",
-      "wiki": "https://minecraft.wiki/w/Loot_table"
+      "id": "lithostitched:worldgen_modifier",
+      "url": "lithostitched/worldgen-modifier",
+      "path": "lithostitched/worldgen_modifier",
+      "tags": ["lithostitched"],
+      "dependency": "lithostitched_base",
+      "minVersion": "1.20",
+      "wiki": "https://github.com/Apollounknowndev/lithostitched/wiki/Worldgen-Modifier-Types"
     },
     {
-      "id": "predicate",
-      "url": "predicate",
-      "wiki": "https://minecraft.wiki/w/Predicate"
-    },
-    {
-      "id": "item_modifier",
-      "url": "item-modifier",
-      "minVersion": "1.17",
-      "wiki": "https://minecraft.wiki/w/Item_modifier"
-    },
-    {
-      "id": "advancement",
-      "url": "advancement",
-      "wiki": "https://minecraft.wiki/w/Custom_advancement"
-    },
-    {
-      "id": "recipe",
-      "url": "recipe",
-      "wiki": "https://minecraft.wiki/w/Recipe#JSON_format"
-    },
-    {
-      "id": "chat_type",
-      "url": "chat-type",
-      "minVersion": "1.19",
-      "wiki": "https://minecraft.wiki/w/Chat_type"
-    },
-    {
-      "id": "damage_type",
-      "url": "damage-type",
-      "minVersion": "1.19.4",
-      "wiki": "https://minecraft.wiki/w/Damage_type"
-    },
-    {
-      "id": "trim_material",
-      "url": "trim-material",
-      "minVersion": "1.19.4"
-    },
-    {
-      "id": "trim_pattern",
-      "url": "trim-pattern",
-      "minVersion": "1.19.4"
-    },
-    {
-      "id": "banner_pattern",
-      "url": "banner-pattern",
-      "minVersion": "1.20.5",
-      "wiki": "https://minecraft.wiki/w/Banner/Patterns#JSON_Format"
-    },
-    {
-      "id": "wolf_variant",
-      "url": "wolf-variant",
-      "minVersion": "1.20.5",
-      "wiki": "https://minecraft.wiki/w/Mob_variant_definitions#Wolf"
-    },
-    {
-      "id": "wolf_sound_variant",
-      "url": "wolf-sound-variant",
-      "minVersion": "1.21.5"
-    },
-    {
-      "id": "enchantment",
-      "url": "enchantment",
+      "id": "lithostitched:bandlands",
+      "url": "lithostitched/bandlands",
+      "path": "lithostitched/bandlands",
+      "tags": ["lithostitched"],
+      "dependency": "lithostitched_base",
       "minVersion": "1.21",
-      "wiki": "https://minecraft.wiki/w/Custom_enchantment"
+      "wiki": "https://github.com/Apollounknowndev/lithostitched/wiki/Worldgen-Modifier-Types"
     },
     {
-      "id": "enchantment_provider",
-      "url": "enchantment-provider",
-      "minVersion": "1.21",
-      "wiki": "https://minecraft.wiki/w/Enchantment_provider"
-    },
-    {
-      "id": "painting_variant",
-      "url": "painting-variant",
-      "minVersion": "1.21",
-      "wiki": "https://minecraft.wiki/w/Painting_variant"
-    },
-    {
-      "id": "jukebox_song",
-      "url": "jukebox-song",
-      "minVersion": "1.21",
-      "wiki": "https://minecraft.wiki/w/Jukebox_song_definition"
-    },
-    {
-      "id": "instrument",
-      "url": "instrument",
-      "minVersion": "1.21.2",
-      "wiki": "https://minecraft.wiki/w/Instrument_definition"
-    },
-    {
-      "id": "trial_spawner",
-      "url": "trial-spawner",
-      "minVersion": "1.21.2",
-      "wiki": "https://minecraft.wiki/w/Trial_spawner_configuration"
-    },
-    {
-      "id": "pig_variant",
-      "url": "pig-variant",
-      "minVersion": "1.21.5",
-      "wiki": "https://minecraft.wiki/w/Mob_variant_definitions#Pig"
-    },
-    {
-      "id": "cat_variant",
-      "url": "cat-variant",
-      "minVersion": "1.21.5",
-      "wiki": "https://minecraft.wiki/w/Mob_variant_definitions#Cat"
-    },
-    {
-      "id": "frog_variant",
-      "url": "frog-variant",
-      "minVersion": "1.21.5",
-      "wiki": "https://minecraft.wiki/w/Mob_variant_definitions#Frog"
-    },
-    {
-      "id": "chicken_variant",
-      "url": "chicken-variant",
-      "minVersion": "1.21.5",
-      "wiki": "https://minecraft.wiki/w/Mob_variant_definitions#Chicken"
-    },
-    {
-      "id": "cow_variant",
-      "url": "cow-variant",
-      "minVersion": "1.21.5",
-      "wiki": "https://minecraft.wiki/w/Mob_variant_definitions#Cow"
-    },
-    {
-      "id": "dialog",
-      "url": "dialog",
+      "id": "wikiful:tip",
+      "url": "wikiful/tip",
+      "path": "wikiful/tip",
+      "tags": ["wikiful"],
+      "dependency": "wikiful",
       "minVersion": "1.21.6",
-      "wiki": "https://minecraft.wiki/w/Dialog"
+      "wiki": "https://github.com/Apollounknowndev/wikiful/wiki/Tip"
     },
     {
-      "id": "test_instance",
-      "url": "test-instance",
-      "minVersion": "1.21.5",
-      "wiki": "https://minecraft.wiki/w/Test_instance_definition"
-    },
-    {
-      "id": "test_environment",
-      "url": "test-environment",
-      "minVersion": "1.21.5",
-      "wiki": "https://minecraft.wiki/w/Test_environment_definition"
-    },
-    {
-      "id": "text_component",
-      "url": "text-component",
-      "noPath": true,
-      "wiki": "https://minecraft.wiki/w/Raw_JSON_text_format#Java_Edition"
+      "id": "abridged:bridge_config",
+      "url": "abridged/bridge-config",
+      "path": "abridged/bridge_config",
+      "tags": ["abridged"],
+      "dependency": "abridged",
+      "minVersion": "1.20",
+      "wiki": "https://github.com/Apollounknowndev/abridged/wiki/Adding-Bridge-Variants"
     },
     {
       "id": "pack_mcmeta",
@@ -273,35 +154,28 @@
     {
       "id": "dimension",
       "url": "dimension",
-      "tags": ["worldgen"],
+      "tags": ["lithostitched"],
       "minVersion": "1.16",
       "wiki": "https://minecraft.wiki/w/Custom_dimension"
     },
     {
       "id": "dimension_type",
       "url": "dimension-type",
-      "tags": ["worldgen"],
+      "tags": ["lithostitched"],
       "minVersion": "1.16",
       "wiki": "https://minecraft.wiki/w/Dimension_type"
     },
     {
       "id": "worldgen/biome",
       "url": "worldgen/biome",
-      "tags": ["worldgen"],
+      "tags": ["lithostitched"],
       "minVersion": "1.16",
       "wiki": "https://minecraft.wiki/w/Custom_biome"
     },
     {
-      "id": "worldgen/configured_carver",
-      "url": "worldgen/carver",
-      "tags": ["worldgen"],
-      "minVersion": "1.16",
-      "wiki": "https://minecraft.wiki/w/Custom_carver"
-    },
-    {
       "id": "worldgen/configured_feature",
       "url": "worldgen/feature",
-      "tags": ["worldgen"],
+      "tags": ["lithostitched"],
       "minVersion": "1.16",
       "dependency": "lithostitched_addons",
       "wiki": "https://minecraft.wiki/w/Configured_feature"
@@ -309,148 +183,58 @@
     {
       "id": "worldgen/placed_feature",
       "url": "worldgen/placed-feature",
-      "tags": ["worldgen"],
+      "tags": ["lithostitched"],
       "minVersion": "1.18",
       "wiki": "https://minecraft.wiki/w/Placed_feature"
     },
     {
       "id": "worldgen/density_function",
       "url": "worldgen/density-function",
-      "tags": ["worldgen"],
+      "tags": ["lithostitched"],
       "minVersion": "1.18.2",
       "wiki": "https://minecraft.wiki/w/Density_function"
     },
     {
       "id": "worldgen/noise",
       "url": "worldgen/noise",
-      "tags": ["worldgen"],
+      "tags": ["lithostitched"],
       "minVersion": "1.18",
       "wiki": "https://minecraft.wiki/w/Noise"
     },
     {
       "id": "worldgen/noise_settings",
       "url": "worldgen/noise-settings",
-      "tags": ["worldgen"],
+      "tags": ["lithostitched"],
       "minVersion": "1.16",
       "wiki": "https://minecraft.wiki/w/Custom_noise_settings"
     },
     {
-      "id": "worldgen/configured_structure_feature",
-      "url": "worldgen/structure-feature",
-      "tags": ["worldgen"],
-      "minVersion": "1.16",
-      "maxVersion": "1.18.2"
-    },
-    {
       "id": "worldgen/structure",
       "url": "worldgen/structure",
-      "tags": ["worldgen"],
+      "tags": ["lithostitched"],
       "minVersion": "1.19",
       "wiki": "https://minecraft.wiki/w/Custom_structure"
     },
     {
       "id": "worldgen/structure_set",
       "url": "worldgen/structure-set",
-      "tags": ["worldgen"],
+      "tags": ["lithostitched"],
       "minVersion": "1.18.2",
       "wiki": "https://minecraft.wiki/w/Structure_set"
     },
     {
-      "id": "worldgen/configured_surface_builder",
-      "url": "worldgen/surface-builder",
-      "tags": ["worldgen"],
-      "minVersion": "1.16",
-      "maxVersion": "1.17",
-      "wiki": "https://minecraft.wiki/w/Configured_surface_builder"
-    },
-    {
       "id": "worldgen/processor_list",
       "url": "worldgen/processor-list",
-      "tags": ["worldgen"],
+      "tags": ["lithostitched"],
       "minVersion": "1.16",
       "wiki": "https://minecraft.wiki/w/Processor_list"
     },
     {
       "id": "worldgen/template_pool",
       "url": "worldgen/template-pool",
-      "tags": ["worldgen"],
+      "tags": ["lithostitched"],
       "minVersion": "1.16",
       "wiki": "https://minecraft.wiki/w/Template_pool"
-    },
-    {
-      "id": "worldgen/world_preset",
-      "url": "worldgen/world-preset",
-      "tags": ["worldgen"],
-      "minVersion": "1.19",
-      "wiki": "https://minecraft.wiki/w/Custom_world_preset"
-    },
-    {
-      "id": "worldgen/flat_level_generator_preset",
-      "url": "worldgen/flat-world-preset",
-      "tags": ["worldgen"],
-      "minVersion": "1.19",
-      "wiki": "https://minecraft.wiki/w/Custom_world_preset#Superflat_Level_Generation_Preset"
-    },
-    {
-      "id": "world",
-      "url": "world",
-      "noPath": true,
-      "tags": ["worldgen"],
-      "minVersion": "1.16",
-      "maxVersion": "1.19.3",
-      "wiki": "https://minecraft.wiki/w/Custom"
-    },
-    {
-      "id": "tag/block",
-      "url": "tags/block",
-      "tags": ["tags"],
-      "path": "tags/block",
-      "wiki": "https://minecraft.wiki/w/Tag#Java_Edition"
-    },
-    {
-      "id": "tag/entity_type",
-      "url": "tags/entity-type",
-      "tags": ["tags"],
-      "path": "tags/entity_type",
-      "wiki": "https://minecraft.wiki/w/Tag#Java_Edition"
-    },
-    {
-      "id": "tag/fluid",
-      "url": "tags/fluid",
-      "tags": ["tags"],
-      "path": "tags/fluid",
-      "wiki": "https://minecraft.wiki/w/Tag#Java_Edition"
-    },
-    {
-      "id": "tag/game_event",
-      "url": "tags/game-event",
-      "tags": ["tags"],
-      "path": "tags/game_event",
-      "minVersion": "1.17",
-      "wiki": "https://minecraft.wiki/w/Tag#Java_Edition"
-    },
-    {
-      "id": "tag/item",
-      "url": "tags/item",
-      "tags": ["tags"],
-      "path": "tags/item",
-      "wiki": "https://minecraft.wiki/w/Tag#Java_Edition"
-    },
-    {
-      "id": "tag/damage_type",
-      "url": "tags/damage-type",
-      "tags": ["tags"],
-      "path": "tags/damage_type",
-      "minVersion": "1.19.4",
-      "wiki": "https://minecraft.wiki/w/Tag#Java_Edition"
-    },
-    {
-      "id": "tag/dialog",
-      "url": "tags/dialog",
-      "tags": ["tags"],
-      "path": "tags/dialog",
-      "minVersion": "1.21.6",
-      "wiki": "https://minecraft.wiki/w/Tag#Java_Edition"
     },
     {
       "id": "tag/worldgen/biome",
@@ -475,88 +259,6 @@
       "path": "tags/worldgen/structure_set",
       "minVersion": "1.18.2",
       "wiki": "https://minecraft.wiki/w/Tag#Java_Edition"
-    },
-    {
-      "id": "tag/worldgen/flat_level_generator_preset",
-      "url": "tags/flat-world-preset",
-      "tags": ["tags", "worldgen"],
-      "path": "tags/worldgen/flat_level_generator_preset",
-      "minVersion": "1.19",
-      "wiki": "https://minecraft.wiki/w/Tag#Java_Edition"
-    },
-    {
-      "id": "tag/worldgen/world_preset",
-      "url": "tags/world-preset",
-      "tags": ["tags", "worldgen"],
-      "path": "tags/worldgen/world_preset",
-      "minVersion": "1.19",
-      "wiki": "https://minecraft.wiki/w/Tag#Java_Edition"
-    },
-    {
-      "id": "tag/banner_pattern",
-      "url": "tags/banner-pattern",
-      "tags": ["tags"],
-      "path": "tags/banner_pattern",
-      "minVersion": "1.19",
-      "wiki": "https://minecraft.wiki/w/Tag#Java_Edition"
-    },
-    {
-      "id": "tag/cat_variant",
-      "url": "tags/cat-variant",
-      "tags": ["tags"],
-      "path": "tags/cat_variant",
-      "minVersion": "1.19",
-      "wiki": "https://minecraft.wiki/w/Tag#Java_Edition"
-    },
-    {
-      "id": "tag/enchantment",
-      "url": "tags/enchantment",
-      "tags": ["tags"],
-      "path": "tags/enchantment",
-      "minVersion": "1.19",
-      "wiki": "https://minecraft.wiki/w/Tag#Java_Edition"
-    },
-    {
-      "id": "tag/instrument",
-      "url": "tags/instrument",
-      "tags": ["tags"],
-      "path": "tags/instrument",
-      "minVersion": "1.19",
-      "wiki": "https://minecraft.wiki/w/Tag#Java_Edition"
-    },
-    {
-      "id": "tag/painting_variant",
-      "url": "tags/painting-variant",
-      "tags": ["tags"],
-      "path": "tags/painting_variant",
-      "minVersion": "1.19",
-      "wiki": "https://minecraft.wiki/w/Tag#Java_Edition"
-    },
-    {
-      "id": "tag/point_of_interest_type",
-      "url": "tags/point-of-interest-type",
-      "tags": ["tags"],
-      "path": "tags/point_of_interest_type",
-      "minVersion": "1.19",
-      "wiki": "https://minecraft.wiki/w/Tag#Java_Edition"
-    },
-    {
-      "id": "lithostitched:worldgen_modifier",
-      "url": "lithostitched/worldgen-modifier",
-      "path": "lithostitched/worldgen_modifier",
-      "tags": ["lithostitched"],
-      "dependency": "lithostitched_base",
-      "minVersion": "1.20",
-      "wiki": "https://github.com/Apollounknowndev/lithostitched/wiki/Worldgen-Modifier-Types"
-    },
-    {
-      "id": "wikiful:tip",
-      "url": "wikiful/tip",
-      "path": "wikiful/tip",
-      "tags": ["wikiful"],
-      "dependency": "wikiful",
-      "minVersion": "1.21.6",
-      "wiki": "https://github.com/Apollounknowndev/wikiful/wiki/Tip"
     }
   ],
   "legacyGuides": []

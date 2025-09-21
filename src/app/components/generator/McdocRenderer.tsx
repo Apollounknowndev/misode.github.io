@@ -190,7 +190,11 @@ function StringHead({ type, optional, excludeStrings, node, ctx }: Props<StringT
 			if (attribute?.name == "id" && attribute.value != null) {
 				let registryId
 				if (attribute.value.values != null) {
-					registryId = String(attribute.value.values.registry.value.value)
+					if (attribute.value.values.registry != null) {
+						registryId = String(attribute.value.values.registry.value.value)
+					} else {
+						registryId = "unknown"
+					}
 				} else {
 					registryId = String(attribute.value.value.value);
 				}

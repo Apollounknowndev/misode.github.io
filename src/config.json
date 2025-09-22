@@ -115,7 +115,7 @@
       "url": "lithostitched/worldgen-modifier",
       "path": "lithostitched/worldgen_modifier",
       "tags": ["lithostitched"],
-      "dependency": "lithostitched_base",
+      "dependencies": ["lithostitched_base", "mod"],
       "minVersion": "1.20",
       "wiki": "https://github.com/Apollounknowndev/lithostitched/wiki/Worldgen-Modifier-Types"
     },
@@ -124,7 +124,7 @@
       "url": "lithostitched/bandlands",
       "path": "lithostitched/bandlands",
       "tags": ["lithostitched"],
-      "dependency": "lithostitched_base",
+      "dependencies": ["lithostitched_base", "mod"],
       "minVersion": "1.21",
       "wiki": "https://github.com/Apollounknowndev/lithostitched/wiki/Worldgen-Modifier-Types"
     },
@@ -133,7 +133,7 @@
       "url": "wikiful/tip",
       "path": "wikiful/tip",
       "tags": ["wikiful"],
-      "dependency": "wikiful",
+      "dependencies": ["wikiful"],
       "minVersion": "1.21.6",
       "wiki": "https://github.com/Apollounknowndev/wikiful/wiki/Tip"
     },
@@ -142,7 +142,7 @@
       "url": "abridged/bridge-config",
       "path": "abridged/bridge_config",
       "tags": ["abridged"],
-      "dependency": "abridged",
+      "dependencies": ["abridged", "mod"],
       "minVersion": "1.20",
       "wiki": "https://github.com/Apollounknowndev/abridged/wiki/Adding-Bridge-Variants"
     },
@@ -177,7 +177,7 @@
       "url": "worldgen/feature",
       "tags": ["lithostitched"],
       "minVersion": "1.16",
-      "dependency": "lithostitched_addons",
+      "dependencies": ["lithostitched_addons"],
       "wiki": "https://minecraft.wiki/w/Configured_feature"
     },
     {

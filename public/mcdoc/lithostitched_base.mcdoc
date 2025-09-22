@@ -18,6 +18,7 @@ use ::java::data::worldgen::template_pool::WeightedElement
 use ::java::util::block_state::BlockState
 use ::java::util::particle::Particle
 use ::java::util::InclusiveRange
+use super::PlacementCondition
 
 
 
@@ -45,91 +46,6 @@ enum(string) NoiseRouterTarget {
 	VeinToggle = "vein_toggle",
 	VeinRidged = "vein_ridged",
 	VeinGap = "vein_gap",
-}
-
-
-
-
-
-// PLACEMENT CONDITIONS
-
-
-
-
-
-dispatch minecraft:resource[lithostitched:placement_condition] to struct PlacementCondition {
-	type: PlacementConditionType,
-	...lithostitched:placement_condition[[type]],
-}
-
-enum(string) PlacementConditionType {
-	AllOf = "lithostitched:all_of",
-	AnyOf = "lithostitched:any_of",
-	Grid = "lithostitched:grid",
-	HeightFilter = "lithostitched:height_filter",
-	InBiome = "lithostitched:in_biome",
-	MultipleOf = "lithostitched:multiple_of",
-	Not = "lithostitched:not",
-	Offset = "lithostitched:offset",
-	SampleDensity = "lithostitched:sample_density",
-	SampleNoiseRouter = "lithostitched:sample_noise_router",
-	True = "lithostitched:true"
-}
-
-//dispatch lithostitched:placement_condition[lithostitched:all_of] to struct {
-//	conditions: [PlacementCondition]
-//}
-
-//dispatch lithostitched:placement_condition[lithostitched:any_of] to struct {
-//	conditions: [PlacementCondition]
-//}
-
-dispatch lithostitched:placement_condition[lithostitched:grid] to struct {
-	radius: int @ 1..,
-	distance_between_points: int @ 4..1024,
-	condition: PlacementCondition,
-	allowed_count: InclusiveRange<int>
-}
-
-dispatch lithostitched:placement_condition[lithostitched:height_filter] to struct {
-	range_type: RangeType,
-	heightmap?: HeightmapType,
-	permitted_range: InclusiveRange<int>
-}
-
-enum(string) RangeType {
-	Absolute = "absolute",
-	HeightmapRelative = "heightmap_relative"
-}
-
-dispatch lithostitched:placement_condition[lithostitched:in_biome] to struct {
-	biomes: (#[id(registry="worldgen/biome",tags="allowed")] string | [#[id="worldgen/biome"] string]),
-}
-
-dispatch lithostitched:placement_condition[lithostitched:multiple_of] to struct {
-	conditions: [PlacementCondition],
-	allowed_count: InclusiveRange<int>
-}
-
-dispatch lithostitched:placement_condition[lithostitched:not] to struct {
-	condition: PlacementCondition
-}
-
-dispatch lithostitched:placement_condition[lithostitched:offset] to struct {
-	condition: PlacementCondition,
-	offset: int[] @ 3
-}
-
-dispatch lithostitched:placement_condition[lithostitched:sample_density] to struct {
-	density_function: DensityFunctionRef,
-	min_inclusive: double,
-	max_inclusive: double,
-}
-
-dispatch lithostitched:placement_condition[lithostitched:sample_noise_router] to struct {
-	target: NoiseRouterTarget,
-	min_inclusive: double,
-	max_inclusive: double,
 }
 
 

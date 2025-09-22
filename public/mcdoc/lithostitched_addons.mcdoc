@@ -6,30 +6,8 @@ use ::java::data::worldgen::processor_list::ProcessorListRef
 use ::java::data::worldgen::structure::LiquidSettings
 use ::java::data::worldgen::IntProvider
 use ::java::data::worldgen::FloatProvider
-
-
-
-
-
-// UTILS
-
-
-
-
-
-type WeightedList<T> = [struct {
-	weight: int @ 1..,
-	data: T,
-}]
-
-type InclusiveRange<T> = (
-	T |
-	[T] @ 2 |
-	struct ExplicitInclusiveRange {
-		min_inclusive?: T,
-		max_inclusive?: T,
-	}
-)
+use super::WeightedList
+use super::InclusiveRange
 
 
 

@@ -311,7 +311,7 @@ export class SpyglassService {
 								category: 'world',
 							},
 							// Partner resources
-							...Object.fromEntries(siteConfig.generators.filter(gen => gen.dependency).map(gen =>
+							...Object.fromEntries(siteConfig.generators.filter(gen => gen.dependencies).map(gen =>
 								[gen.path ?? gen.id, {
 									category: gen.id,
 									pack: gen.tags?.includes('assets') ? 'assets' : 'data',

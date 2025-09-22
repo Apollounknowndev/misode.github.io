@@ -19,7 +19,7 @@ use ::java::data::worldgen::template_pool::WeightedElement
 use ::java::util::block_state::BlockState
 use ::java::util::particle::Particle
 use ::java::util::InclusiveRange
-use super::lithostitched_base::PlacementCondition
+use super::PlacementCondition
 
 
 

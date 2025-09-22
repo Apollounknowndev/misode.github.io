@@ -4,7 +4,7 @@ import { message } from '../Utils.js'
 import type { VersionId } from './Versions.js'
 import { checkVersion } from './Versions.js'
 
-const CACHE_NAME = 'misode-v22'
+const CACHE_NAME = 'misode-v14'
 const CACHE_LATEST_VERSION = 'cached_latest_version'
 const CACHE_PATCH = 'misode_cache_patch'
 
@@ -77,6 +77,21 @@ export const REGISTRY_ADDONS = new Map([
     	"lithostitched:shipwreck_palette/spruce_and_jungle",
     	"lithostitched:shipwreck_palette/spruce_and_oak",
     	"lithostitched:woodland_mansion",
+		]
+	],
+	[
+		"abridged:bridge_config", [
+			"abridged:canyon/badlands_mining",
+			"abridged:canyon/pillager_infested",
+			"abridged:canyon/stone",
+			"abridged:creek/birch",
+			"abridged:creek/jungle",
+			"abridged:creek/oak",
+			"abridged:creek/oak_fancy",
+			"abridged:creek/sandstone",
+			"abridged:creek/spruce",
+			"abridged:creek/stone",
+			"abridged:river_valley/stone",
 		]
 	]
 ])
@@ -198,17 +213,24 @@ export async function fetchItemComponents(versionId: VersionId) {
 	return result
 }
 
+const namespaces = new Map([
+	["example", 8],
+	["lithostitched", 14],
+	["abridged", 8],
+])
+
 export async function fetchPreset(versionId: VersionId, registry: string, id: string) {
 	console.debug(`[fetchPreset] ${versionId} ${registry} ${id}`)
 	const version = config.versions.find(v => v.id === versionId)!
 	await validateCache(version)
 	try {
 		let url
-		if (id.startsWith('example')) {
-			url = `https://raw.githubusercontent.com/Apollounknowndev/misode.github.io/refs/heads/data/example/${registry.split("/")[1]}/${id.substring(8)}.json`
-		} else if (id.startsWith('lithostitched')) {
-			url = `https://raw.githubusercontent.com/Apollounknowndev/misode.github.io/refs/heads/data/lithostitched/${registry.split("/")[1]}/${id.substring(14)}.json`
-		} else {
+		for (const [namespace, trim] of namespaces.entries()) {
+			if (id.startsWith(namespace)) {
+				url = `https://raw.githubusercontent.com/Apollounknowndev/misode.github.io/refs/heads/data/example/${registry.split("/")[1]}/${id.substring(trim)}.json`
+			}
+		}
+		if (!url) {
 			const type = ['atlases', 'blockstates', 'items', 'font', 'lang', 'models', 'equipment', 'post_effect'].includes(registry) ? 'assets' : 'data'
 			url = `${mcmeta(version, type)}/${type}/minecraft/${registry}/${id}.json`
 		}
@@ -473,6 +495,7 @@ interface FetchOptions<D> {
 const REFRESHED = new Set<string>()
 
 export async function cachedFetch<D = unknown>(url: string, { decode = (r => r.json()), refresh }: FetchOptions<D> = {}): Promise<D> {
+	caches.delete(CACHE_NAME)
 	try {
 		const cache = await caches.open(CACHE_NAME)
 		console.debug(`[cachedFetch] Opened cache ${CACHE_NAME} ${url}`)

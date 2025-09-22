@@ -213,11 +213,7 @@ export async function fetchItemComponents(versionId: VersionId) {
 	return result
 }
 
-const namespaces = new Map([
-	["example", 8],
-	["lithostitched", 14],
-	["abridged", 8],
-])
+const namespaces = ['example', "lithostitched", "abridged"]
 
 export async function fetchPreset(versionId: VersionId, registry: string, id: string) {
 	console.debug(`[fetchPreset] ${versionId} ${registry} ${id}`)
@@ -225,9 +221,9 @@ export async function fetchPreset(versionId: VersionId, registry: string, id: st
 	await validateCache(version)
 	try {
 		let url
-		for (const [namespace, trim] of namespaces.entries()) {
+		for (const namespace of namespaces) {
 			if (id.startsWith(namespace)) {
-				url = `https://raw.githubusercontent.com/Apollounknowndev/misode.github.io/refs/heads/data/example/${registry.split("/")[1]}/${id.substring(trim)}.json`
+					url = `https://raw.githubusercontent.com/Apollounknowndev/misode.github.io/refs/heads/data/${namespace}/${registry.split("/")[1]}/${id.substring(namespace.length + 1)}.json`
 			}
 		}
 		if (!url) {

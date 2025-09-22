@@ -15,6 +15,14 @@ type InclusiveRange<T> = (
 	}
 )
 
+type SquareBaseBox<T> = (
+	T |
+	struct RectangularBaseBox {
+		horizontal: T,
+		vertical?: int @ 0..
+	}
+)
+
 enum(string) NoiseRouterTarget {
 	FinalDensity = "final_density",
 	InitialDensityWithoutJaggedness = "initial_density_without_jaggedness",

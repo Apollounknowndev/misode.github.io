@@ -33,6 +33,8 @@ export const REGISTRY_ADDONS = new Map([
 	],
 	[
 		"block_predicate_type", [
+			"lithostitched:block_state",
+			"lithostitched:in_structure",
 			"lithostitched:multiple_of",
 			"lithostitched:random_chance",
 		]
@@ -45,38 +47,58 @@ export const REGISTRY_ADDONS = new Map([
 	],
 	[
 		"worldgen/biome", [
-    	"lithostitched:corrupted_forest"
+    		"lithostitched:corrupted_forest"
+		]
+	],
+	[
+		"worldgen/density_function_type", [
+			"lithostitched:wrapped_marker",
+			"lithostitched:original_marker",
 		]
 	],
 	[
 		"worldgen/feature", [
-    	"lithostitched:composite",
-    	"lithostitched:dungeon",
-    	"lithostitched:large_dripstone",
-    	"lithostitched:ore",
-    	"lithostitched:select",
-    	"lithostitched:structure_template",
-    	"lithostitched:vines",
-    	"lithostitched:weighted_selector",
-    	"lithostitched:well",
+			"lithostitched:composite",
+			"lithostitched:dungeon",
+			"lithostitched:large_dripstone",
+			"lithostitched:ore",
+			"lithostitched:select",
+			"lithostitched:structure_template",
+			"lithostitched:vines",
+			"lithostitched:weighted_selector",
+			"lithostitched:well",
+		]
+	],
+	[
+		"worldgen/placement_modifier_type", [
+			"lithostitched:condition",
+			"lithostitched:noise_slope",
+			"lithostitched:offset",
+		]
+	],
+	[
+		"worldgen/structure_pool_element", [
+			"lithostitched:delegating",
+			"lithostitched:guaranteed",
+			"lithostitched:limited",
 		]
 	],
 	[
 		"worldgen/processor_list", [
-    	"lithostitched:end_city",
-    	"lithostitched:igloo",
-    	"lithostitched:nether_fossil",
-    	"lithostitched:ruined_portal",
-    	"lithostitched:shipwreck",
-    	"lithostitched:shipwreck_palette/dark_oak_and_jungle",
-    	"lithostitched:shipwreck_palette/dark_oak_and_spruce",
-    	"lithostitched:shipwreck_palette/jungle_and_spruce",
-    	"lithostitched:shipwreck_palette/oak_and_birch",
-    	"lithostitched:shipwreck_palette/oak_and_spruce",
-    	"lithostitched:shipwreck_palette/spruce_and_dark_oak",
-    	"lithostitched:shipwreck_palette/spruce_and_jungle",
-    	"lithostitched:shipwreck_palette/spruce_and_oak",
-    	"lithostitched:woodland_mansion",
+			"lithostitched:end_city",
+			"lithostitched:igloo",
+			"lithostitched:nether_fossil",
+			"lithostitched:ruined_portal",
+			"lithostitched:shipwreck",
+			"lithostitched:shipwreck_palette/dark_oak_and_jungle",
+			"lithostitched:shipwreck_palette/dark_oak_and_spruce",
+			"lithostitched:shipwreck_palette/jungle_and_spruce",
+			"lithostitched:shipwreck_palette/oak_and_birch",
+			"lithostitched:shipwreck_palette/oak_and_spruce",
+			"lithostitched:shipwreck_palette/spruce_and_dark_oak",
+			"lithostitched:shipwreck_palette/spruce_and_jungle",
+			"lithostitched:shipwreck_palette/spruce_and_oak",
+			"lithostitched:woodland_mansion",
 		]
 	],
 	[

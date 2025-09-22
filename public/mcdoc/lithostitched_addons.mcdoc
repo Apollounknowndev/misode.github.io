@@ -2,12 +2,95 @@ use ::java::data::gametest::Rotation
 use ::java::data::worldgen::feature::placement::PlacedFeatureRef
 use ::java::data::worldgen::feature::block_predicate::BlockPredicate
 use ::java::data::worldgen::feature::block_state_provider::BlockStateProvider
+use ::java::data::worldgen::template_pool::Element
 use ::java::data::worldgen::processor_list::ProcessorListRef
 use ::java::data::worldgen::structure::LiquidSettings
+use ::java::data::worldgen::structure::TerrainAdaptation
 use ::java::data::worldgen::IntProvider
 use ::java::data::worldgen::FloatProvider
 use super::WeightedList
 use super::InclusiveRange
+use super::SquareBaseBox
+use super::PlacementCondition
+
+
+
+
+
+// BLOCK PREDICATE
+
+
+
+
+
+
+dispatch minecraft:block_predicate["lithostitched:block_state"] to struct BlockStatePredicate {
+	properties?: StatePredicate,
+}
+
+struct StatePredicate {
+	[string]: string,
+}
+
+dispatch minecraft:block_predicate["lithostitched:in_structure"] to struct InStructurePredicate {
+	structure?: (#[id="worldgen/structure"] string),
+	search_range: SquareBaseBox<int @ 0..32>
+}
+
+dispatch minecraft:block_predicate["lithostitched:multiple_of"] to struct MultipleOfPredicate {
+	predicates: [BlockPredicate],
+	allowed_count: InclusiveRange<int @ 0..>
+}
+
+dispatch minecraft:block_predicate["lithostitched:random_chance"] to struct RandomChancePredicate {
+	chance: float @ 0..1
+}
+
+
+
+
+
+// BLOCK STATE PROVIDER
+
+
+
+
+
+dispatch minecraft:block_state_provider["lithostitched:random_block"] to struct RandomBlockProvider {
+	blocks: (#[id(registry="block",tags="required")] string | [#[id="block"] string])
+}
+
+dispatch minecraft:block_state_provider["lithostitched:weighted"] to struct WeightedProvider {
+	entries: WeightedList<BlockStateProvider>
+}
+
+
+
+
+
+// PLACEMENT MODIFIERS
+
+
+
+
+
+dispatch minecraft:placement_modifier["lithostitched:condition"] to struct ConditionPlacement {
+	condition: PlacementCondition
+}
+
+dispatch minecraft:placement_modifier["lithostitched:noise_slope"] to struct NoiseSlopePlacement {
+	noise: (#[id="worldgen/noise"] string),
+	slope: int,
+	offset?: int,
+	xz_scale: double,
+	y_scale: double
+}
+
+dispatch minecraft:placement_modifier["lithostitched:offset"] to struct OffsetPlacement {
+	x_offset?: IntProvider<int @ -16..16>,
+	y_offset?: IntProvider<int>,
+	z_offset?: IntProvider<int @ -16..16>,
+}
 
 
 
@@ -128,35 +211,32 @@ dispatch minecraft:feature_config["lithostitched:well"] to struct WellConfig {
 
 
 
-// BLOCK PREDICATE
+// PLACEMENT MODIFIERS
 
 
 
 
 
-dispatch minecraft:block_predicate["lithostitched:multiple_of"] to struct MultipleOfPredicate {
-	predicates: [BlockPredicate],
-	allowed_count: InclusiveRange<int @ 0..>
+dispatch minecraft:template_pool_element["lithostitched:delegating"] to struct DelegatingElement {
+	delegate: Element, 
+	name?: #[id] string,
+	condition?: PlacementCondition,
+	allowed_depth?: InclusiveRange<int @ 0..>,
+	forced_count?: int @ 1..,
+	max_count?: int @ 1..,
+	allow_bounding_box_collisions?: boolean,
+	other_pieces_can_intersect?: boolean,
+	override_terrain_adaptation?: TerrainAdaptation
 }
 
-dispatch minecraft:block_predicate["lithostitched:random_chance"] to struct RandomChancePredicate {
-	chance: float @ 0..1
+dispatch minecraft:template_pool_element["lithostitched:guaranteed"] to struct GuaranteedElement {
+	delegate: Element, 
+	min_depth?: int @ 0..,
+	count: int @ 1..,
 }
 
-
-
-
-
-// BLOCK STATE PROVIDER
-
-
-
-
-
-dispatch minecraft:block_state_provider["lithostitched:random_block"] to struct RandomBlockProvider {
-	blocks: (#[id(registry="block",tags="required")] string | [#[id="block"] string])
-}
-
-dispatch minecraft:block_state_provider["lithostitched:weighted"] to struct WeightedProvider {
-	entries: WeightedList<BlockStateProvider>
+dispatch minecraft:template_pool_element["lithostitched:limited"] to struct GuaranteedElement {
+	delegate: Element, 
+	min_depth?: int @ 0..,
+	limit: int @ 1..,
 }

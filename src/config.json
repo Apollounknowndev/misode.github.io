@@ -156,6 +156,7 @@
       "url": "dimension",
       "tags": ["lithostitched"],
       "minVersion": "1.16",
+      "dependencies": ["lithostitched_addons", "mod"],
       "wiki": "https://minecraft.wiki/w/Custom_dimension"
     },
     {
@@ -163,6 +164,7 @@
       "url": "dimension-type",
       "tags": ["lithostitched"],
       "minVersion": "1.16",
+      "dependencies": ["lithostitched_addons", "mod"],
       "wiki": "https://minecraft.wiki/w/Dimension_type"
     },
     {
@@ -170,6 +172,7 @@
       "url": "worldgen/biome",
       "tags": ["lithostitched"],
       "minVersion": "1.16",
+      "dependencies": ["lithostitched_addons", "mod"],
       "wiki": "https://minecraft.wiki/w/Custom_biome"
     },
     {
@@ -177,7 +180,7 @@
       "url": "worldgen/feature",
       "tags": ["lithostitched"],
       "minVersion": "1.16",
-      "dependencies": ["lithostitched_addons"],
+      "dependencies": ["lithostitched_addons", "mod"],
       "wiki": "https://minecraft.wiki/w/Configured_feature"
     },
     {
@@ -185,6 +188,7 @@
       "url": "worldgen/placed-feature",
       "tags": ["lithostitched"],
       "minVersion": "1.18",
+      "dependencies": ["lithostitched_addons", "mod"],
       "wiki": "https://minecraft.wiki/w/Placed_feature"
     },
     {
@@ -192,6 +196,7 @@
       "url": "worldgen/density-function",
       "tags": ["lithostitched"],
       "minVersion": "1.18.2",
+      "dependencies": ["lithostitched_addons", "mod"],
       "wiki": "https://minecraft.wiki/w/Density_function"
     },
     {
@@ -206,6 +211,7 @@
       "url": "worldgen/noise-settings",
       "tags": ["lithostitched"],
       "minVersion": "1.16",
+      "dependencies": ["lithostitched_addons", "mod"],
       "wiki": "https://minecraft.wiki/w/Custom_noise_settings"
     },
     {
@@ -213,6 +219,7 @@
       "url": "worldgen/structure",
       "tags": ["lithostitched"],
       "minVersion": "1.19",
+      "dependencies": ["lithostitched_addons", "mod"],
       "wiki": "https://minecraft.wiki/w/Custom_structure"
     },
     {
@@ -220,6 +227,7 @@
       "url": "worldgen/structure-set",
       "tags": ["lithostitched"],
       "minVersion": "1.18.2",
+      "dependencies": ["lithostitched_addons", "mod"],
       "wiki": "https://minecraft.wiki/w/Structure_set"
     },
     {
@@ -227,6 +235,7 @@
       "url": "worldgen/processor-list",
       "tags": ["lithostitched"],
       "minVersion": "1.16",
+      "dependencies": ["lithostitched_addons", "mod"],
       "wiki": "https://minecraft.wiki/w/Processor_list"
     },
     {
@@ -234,6 +243,7 @@
       "url": "worldgen/template-pool",
       "tags": ["lithostitched"],
       "minVersion": "1.16",
+      "dependencies": ["lithostitched_addons", "mod"],
       "wiki": "https://minecraft.wiki/w/Template_pool"
     },
     {

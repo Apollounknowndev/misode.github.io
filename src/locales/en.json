@@ -5,6 +5,8 @@
 
   "generator.lithostitched:worldgen_modifier": "Worldgen Modifier",
   "generator.lithostitched:bandlands": "Bandlands",
+  "generator.lithostitched:surface_rule": "Surface Rule",
+  "generator.lithostitched:structure": "Structure",
   "generator.wikiful:tip": "Tip",
   "generator.abridged:bridge_config": "Bridge Config",
 

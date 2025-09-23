@@ -3,11 +3,21 @@ use ::java::data::worldgen::feature::placement::PlacedFeatureRef
 use ::java::data::worldgen::feature::block_predicate::BlockPredicate
 use ::java::data::worldgen::feature::block_state_provider::BlockStateProvider
 use ::java::data::worldgen::template_pool::Element
+use ::java::data::worldgen::processor_list::BlockEntityModifier
+use ::java::data::worldgen::processor_list::PosRuleTest
+use ::java::data::worldgen::processor_list::Processor
 use ::java::data::worldgen::processor_list::ProcessorListRef
+use ::java::data::worldgen::structure::SpawnOverride
+use ::java::data::worldgen::structure::PoolAlias
 use ::java::data::worldgen::structure::LiquidSettings
 use ::java::data::worldgen::structure::TerrainAdaptation
+use ::java::data::worldgen::surface_rule::SurfaceRule
+use ::java::data::worldgen::surface_rule::SurfaceCondition
+use ::java::data::worldgen::DecorationStep
 use ::java::data::worldgen::IntProvider
 use ::java::data::worldgen::FloatProvider
+use ::java::data::worldgen::HeightmapType
+use ::java::data::worldgen::HeightProvider
 use super::WeightedList
 use super::InclusiveRange
 use super::SquareBaseBox
@@ -24,12 +34,12 @@ use super::PlacementCondition
 
 
 
-dispatch minecraft:block_predicate["lithostitched:block_state"] to struct BlockStatePredicate {
-	properties?: StatePredicate,
-}
-
 struct StatePredicate {
 	[string]: string,
+}
+
+dispatch minecraft:block_predicate["lithostitched:block_state"] to struct BlockStatePredicate {
+	properties?: StatePredicate,
 }
 
 dispatch minecraft:block_predicate["lithostitched:in_structure"] to struct InStructurePredicate {
@@ -129,7 +139,7 @@ dispatch minecraft:feature_config["lithostitched:dungeon"] to struct DungeonConf
 	/// The block state provider for the walls of the dungeon. Defaults to just cobblestone.
 	wall_provider?: BlockStateProvider,
 	/// The blocks that the dungeon cannot override. Defaults to #minecraft:features_cannot_replace.
-	dungeon_invalid_blocks?: (#[id(registry="block",tags="required")] string | [#[id="block"] string]),
+	dungeon_invalid_blocks?: (#[id(registry="block",tags="allowed")] string | [#[id="block"] string]),
 	/// The loot table for the chests to use. Defaults to minecraft:chests/simple_dungeon.
 	loot_table?: #[id="loot_table"] string
 }
@@ -147,7 +157,7 @@ dispatch minecraft:feature_config["lithostitched:large_dripstone"] to struct Alt
 	/// The block state provider to use.
 	state_provider: BlockStateProvider,
 	/// The blocks that can be replaced by the blocks in the state_provider.
-	replaceable_blocks: (#[id(registry="block",tags="required")] string | [#[id="block"] string])
+	replaceable_blocks: (#[id(registry="block",tags="allowed")] string | [#[id="block"] string])
 }
 
 dispatch minecraft:feature_config["lithostitched:ore"] to struct AltOreConfig {
@@ -211,7 +221,74 @@ dispatch minecraft:feature_config["lithostitched:well"] to struct WellConfig {
 
 
 
-// PLACEMENT MODIFIERS
+// STRUCTURE TYPES
+
+
+
+
+
+type StructureRef = (
+	#[id="worldgen/structure"] string |
+	Structure
+)
+
+dispatch minecraft:resource[lithostitched:structure] to struct Structure {
+	type: #[id="worldgen/structure_type"] string,
+	...lithostitched:common_structure_options[[type]],
+	...minecraft:structure_config[[type]],
+}
+
+dispatch lithostitched:common_structure_options["lithostitched:delegating"] to struct {}
+dispatch lithostitched:common_structure_options[%none,%unknown] to struct {
+	biomes: (
+		[#[id="worldgen/biome"] string] |
+		#[id(registry="worldgen/biome",tags=allowed)] string |
+	),
+	/// The step when the structure generates.
+	step: DecorationStep,
+	terrain_adaptation?: TerrainAdaptation,
+	spawn_overrides: struct {
+		[MobCategory]: SpawnOverride,
+	},
+}
+
+dispatch minecraft:structure_config["lithostitched:delegating"] to struct DelegatingStructure {
+	delegate: StructureRef,
+	spawn_condition: PlacementCondition
+}
+
+dispatch minecraft:structure_config["lithostitched:jigsaw"] to struct JigsawStructure {
+	start_pool: #[id="worldgen/template_pool"] string,
+	size: (
+		#[until="1.20.3"] IntProvider<int @ 0..7> |
+		#[since="1.20.3"] IntProvider<int @ 0..128>
+	),
+	#[since="1.21"]
+	fixed_rotation?: boolean,
+	start_height: HeightProvider,
+	start_jigsaw_name?: #[id] string,
+	project_start_to_heightmap?: HeightmapType,
+	max_distance_from_center: minecraft:jigsaw_max_distance_from_center[[terrain_adaptation]],
+	use_expansion_hack: boolean,
+	#[since="1.20.3"]
+	pool_aliases?: [PoolAlias],
+	#[since="1.21"]
+	dimension_padding?: (
+		int @ 0.. |
+		struct DimensionPaddingConfig {
+			bottom?: int @ 0..,
+			top?: int @ 0..,
+		}
+	),
+	#[since="1.21"]
+	liquid_settings?: LiquidSettings,
+}
+
+
+
+
+
+// TEMPLATE POOL ELEMENTS
 
 
 
@@ -235,8 +312,178 @@ dispatch minecraft:template_pool_element["lithostitched:guaranteed"] to struct G
 	count: int @ 1..,
 }
 
-dispatch minecraft:template_pool_element["lithostitched:limited"] to struct GuaranteedElement {
+dispatch minecraft:template_pool_element["lithostitched:limited"] to struct LimitedElement {
 	delegate: Element, 
 	min_depth?: int @ 0..,
 	limit: int @ 1..,
+}
+
+
+
+
+
+// STRUCTURE PROCESSORS
+
+
+
+
+
+enum(string) RandomMode {
+	PerBlock = "per_block",
+	PerPiece = "per_piece"
+}
+
+type RandomSettings = (
+	RandomMode |
+	struct FullRandomSettings {
+		mode?: RandomMode,
+		name: #[id] string
+	}
+)
+
+dispatch minecraft:template_processor["lithostitched:apply_random"] to struct ApplyRandomProcessor {
+	mode: RandomSettings,
+	processor_lists: (
+		#[id(registry="worldgen/processor_list",tags="allowed")] string | 
+		WeightedList<ProcessorListRef>
+	),
+}
+
+dispatch minecraft:template_processor["lithostitched:block_swap"] to struct BlockSwapProcessor {
+	blocks: struct BlockSwapMap {
+		[#[id="block"] string]: #[id="block"] string,
+	}
+}
+
+dispatch minecraft:template_processor["lithostitched:reference"] to struct ReferenceProcessor {
+	processor_lists: (#[id(registry="worldgen/processor_list",tags="allowed")] string | [#[id="worldgen/processor_list"] string])
+}
+
+dispatch minecraft:template_processor["lithostitched:set_block"] to struct SetBlockProcessor {
+	state_provider: BlockStateProvider,
+	/// Whether to preserve the block state values from the previous input block. Defaults to true.
+	preserve_state?: boolean,
+	random_mode?: RandomMode,
+	block_entity_modifier?: BlockEntityModifier
+}
+
+dispatch minecraft:template_processor["lithostitched:condition"] to struct ConditionProcessor {
+	random_mode?: RandomMode,
+	if_true: ProcessorCondition,
+	then: (Processor | [Processor]),
+	else?: (Processor | [Processor]),
+}
+
+
+
+
+
+// STRUCTURE PROCESSORS
+
+
+
+
+
+dispatch minecraft:resource[lithostitched:processor_condition] to struct ProcessorCondition {
+	type: PlacementConditionType,
+	...lithostitched:processor_condition[[type]],
+}
+
+enum(string) PlacementConditionType {
+	AllOf = "lithostitched:all_of",
+	AnyOf = "lithostitched:any_of",
+	MatchingBlocks = "lithostitched:matching_blocks",
+	Not = "lithostitched:not",
+	Position = "lithostitched:position",
+	SampleDensity = "lithostitched:random_chance",
+	True = "lithostitched:true",
+}
+
+dispatch lithostitched:processor_condition["lithostitched:all_of"] to struct AllOfCondition {
+	conditions: [PlacementCondition]
+}
+
+dispatch lithostitched:processor_condition["lithostitched:any_of"] to struct AnyOfCondition {
+	conditions: [PlacementCondition]
+}
+
+dispatch lithostitched:processor_condition["lithostitched:matching_blocks"] to struct MatchingBlocksCondition {
+	blocks: (#[id(registry="block",tags="allowed")] string | [#[id="block"] string]),
+	properties?: StatePredicate,
+	/// The type of matching to do. input checks against the block in the structure template, location checks against the block in the world getting replaced. Defaults to input.
+	match_type?: MatchType
+}
+
+enum(string) MatchType {
+	Input = "input",
+	Location = "location"
+}
+
+dispatch lithostitched:processor_condition["lithostitched:not"] to struct NotCondition {
+	condition: PlacementCondition
+}
+
+dispatch lithostitched:processor_condition["lithostitched:position"] to struct PositionCondition {
+	predicate: PosRuleTest,
+	/// The positional anchor to base the check on. Possible fields are structure_start for current/vanilla behavior and piece for piece-relative position checks. Defaults to structure start.
+	anchor?: PosAnchor
+}
+
+enum(string) PosAnchor {
+	StructureStart = "structure_start",
+	Piece = "piece"
+}
+
+dispatch minecraft:processor_condition["lithostitched:random_chance"] to struct RandomChanceCondition {
+	chance: float @ 0..1
+}
+
+
+
+
+
+// STRUCTURE PROCESSORS
+
+
+
+
+
+dispatch minecraft:rule_block_entity_modifier["lithostitched:apply_all"] to struct ApplyAllModifier {
+	modifiers: [BlockEntityModifier],
+}
+
+dispatch minecraft:rule_block_entity_modifier["lithostitched:apply_random"] to struct ApplyRandomModifier {
+	modifiers: WeightedList<BlockEntityModifier>,
+}
+
+
+
+
+
+// SURFACE RULES
+
+
+
+
+
+dispatch minecraft:resource["lithostitched:surface_rule"] to SurfaceRule
+
+dispatch minecraft:surface_rule["lithostitched:bandlands"] to struct BandlandsRule {
+	options: #[id="lithostitched:bandlands"] string,
+}
+
+dispatch minecraft:surface_rule["lithostitched:reference"] to struct ReferenceRule {
+	rules: (#[id(registry="lithostitched:surface_rule",tags="allowed")] string | [#[id="lithostitched:surface_rule"] string]),
+}
+
+dispatch minecraft:surface_condition["lithostitched:all_of"] to struct AllOfMaterialCondition {
+	conditions: [SurfaceCondition]
+}
+
+dispatch minecraft:surface_condition["lithostitched:any_of"] to struct AnyOfMaterialCondition {
+	conditions: [SurfaceCondition]
+}
+
+dispatch minecraft:surface_condition["lithostitched:slope"] to struct SlopeMaterialCondition {
+	height_difference?: InclusiveRange<int>
 }

@@ -129,6 +129,15 @@
       "wiki": "https://github.com/Apollounknowndev/lithostitched/wiki/Worldgen-Modifier-Types"
     },
     {
+      "id": "lithostitched:surface_rule",
+      "url": "lithostitched/surface_rule",
+      "path": "lithostitched/surface_rule",
+      "tags": ["lithostitched"],
+      "dependencies": ["lithostitched_base", "lithostitched_addons", "mod"],
+      "minVersion": "1.21",
+      "wiki": "https://github.com/Apollounknowndev/lithostitched/wiki/Worldgen-Modifier-Types"
+    },
+    {
       "id": "wikiful:tip",
       "url": "wikiful/tip",
       "path": "wikiful/tip",
@@ -150,30 +159,6 @@
       "id": "pack_mcmeta",
       "url": "pack-mcmeta",
       "wiki": "https://minecraft.wiki/w/Data_pack#pack.mcmeta"
-    },
-    {
-      "id": "dimension",
-      "url": "dimension",
-      "tags": ["lithostitched"],
-      "minVersion": "1.16",
-      "dependencies": ["lithostitched_addons", "mod"],
-      "wiki": "https://minecraft.wiki/w/Custom_dimension"
-    },
-    {
-      "id": "dimension_type",
-      "url": "dimension-type",
-      "tags": ["lithostitched"],
-      "minVersion": "1.16",
-      "dependencies": ["lithostitched_addons", "mod"],
-      "wiki": "https://minecraft.wiki/w/Dimension_type"
-    },
-    {
-      "id": "worldgen/biome",
-      "url": "worldgen/biome",
-      "tags": ["lithostitched"],
-      "minVersion": "1.16",
-      "dependencies": ["lithostitched_addons", "mod"],
-      "wiki": "https://minecraft.wiki/w/Custom_biome"
     },
     {
       "id": "worldgen/configured_feature",
@@ -215,8 +200,9 @@
       "wiki": "https://minecraft.wiki/w/Custom_noise_settings"
     },
     {
-      "id": "worldgen/structure",
+      "id": "lithostitched:structure",
       "url": "worldgen/structure",
+      "path": "worldgen/structure",
       "tags": ["lithostitched"],
       "minVersion": "1.19",
       "dependencies": ["lithostitched_addons", "mod"],

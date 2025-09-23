@@ -10,7 +10,14 @@ type InclusiveRange<T> = (
 	T |
 	[T] @ 2 |
 	struct ExplicitInclusiveRange {
+		#[until="1.21"]
+		min_inclusive: T,
+		#[until="1.21"]
+		max_inclusive: T,
+
+		#[since="1.21"]
 		min_inclusive?: T,
+		#[since="1.21"]
 		max_inclusive?: T,
 	}
 )

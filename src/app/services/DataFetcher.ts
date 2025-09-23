@@ -77,10 +77,47 @@ export const REGISTRY_ADDONS = new Map([
 		]
 	],
 	[
+		"worldgen/material_rule", [
+			"lithostitched:bandlands",
+			"lithostitched:reference",
+		]
+	],
+	[
+		"worldgen/material_condition", [
+			"lithostitched:all_of",
+			"lithostitched:any_of",
+			"lithostitched:slope",
+		]
+	],
+	[
+		"worldgen/structure_type", [
+			"lithostitched:delegating",
+			"lithostitched:jigsaw",
+		]
+	],
+	[
 		"worldgen/structure_pool_element", [
 			"lithostitched:delegating",
 			"lithostitched:guaranteed",
 			"lithostitched:limited",
+		]
+	],
+	[
+		"rule_block_entity_modifier", [
+			"lithostitched:apply_all",
+			"lithostitched:apply_random",
+		]
+	],
+	[
+		"worldgen/structure_processor", [
+			"lithostitched:apply_random",
+			"lithostitched:block_swap",
+			"lithostitched:reference",
+
+			"lithostitched:condition",
+			"lithostitched:discard_input",
+			"lithostitched:schedule_tick",
+			"lithostitched:set_block",
 		]
 	],
 	[
@@ -182,6 +219,7 @@ export async function fetchRegistries(versionId: VersionId) {
 		for (const [id, entries] of REGISTRY_ADDONS) {
 			result.set(id, entries.concat(result.get(id) ?? []))
 		}
+		result.set("lithostitched:structure", result.get("worldgen/structure") ?? [])
 		return result
 	} catch (e) {
 		throw new Error(`Error occurred while fetching registries: ${message(e)}`)
@@ -238,6 +276,9 @@ export async function fetchItemComponents(versionId: VersionId) {
 const namespaces = ['example', "lithostitched", "abridged"]
 
 export async function fetchPreset(versionId: VersionId, registry: string, id: string) {
+	if (registry == "lithostitched:structure") {
+		registry = "worldgen/structure"
+	}
 	console.debug(`[fetchPreset] ${versionId} ${registry} ${id}`)
 	const version = config.versions.find(v => v.id === versionId)!
 	await validateCache(version)

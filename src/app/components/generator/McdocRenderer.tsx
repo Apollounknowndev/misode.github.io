@@ -186,7 +186,8 @@ function StringHead({ type, optional, excludeStrings, node, ctx }: Props<StringT
 			.filter(c => c.kind === 'string' && c.value !== 'THIS')
 			.filter(c => !excludeStrings?.includes(c.value))
 		if (type.attributes?.length != 0) {
-			let attribute = type.attributes?.at(0)
+			let firstAttribute = type.attributes?.at(0)
+			let attribute = firstAttribute?.name == "id" ? firstAttribute : type.attributes?.at(1)
 			if (attribute?.name == "id" && attribute.value != null) {
 				let registryId
 				if (attribute.value.values != null) {
@@ -198,8 +199,11 @@ function StringHead({ type, optional, excludeStrings, node, ctx }: Props<StringT
 				} else {
 					registryId = String(attribute.value.value.value);
 				}
+				//console.debug("registryId: " + registryId)
 				for (const id of REGISTRY_ADDONS.get(registryId) ?? []) {
-					values.push({value: id})
+					if (!values.find(entry => entry.value.startsWith("lithostitched"))) {
+						values.push({value: id})
+					}
 				}
 			}
 		}

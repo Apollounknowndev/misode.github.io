@@ -1,11 +1,11 @@
 import { useMemo } from 'preact/hooks'
-import { Card, ChangelogEntry, Footer, GeneratorCard, ToolCard, ToolGroup } from '../components/index.js'
-import { WhatsNewTime } from '../components/whatsnew/WhatsNewTime.jsx'
+import { Footer, GeneratorCard, ToolCard, ToolGroup } from '../components/index.js'
 import { useLocale, useTitle } from '../contexts/index.js'
 import { useAsync } from '../hooks/useAsync.js'
 import { useMediaQuery } from '../hooks/useMediaQuery.js'
-import { fetchChangelogs, fetchVersions, fetchWhatsNew } from '../services/DataFetcher.js'
+import { fetchModVersions } from '../services/DataFetcher.js'
 import { Store } from '../Store.js'
+
 
 const MIN_FAVORITES = 2
 const MAX_FAVORITES = 5
@@ -25,19 +25,16 @@ export function Home({}: Props) {
 				{smallScreen ? /* mobile */ <>
 					<PopularGenerators />
 					<FavoriteGenerators />
-					<WhatsNew />
-					<Changelog />
 					<Versions />
 					<Tools />
 				</> : /* desktop */ <>
 					<div class="card-column">
 						<PopularGenerators />
-						<Changelog />
 						<Versions />
 					</div>
 					{!smallScreen && <div class="card-column">
 						<FavoriteGenerators />
-						<WhatsNew />
+						<Tools />
 					</div>}
 				</>}
 			</div>
@@ -77,70 +74,32 @@ function FavoriteGenerators() {
 }
 
 function Tools() {
-	const { locale } = useLocale()
-
-	return <ToolGroup title={locale('tools')}>
-		<ToolCard title="Converter" icon="convert"
-			link="/convert/"
-			desc="Turn /give commands into loot tables" />
-		<ToolCard title="Customized Worlds" icon="customized"
-			link="/customized/"
-			desc="Create data packs to customize your world" />
-		<ToolCard title="Report Inspector" icon="report"
-			link="https://misode.github.io/report/"
-			desc="Analyse your performance reports" />
-		<ToolCard title="Minecraft Sounds" icon="sounds"
-			link="/sounds/"
-			desc="Browse through and mix all the vanilla sounds" />
-		<ToolCard title="Transformation preview"
-			link="/transformation/"
-			desc="Visualize transformations for display entities" />
-		<ToolCard title="Template Placer"
-			link="https://misode.github.io/template-placer/"
-			desc="Automatically place all the structure pieces in your world" />
+	return <ToolGroup title='Links'>
+		<ToolCard title="Lithostitched Wiki"
+			link="https://github.com/Apollounknowndev/lithostitched/wiki"
+			desc="Learn about Lithostitched's features" />
+		<ToolCard title="Wikiful Wiki"
+			link="https://github.com/Apollounknowndev/wikiful/wiki"
+			desc="Learn about Wikiful's features" />
+		<ToolCard title="Apollo's Modrinth" icon="modrinth"
+			link="https://modrinth.com/user/Apollo"
+			desc="Download Apollo's library mods" />
+		<ToolCard title="Original Site" icon="home"
+			link="https://misode.github.io/"
+			desc="Non-modded generators" />
 	</ToolGroup>
 }
 
 function Versions() {
-	const { locale } = useLocale()
+	const { value: lithostitchedVersions } = useAsync(() => fetchModVersions('lithostitched'), [])
+	const { value: wikifulVersions } = useAsync(() => fetchModVersions('wikiful'), [])
 
-	const { value: versions } = useAsync(fetchVersions, [])
-	const release = useMemo(() => versions?.find(v => v.type === 'release'), [versions])
-
-	return <ToolGroup title={locale('versions.minecraft_versions')} link="/versions/" titleIcon="arrow_right">
-		{(versions?.[0] && release) && <>
-			{versions[0].id !== release.id && (
-				<ToolCard title={versions[0].name} link={`/versions/?id=${versions[0].id}`} desc={locale('versions.latest_snapshot')} />
-			)}
-			<ToolCard title={release.name} link={`/versions/?id=${release.id}`} desc={locale('versions.latest_release')} />
+	return <ToolGroup title={'Mod versions'}>
+		{(lithostitchedVersions?.[0]) && <>
+			<ToolCard title={lithostitchedVersions[0].version_number.split("-")[0]} link={`https://modrinth.com/mod/lithostitched/version/${lithostitchedVersions[0].version_number}`} desc={"Latest Lithostitched"} />
 		</>}
-	</ToolGroup>
-}
-
-function Changelog() {
-	const { locale } = useLocale()
-
-	const hugeScreen = useMediaQuery('(min-width: 960px)')
-
-	const { value: changes } = useAsync(fetchChangelogs, [])
-	const latestChanges = useMemo(() => {
-		return changes
-			?.sort((a, b) => b.order - a.order)
-			.filter(c => !(c.tags.includes('pack') && c.tags.includes('breaking')))
-			.slice(0, 2)
-	}, [changes])
-
-	return <ToolGroup title={locale('changelog')} link="/changelog/" titleIcon="git_commit">
-		{latestChanges?.map(change => <ChangelogEntry minimal={!hugeScreen} short={true} change={change} />)}
-	</ToolGroup>
-}
-
-function WhatsNew() {
-	const { locale } = useLocale()
-
-	const { value: items } = useAsync(fetchWhatsNew)
-
-	return <ToolGroup title={locale('whats_new')} link="/whats-new/" titleIcon="megaphone">
-		{items?.slice(0, 3).map(item => <Card link="/whats-new/" overlay={<WhatsNewTime item={item} short={true} />}>{item.title}</Card>)}
+		{(wikifulVersions?.[0]) && <>
+			<ToolCard title={wikifulVersions[0].version_number.split("-")[0]} link={`https://modrinth.com/mod/wikiful/version/${wikifulVersions[0].version_number}`} desc={"Latest Lithostitched"} />
+		</>}
 	</ToolGroup>
 }

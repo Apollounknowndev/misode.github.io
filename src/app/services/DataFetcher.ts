@@ -4,7 +4,7 @@ import { message } from '../Utils.js'
 import type { VersionId } from './Versions.js'
 import { checkVersion } from './Versions.js'
 
-const CACHE_NAME = 'misode-v14'
+const CACHE_NAME = 'lithostitched-v1'
 const CACHE_LATEST_VERSION = 'cached_latest_version'
 const CACHE_PATCH = 'misode_cache_patch'
 
@@ -23,6 +23,12 @@ export const REGISTRY_ADDONS = new Map([
 		"lithostitched:worldgen_modifier", [
 			"example:jungle_ruby_ore",
 			"example:plains_village_special_house"
+		]
+	],
+	[
+		"wikiful:tip_background", [
+			"wikiful:tip/default",
+			"wikiful:tip/console"
 		]
 	],
 	[
@@ -86,6 +92,7 @@ export const REGISTRY_ADDONS = new Map([
 		"worldgen/material_condition", [
 			"lithostitched:all_of",
 			"lithostitched:any_of",
+			"lithostitched:biome",
 			"lithostitched:slope",
 		]
 	],
@@ -106,6 +113,11 @@ export const REGISTRY_ADDONS = new Map([
 		"rule_block_entity_modifier", [
 			"lithostitched:apply_all",
 			"lithostitched:apply_random",
+		]
+	],
+	[
+		"tag/worldgen/processor_list", [
+			"lithostitched:shipwreck_palettes",
 		]
 	],
 	[
@@ -154,6 +166,19 @@ export const REGISTRY_ADDONS = new Map([
 		]
 	]
 ])
+
+export type ModVersionMeta = {
+	version_number: string,
+	changelog: string,
+}
+export async function fetchModVersions(modId: string): Promise<ModVersionMeta[]> {
+	await validateCache({ dynamic: true })
+	try {
+		return cachedFetch(`https://api.modrinth.com/v2/project/${modId}/version`, { refresh: true })
+	} catch (e) {
+		throw new Error(`Error occured while fetching versions: ${message(e)}`)
+	}
+}
 
 type McmetaTypes = 'summary' | 'data' | 'data-json' | 'assets' | 'assets-json' | 'registries' | 'atlas'
 
@@ -286,7 +311,7 @@ export async function fetchPreset(versionId: VersionId, registry: string, id: st
 		let url
 		for (const namespace of namespaces) {
 			if (id.startsWith(namespace)) {
-					url = `https://raw.githubusercontent.com/Apollounknowndev/misode.github.io/refs/heads/data/${namespace}/${registry.split("/")[1]}/${id.substring(namespace.length + 1)}.json`
+					url = `https://raw.githubusercontent.com/Apollounknowndev/misode.github.io/refs/heads/data/${namespace}/${registry.substring(registry.indexOf("/") + 1)}/${id.substring(namespace.length + 1)}.json`
 			}
 		}
 		if (!url) {

@@ -147,6 +147,33 @@
       "wiki": "https://github.com/Apollounknowndev/wikiful/wiki/Tip"
     },
     {
+      "id": "wikiful:category",
+      "url": "wikiful/category",
+      "path": "wikiful/category",
+      "tags": ["wikiful"],
+      "dependencies": ["wikiful"],
+      "minVersion": "1.21.6",
+      "wiki": "https://github.com/Apollounknowndev/wikiful/wiki/Tip"
+    },
+    {
+      "id": "wikiful:page",
+      "url": "wikiful/page",
+      "path": "wikiful/page",
+      "tags": ["wikiful"],
+      "dependencies": ["wikiful"],
+      "minVersion": "1.21.6",
+      "wiki": "https://github.com/Apollounknowndev/wikiful/wiki/Tip"
+    },
+    {
+      "id": "wikiful:section",
+      "url": "wikiful/section",
+      "path": "wikiful/section",
+      "tags": ["wikiful"],
+      "dependencies": ["wikiful"],
+      "minVersion": "1.21.6",
+      "wiki": "https://github.com/Apollounknowndev/wikiful/wiki/Tip"
+    },
+    {
       "id": "abridged:bridge_config",
       "url": "abridged/bridge-config",
       "path": "abridged/bridge_config",
@@ -213,7 +240,6 @@
       "url": "worldgen/structure-set",
       "tags": ["lithostitched"],
       "minVersion": "1.18.2",
-      "dependencies": ["lithostitched_addons", "mod"],
       "wiki": "https://minecraft.wiki/w/Structure_set"
     },
     {
@@ -235,7 +261,7 @@
     {
       "id": "tag/worldgen/biome",
       "url": "tags/biome",
-      "tags": ["tags", "worldgen"],
+      "tags": ["lithostitched"],
       "path": "tags/worldgen/biome",
       "minVersion": "1.18.2",
       "wiki": "https://minecraft.wiki/w/Tag#Java_Edition"
@@ -243,16 +269,16 @@
     {
       "id": "tag/worldgen/structure",
       "url": "tags/structure",
-      "tags": ["tags", "worldgen"],
+      "tags": ["lithostitched"],
       "path": "tags/worldgen/structure",
       "minVersion": "1.19",
       "wiki": "https://minecraft.wiki/w/Tag#Java_Edition"
     },
     {
-      "id": "tag/worldgen/structure_set",
-      "url": "tags/structure-set",
-      "tags": ["tags", "worldgen"],
-      "path": "tags/worldgen/structure_set",
+      "id": "tag/worldgen/processor_list",
+      "url": "tags/processor-list",
+      "tags": ["lithostitched"],
+      "path": "tags/worldgen/processor_list",
       "minVersion": "1.18.2",
       "wiki": "https://minecraft.wiki/w/Tag#Java_Edition"
     }

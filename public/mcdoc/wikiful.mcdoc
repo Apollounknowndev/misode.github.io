@@ -1,3 +1,7 @@
+use ::java::data::predicate::Predicate
+use ::java::data::advancement::predicate::ItemPredicate
+use ::java::data::advancement::predicate::LocationPredicate
+use ::java::data::util::MinMaxBounds
 use ::java::util::text::Text
 use ::java::world::item::ItemStack
 
@@ -18,9 +22,40 @@ dispatch minecraft:resource[wikiful:event_trigger] to struct EventTrigger {
 
 enum(string) EventTriggerType {
 	AnyOf = "wikiful:any_of",
+	DestroyBlock = "wikiful:destroy_block",
 	HitBlock = "wikiful:hit_block",
 	InventoryChanged = "wikiful:inventory_changed",
 	LocationChanged = "wikiful:location_changed"
+}
+
+dispatch wikiful:event_trigger[wikiful:any_of] to struct {
+	triggers: [EventTrigger]
+}
+
+dispatch wikiful:event_trigger[wikiful:destroy_block, wikiful:hit_block] to struct {
+	condition?: Predicate,
+	blocks?: (#[id(registry="block",tags="allowed")] string | [#[id="block"] string]),
+	properties?: struct {
+		[string]: string
+	},
+}
+
+dispatch wikiful:event_trigger[wikiful:inventory_changed] to struct {
+	condition?: Predicate,
+	slots?: struct InventoryChangedSlots {
+		/// Amount of empty slots.
+		empty?: MinMaxBounds<int>,
+		/// Amount of occupied slots.
+		occupied?: MinMaxBounds<int>,
+		/// Amount of slots that are a full stack.
+		full?: MinMaxBounds<int>,
+	},
+	items?: [ItemPredicate],
+}
+
+dispatch wikiful:event_trigger[wikiful:location_changed] to struct {
+	condition?: Predicate,
+	location: LocationPredicate
 }
 
 
@@ -33,10 +68,14 @@ enum(string) EventTriggerType {
 
 
 
-dispatch minecraft:resource[wikiful:body_element] to struct BodyElement {
-	type: BodyElementType,
-	...wikiful:body_element[[type]]
-}
+type BodyElement = (
+	int |
+	Text |
+	struct {
+		type: BodyElementType,
+		...wikiful:body_element[[type]]
+	}
+)
 
 enum(string) BodyElementType {
 	Text = "wikiful:text",
@@ -79,21 +118,57 @@ dispatch wikiful:body_element[wikiful:horizontal_line] to struct {
 
 
 
-// TIP
+// ACTUAL DATA-DRIVEN STUFF
 
 
 
 
 
 dispatch minecraft:resource[wikiful:tip] to struct Tip {
-	sprite?: BuiltInTipSprites,
+	trigger: EventTrigger,
+	sprite?: #[id="wikiful:tip_background"] string,
 	width?: int @ 1..,
 	padding?: int @ 0..,
 	display_time_multiplier?: float @ 0.01..,
 	body: [BodyElement]
 }
 
-enum(string) BuiltInTipSprites {
-	Default = "wikiful:tip/default",
-	Console = "wikiful:tip/console",
+dispatch minecraft:resource[wikiful:category] to struct Category {
+	title: Text,
+	external_title?: Text,
+	pages?: (#[id(registry="wikiful:page",tags="allowed")] string | [#[id="wikiful:page"] string]),
+	categories?: (#[id(registry="wikiful:category",tags="allowed")] string | [#[id="wikiful:category"] string]),
+	show_if_empty?: boolean
+}
+
+dispatch minecraft:resource[wikiful:page] to struct Page {
+	type: enum(string) PageType {
+		Base = "wikiful:base"
+	},
+	trigger?: EventTrigger,
+	title: Text,
+	show_on_main_page?: boolean,
+	sprites?: struct PageSprites {
+		background?: #[id] string
+	},
+	opener: [BodyElement],
+	sections: [struct SectionInternal {
+		title: Text,
+		body: [BodyElement]
+	}]
+}
+
+dispatch minecraft:resource[wikiful:section] to struct SectionExternal {
+	parent: #[id="wikiful:page"] string,
+	trigger?: EventTrigger,
+	visibility?: Visibility,
+	title: Text,
+	body: [BodyElement]
+}
+
+enum(string) Visibility {
+	Visible = "visible",
+	LockedContents = "locked_contents",
+	LockedAll = "locked_all",
+	Invisible = "invisible"
 }

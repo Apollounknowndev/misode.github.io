@@ -60,6 +60,10 @@ enum(string) NoiseRouterTarget {
 
 dispatch minecraft:resource[lithostitched:worldgen_modifier] to struct WorldgenModifier {
 	type: WorldgenModifierType,
+	#[until="1.21"]
+	predicate?: ModifierPredicate,
+	#[since="1.21"]
+	priority?: int,
 	...lithostitched:worldgen_modifier[[type]],
 }
 
@@ -243,7 +247,15 @@ dispatch lithostitched:worldgen_modifier[lithostitched:set_structure_spawn_condi
 
 dispatch lithostitched:worldgen_modifier[lithostitched:stack_feature] to struct {
 	base_features: (#[id(registry="worldgen/configured_feature",tags="allowed")] string | [#[id="worldgen/configured_feature"] string]),
-	stacked_feature: PlacedFeatureRef
+	stacked_feature: PlacedFeatureRef,
+	#[since="1.21"]
+	placement_type?: PlacementType
+}
+
+enum(string) PlacementType {
+	NeverCancel = "never_cancel",
+	CancelOnFailure = "cancel_on_failure",
+	CancelOnSuccess = "cancel_on_success",
 }
 
 dispatch lithostitched:worldgen_modifier[lithostitched:wrap_density_function] to struct {
@@ -255,6 +267,41 @@ dispatch lithostitched:worldgen_modifier[lithostitched:wrap_noise_router] to str
 	dimension: #[id="dimension"] string,
 	target: NoiseRouterTarget,
 	wrapper_function: DensityFunction
+}
+
+
+
+
+
+// MODIFIER PREDICATES
+
+
+
+
+
+struct ModifierPredicate {
+	type: ModifierPredicateType,
+	...lithostitched:modifier_predicate[[type]]
+}
+
+enum(string) ModifierPredicateType {
+	AllOf = "lithostitched:all_of",
+	AnyOf = "lithostitched:any_of",
+	ModLoaded = "lithostitched:mod_loaded",
+	Not = "lithostitched:not",
+	True = "lithostitched:true",
+}
+
+dispatch lithostitched:modifier_predicate[lithostitched:all_of, lithostitched:any_of] to struct MultipleOf {
+	predicates: [ModifierPredicate]
+}
+
+dispatch lithostitched:modifier_predicate[lithostitched:mod_loaded] to struct ModLoaded {
+	mod_id: string
+}
+
+dispatch lithostitched:modifier_predicate[lithostitched:not] to struct Not {
+	predicate: ModifierPredicate
 }
 
 

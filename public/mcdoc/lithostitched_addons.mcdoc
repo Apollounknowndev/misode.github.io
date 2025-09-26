@@ -437,7 +437,7 @@ enum(string) PosAnchor {
 	Piece = "piece"
 }
 
-dispatch minecraft:processor_condition["lithostitched:random_chance"] to struct RandomChanceCondition {
+dispatch lithostitched:processor_condition["lithostitched:random_chance"] to struct RandomChanceCondition {
 	chance: float @ 0..1
 }
 

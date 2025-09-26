@@ -398,7 +398,7 @@ enum(string) ProcessorConditionType {
 	MatchingBlocks = "lithostitched:matching_blocks",
 	Not = "lithostitched:not",
 	Position = "lithostitched:position",
-	SampleDensity = "lithostitched:random_chance",
+	RandomChance = "lithostitched:random_chance",
 	True = "lithostitched:true",
 }
 

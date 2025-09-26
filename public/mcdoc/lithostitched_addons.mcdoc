@@ -372,7 +372,7 @@ dispatch minecraft:template_processor["lithostitched:set_block"] to struct SetBl
 
 dispatch minecraft:template_processor["lithostitched:condition"] to struct ConditionProcessor {
 	random_mode?: RandomSettings,
-	if_true: ProcessorCondition,
+	if_true: (ProcessorCondition | [ProcessorCondition]),
 	then: (Processor | [Processor]),
 	else?: (Processor | [Processor]),
 }

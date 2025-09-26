@@ -388,11 +388,11 @@ dispatch minecraft:template_processor["lithostitched:condition"] to struct Condi
 
 
 dispatch minecraft:resource[lithostitched:processor_condition] to struct ProcessorCondition {
-	type: PlacementConditionType,
+	type: ProcessorConditionType,
 	...lithostitched:processor_condition[[type]],
 }
 
-enum(string) PlacementConditionType {
+enum(string) ProcessorConditionType {
 	AllOf = "lithostitched:all_of",
 	AnyOf = "lithostitched:any_of",
 	MatchingBlocks = "lithostitched:matching_blocks",
@@ -403,11 +403,11 @@ enum(string) PlacementConditionType {
 }
 
 dispatch lithostitched:processor_condition["lithostitched:all_of"] to struct AllOfCondition {
-	conditions: [PlacementCondition]
+	conditions: [ProcessorCondition]
 }
 
 dispatch lithostitched:processor_condition["lithostitched:any_of"] to struct AnyOfCondition {
-	conditions: [PlacementCondition]
+	conditions: [ProcessorCondition]
 }
 
 dispatch lithostitched:processor_condition["lithostitched:matching_blocks"] to struct MatchingBlocksCondition {
@@ -423,7 +423,7 @@ enum(string) MatchType {
 }
 
 dispatch lithostitched:processor_condition["lithostitched:not"] to struct NotCondition {
-	condition: PlacementCondition
+	condition: ProcessorCondition
 }
 
 dispatch lithostitched:processor_condition["lithostitched:position"] to struct PositionCondition {

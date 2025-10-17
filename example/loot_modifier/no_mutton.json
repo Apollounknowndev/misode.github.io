@@ -1,0 +1,18 @@
+{
+  "type": "lootpatched:apply_function",
+  "targets": {
+    "regex": ".*"
+  },
+  "function": {
+    "function": "minecraft:filtered",
+    "item_filter": {
+      "items": [
+        "minecraft:mutton",
+        "minecraft:cooked_mutton"
+      ]
+    },
+    "modifier": {
+      "function": "lootstitched:remove_item"
+    }
+  }
+}

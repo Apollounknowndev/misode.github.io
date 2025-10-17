@@ -1,0 +1,22 @@
+{
+  "type": "lootpatched:apply_function",
+  "targets": {
+    "regex": ".*:chests\/"
+  },
+  "function": {
+    "function": "minecraft:filtered",
+    "item_filter": {
+      "items": "#minecraft:chest_armor"
+    },
+    "modifier": {
+      "function": "minecraft:set_components",
+      "components": {
+        "minecraft:trim": {
+          "material": "minecraft:emerald",
+          "pattern": "minecraft:eye"
+        }
+      }
+    },
+    "conditions": []
+  }
+}

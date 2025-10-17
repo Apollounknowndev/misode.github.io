@@ -20,6 +20,19 @@ const whatsNewUrl = 'https://whats-new.misode.workers.dev'
 
 export const REGISTRY_ADDONS = new Map([
 	[
+		"loot_function_type", [
+			"lootpatched:item_swap",
+			"lootpatched:remove_item",
+		]
+	],
+	[
+		"lootpatched:loot_modifier", [
+			"example:entity_diamonds",
+			"example:no_mutton",
+			"example:trimmed_chestplates",
+		]
+	],
+	[
 		"lithostitched:worldgen_modifier", [
 			"example:jungle_ruby_ore",
 			"example:plains_village_special_house"
@@ -298,7 +311,7 @@ export async function fetchItemComponents(versionId: VersionId) {
 	return result
 }
 
-const namespaces = ['example', "lithostitched", "abridged"]
+const namespaces = ['example', "lithostitched", "lootpatched", "abridged"]
 
 export async function fetchPreset(versionId: VersionId, registry: string, id: string) {
 	if (registry == "lithostitched:structure") {

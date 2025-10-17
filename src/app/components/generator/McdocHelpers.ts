@@ -288,10 +288,11 @@ export function formatIdentifier(id: string, attributes?: Attributes): string {
 	if (id.startsWith('!')) {
 		return '! ' + formatIdentifier(id.substring(1), attributes)
 	}
-	const isStarred = attributes?.some(a => a.name === 'starred') || id.startsWith("lithostitched")
+	const isStarred = attributes?.some(a => a.name === 'starred') || id.startsWith("lithostitched") || id.startsWith("lootpatched")
 	const text = id
 		.replace(/^minecraft:/, '')
 		.replace(/^lithostitched:/, '')
+		.replace(/^lootpatched:/, '')
 		.replaceAll('_', ' ')
 		.replace(/[a-z][A-Z]+/g, m => m.charAt(0) + ' ' + m.substring(1).toLowerCase())
 	return (isStarred ? '✨ ' : '') + text.charAt(0).toUpperCase() + text.substring(1)

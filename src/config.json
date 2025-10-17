@@ -102,10 +102,10 @@
       "show": true
     },
     {
-      "id": "1.21.6",
-      "ref": "1.21.7",
-      "name": "1.21.6 — 1.21.8",
-      "pack_format": 81,
+      "id": "1.21.9",
+      "dynamic": true,
+      "name": "1.21.9 — 1.21.10",
+      "pack_format": 88,
       "show": true
     }
   ],
@@ -136,6 +136,15 @@
       "dependencies": ["lithostitched_base", "lithostitched_addons", "mod"],
       "minVersion": "1.21",
       "wiki": "https://github.com/Apollounknowndev/lithostitched/wiki/Worldgen-Modifier-Types"
+    },
+    {
+      "id": "lootpatched:loot_modifier",
+      "url": "lootpatched/loot-modifier",
+      "path": "lootpatched/loot_modifier",
+      "tags": ["lootpatched"],
+      "dependencies": ["lootpatched", "mod"],
+      "minVersion": "1.21",
+      "wiki": "https://github.com/Apollounknowndev/lootpatched/wiki/Loot-Modifier"
     },
     {
       "id": "wikiful:tip",

@@ -47,7 +47,7 @@ function PopularGenerators() {
 	const { locale } = useLocale()
 	return <ToolGroup title={locale('generators.all')} link="/generators/">
 		<ToolCard title={locale('title.lithostitched')} link="/lithostitched/" titleIcon="arrow_right" />
-		<ToolCard title={locale('title.lootpatched')} link="/lootpatched/" titleIcon="arrow_right" />
+		<ToolCard title={locale('title.datapatched')} link="/datapatched/" titleIcon="arrow_right" />
 		<ToolCard title={locale('title.wikiful')} link="/wikiful/" titleIcon="arrow_right" />
 		<ToolCard title={locale('title.abridged')} link="/abridged/" titleIcon="arrow_right" />
 		<ToolCard title={locale('generator.pack_mcmeta')} link="/pack-mcmeta/"/>
@@ -93,15 +93,15 @@ function Tools() {
 
 function Versions() {
 	const { value: lithostitchedVersions } = useAsync(() => fetchModVersions('lithostitched'), [])
-	const { value: lootpatchedVersions } = useAsync(() => fetchModVersions('lootpatched'), [])
+	const { value: datapatchedVersions } = useAsync(() => fetchModVersions('datapatched'), [])
 	const { value: wikifulVersions } = useAsync(() => fetchModVersions('wikiful'), [])
 
 	return <ToolGroup title={'Mod versions'}>
 		{(lithostitchedVersions?.[0]) && <>
 			<ToolCard title={lithostitchedVersions[0].version_number.split("-")[0]} link={`https://modrinth.com/mod/lithostitched/version/${lithostitchedVersions[0].version_number}`} desc={"Latest Lithostitched"} />
 		</>}
-		{(lootpatchedVersions?.[0]) && <>
-			<ToolCard title={lootpatchedVersions[0].version_number.split("-")[0]} link={`https://modrinth.com/mod/lootpatched/version/${lootpatchedVersions[0].version_number}`} desc={"Latest Lootpatched"} />
+		{(datapatchedVersions?.[0]) && <>
+			<ToolCard title={datapatchedVersions[0].version_number.split("-")[0]} link={`https://modrinth.com/mod/datapatched/version/${datapatchedVersions[0].version_number}`} desc={"Latest Datapatched"} />
 		</>}
 		{(wikifulVersions?.[0]) && <>
 			<ToolCard title={wikifulVersions[0].version_number.split("-")[0]} link={`https://modrinth.com/mod/wikiful/version/${wikifulVersions[0].version_number}`} desc={"Latest Wikiful"} />

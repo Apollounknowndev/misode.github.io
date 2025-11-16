@@ -1,6 +1,6 @@
 {
   "title.lithostitched": "Lithostitched Generators",
-  "title.lootpatched": "Lootpatched Generators",
+  "title.datapatched": "Datapatched Generators",
   "title.wikiful": "Wikiful Generators",
   "title.abridged": "Abridged Generators",
 
@@ -8,7 +8,7 @@
   "generator.lithostitched:bandlands": "Bandlands",
   "generator.lithostitched:surface_rule": "Surface Rule",
   "generator.lithostitched:structure": "Structure",
-  "generator.lootpatched:loot_modifier": "Loot Modifier",
+  "generator.datapatched:loot_modifier": "Data Modifier",
   "generator.wikiful:tip": "Tip",
   "generator.wikiful:category": "Category",
   "generator.wikiful:page": "Page",
@@ -17,7 +17,7 @@
 
   "partner.lithostitched_base": "From Lithostitched",
   "partner.lithostitched_addons": "Enhanced by Lithostitched",
-  "partner.lootpatched": "Lootpatched",
+  "partner.datapatched": "Datapatched",
   "partner.wikiful": "Wikiful",
   "partner.abridged": "Abridged",
 

@@ -12,7 +12,7 @@ use ::java::data::loot::LootPoolEntry
 
 
 
-dispatch minecraft:resource[lootpatched:loot_modifier] to struct LootModifier {
+dispatch minecraft:resource[datapatched:loot_modifier] to struct LootModifier {
 	type: LootModifierType,
 	targets: (
 		#[id="loot_table"] string |
@@ -21,24 +21,24 @@ dispatch minecraft:resource[lootpatched:loot_modifier] to struct LootModifier {
 			regex: #[regex_pattern] string
 		}
 	),
-	...lootpatched:loot_modifier[[type]],
+	...datapatched:loot_modifier[[type]],
 }
 
 enum(string) LootModifierType {
-	AddEntries = "lootpatched:add_entries",
-	AddPools = "lootpatched:add_pools",
-	ApplyFunction = "lootpatched:apply_function",
+	AddEntries = "datapatched:add_entries",
+	AddPools = "datapatched:add_pools",
+	ApplyFunction = "datapatched:apply_function",
 }
 
-dispatch lootpatched:loot_modifier[lootpatched:add_entries] to struct {
+dispatch datapatched:loot_modifier[datapatched:add_entries] to struct {
 	entries: [LootPoolEntry]
 }
 
-dispatch lootpatched:loot_modifier[lootpatched:add_pools] to struct {
+dispatch datapatched:loot_modifier[datapatched:add_pools] to struct {
 	pools: [LootPool]
 }
 
-dispatch lootpatched:loot_modifier[lootpatched:apply_function] to struct {
+dispatch datapatched:loot_modifier[datapatched:apply_function] to struct {
 	function: (LootFunction | [LootFunction])
 }
 
@@ -52,7 +52,7 @@ dispatch lootpatched:loot_modifier[lootpatched:apply_function] to struct {
 
 
 
-dispatch minecraft:loot_function[lootpatched:item_swap] to struct {
+dispatch minecraft:loot_function[datapatched:item_swap] to struct {
 	items: struct ItemSwapMap {
 		[#[id="item"] string]: #[id="item"] string,
 	}

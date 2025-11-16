@@ -193,7 +193,7 @@ function StringHead({ type, optional, excludeStrings, node, ctx }: Props<StringT
 				const registryId = v?.values?.registry?.value?.value ?? v?.value?.value ?? "unknown";
 				//console.debug("registryId: " + registryId)
 				for (const id of REGISTRY_ADDONS.get(registryId) ?? []) {
-					if (!values.find(entry => entry.value.startsWith("lithostitched") || entry.value.startsWith("lootpatched"))) {
+					if (!values.find(entry => entry.value.startsWith("lithostitched") || entry.value.startsWith("datapatched"))) {
 						values.push({value: id})
 					}
 				}

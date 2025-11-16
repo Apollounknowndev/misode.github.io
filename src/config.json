@@ -138,13 +138,13 @@
       "wiki": "https://github.com/Apollounknowndev/lithostitched/wiki/Worldgen-Modifier-Types"
     },
     {
-      "id": "lootpatched:loot_modifier",
-      "url": "lootpatched/loot-modifier",
-      "path": "lootpatched/loot_modifier",
-      "tags": ["lootpatched"],
-      "dependencies": ["lootpatched", "mod"],
+      "id": "datapatched:loot_modifier",
+      "url": "datapatched/loot-modifier",
+      "path": "datapatched/loot_modifier",
+      "tags": ["datapatched"],
+      "dependencies": ["datapatched", "mod"],
       "minVersion": "1.21",
-      "wiki": "https://github.com/Apollounknowndev/lootpatched/wiki/Loot-Modifier"
+      "wiki": "https://github.com/Apollounknowndev/datapatched/wiki/Loot-Modifier"
     },
     {
       "id": "wikiful:tip",

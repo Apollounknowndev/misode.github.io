@@ -1,5 +1,5 @@
 {
-  "type": "lootpatched:apply_function",
+  "type": "datapatched:apply_function",
   "targets": {
     "regex": ".*"
   },
@@ -12,7 +12,7 @@
       ]
     },
     "modifier": {
-      "function": "lootstitched:remove_item"
+      "function": "datapatched:remove_item"
     }
   }
 }

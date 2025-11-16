@@ -1,5 +1,5 @@
 {
-  "type": "lootpatched:apply_function",
+  "type": "datapatched:apply_function",
   "targets": {
     "regex": ".*:chests\/"
   },

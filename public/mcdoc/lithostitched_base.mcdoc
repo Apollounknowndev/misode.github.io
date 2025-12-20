@@ -1,7 +1,10 @@
+use ::java::data::timeline::EnvironmentAttributeTrackMap
 use ::java::data::util::SoundEventRef
 use ::java::data::worldgen::DecorationStep
 use ::java::data::worldgen::HeightmapType
 use ::java::data::worldgen::IntProvider
+use ::java::data::worldgen::attribute::GlobalEnvironmentAttributeMap
+use ::java::data::worldgen::attribute::PositionalEnvironmentAttributeMap
 use ::java::data::worldgen::biome::BiomeMusic
 use ::java::data::worldgen::biome::GrassColorModifier
 use ::java::data::worldgen::biome::SpawnerData
@@ -82,10 +85,16 @@ enum(string) WorldgenModifierType {
 	RemoveStructureSetEntries = "lithostitched:remove_structure_set_entries",
 	ReplaceClimate = "lithostitched:replace_climate",
 	ReplaceEffects = "lithostitched:replace_effects",
+	#[since="1.21.11"]
+	SetBiomeAttributes = "lithostitched:set_biome_attributes",
+	#[since="1.21.11"]
+	SetDimensionAttributes = "lithostitched:set_dimension_attributes",
 	#[since="1.21"]
 	SetPoolAliases = "lithostitched:set_pool_aliases",
 	SetPoolElementProcessors = "lithostitched:set_pool_element_processors",
 	SetStructureSpawnCondition = "lithostitched:set_structure_spawn_condition",
+	#[since="1.21.11"]
+	SetTimelineTracks = "lithostitched:set_timeline_tracks",
 	StackFeature = "lithostitched:stack_feature",
 	WrapDensityFunction = "lithostitched:wrap_density_function",
 	WrapNoiseRouter = "lithostitched:wrap_noise_router",
@@ -208,13 +217,7 @@ dispatch lithostitched:worldgen_modifier[lithostitched:replace_effects] to struc
 			sound: SoundEventRef,
 			tick_chance: float @ 0..1,
 		},
-		music?: (
-			#[until="1.21.4"] BiomeMusic |
-			#[since="1.21.4"] [struct {
-				weight: int @ 1..,
-				data: BiomeMusic,
-			}]
-		),
+		music?: BiomeMusic,
 		/// The volume of the music in this biome. Defaults to 1.
 		/// The game will smoothly transition between the current music volume and the new volume when entering the biome.
 		#[since="1.21.4"] 
@@ -224,6 +227,18 @@ dispatch lithostitched:worldgen_modifier[lithostitched:replace_effects] to struc
 			probability: float @ 0..1,
 		},
 	}
+}
+
+dispatch lithostitched:worldgen_modifier[lithostitched:set_biome_attributes] to struct {
+	biomes: (#[id(registry="worldgen/biome",tags="allowed")] string | [#[id="worldgen/biome"] string]),
+	attributes: PositionalEnvironmentAttributeMap,
+	append?: boolean
+}
+
+dispatch lithostitched:worldgen_modifier[lithostitched:set_dimension_attributes] to struct {
+	dimension_types: (#[id(registry="dimension_type",tags="allowed")] string | [#[id="dimension_type"] string]),
+	attributes: GlobalEnvironmentAttributeMap,
+	append?: boolean
 }
 
 dispatch lithostitched:worldgen_modifier[lithostitched:set_pool_aliases] to struct {
@@ -242,6 +257,12 @@ dispatch lithostitched:worldgen_modifier[lithostitched:set_pool_element_processo
 dispatch lithostitched:worldgen_modifier[lithostitched:set_structure_spawn_condition] to struct {
 	structures: (#[id(registry="worldgen/structure",tags="allowed")] string | [#[id="worldgen/structure"] string]),
 	spawn_condition: PlacementCondition,
+	append?: boolean
+}
+
+dispatch lithostitched:worldgen_modifier[lithostitched:set_timeline_tracks] to struct {
+	timelines: (#[id(registry="timeline",tags="allowed")] string | [#[id="timeline"] string]),
+	tracks: EnvironmentAttributeTrackMap,
 	append?: boolean
 }
 

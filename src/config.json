@@ -102,10 +102,10 @@
       "show": true
     },
     {
-      "id": "1.21.9",
-      "dynamic": true,
-      "name": "1.21.9 — 1.21.10",
-      "pack_format": 88,
+      "id": "1.21.11",
+      "ref": "1.21.11",
+      "name": "1.21.11",
+      "pack_format": 94,
       "show": true
     }
   ],

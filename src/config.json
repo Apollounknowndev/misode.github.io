@@ -152,7 +152,7 @@
       "path": "wikiful/tip",
       "tags": ["wikiful"],
       "dependencies": ["wikiful"],
-      "minVersion": "1.21.6",
+      "minVersion": "1.21.11",
       "wiki": "https://github.com/Apollounknowndev/wikiful/wiki/Tip"
     },
     {
@@ -161,7 +161,7 @@
       "path": "wikiful/category",
       "tags": ["wikiful"],
       "dependencies": ["wikiful"],
-      "minVersion": "1.21.6",
+      "minVersion": "1.21.11",
       "wiki": "https://github.com/Apollounknowndev/wikiful/wiki/Tip"
     },
     {
@@ -170,7 +170,7 @@
       "path": "wikiful/page",
       "tags": ["wikiful"],
       "dependencies": ["wikiful"],
-      "minVersion": "1.21.6",
+      "minVersion": "1.21.1",
       "wiki": "https://github.com/Apollounknowndev/wikiful/wiki/Tip"
     },
     {
@@ -179,7 +179,7 @@
       "path": "wikiful/section",
       "tags": ["wikiful"],
       "dependencies": ["wikiful"],
-      "minVersion": "1.21.6",
+      "minVersion": "1.21.11",
       "wiki": "https://github.com/Apollounknowndev/wikiful/wiki/Tip"
     },
     {

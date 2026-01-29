@@ -177,6 +177,14 @@ export const REGISTRY_ADDONS = new Map([
 			"abridged:creek/stone",
 			"abridged:river_valley/stone",
 		]
+	],
+	[
+		"trimmable_tools:trimmable_tools", [
+			"example:custom_materials",
+			"example:custom_patterns",
+			"example:custom_tool_types",
+			"example:custom_tool_tier",
+		]
 	]
 ])
 

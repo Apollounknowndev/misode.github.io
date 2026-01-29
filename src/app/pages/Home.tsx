@@ -50,6 +50,7 @@ function PopularGenerators() {
 		<ToolCard title={locale('title.datapatched')} link="/datapatched/" titleIcon="arrow_right" />
 		<ToolCard title={locale('title.wikiful')} link="/wikiful/" titleIcon="arrow_right" />
 		<ToolCard title={locale('title.abridged')} link="/abridged/" titleIcon="arrow_right" />
+		<ToolCard title={locale('title.trimmable_tools')} link="/trimmable_tools/" titleIcon="arrow_right" />
 		<ToolCard title={locale('generator.pack_mcmeta')} link="/pack-mcmeta/"/>
 	</ToolGroup>
 }

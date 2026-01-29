@@ -1,0 +1,28 @@
+
+
+
+
+
+
+// TRIMMABLE TOOLS CONFIG
+
+
+
+
+
+dispatch minecraft:resource[trimmable_tools:trimmable_tools] to struct TrimmableTools {
+	tool_types?: struct ToolTypeMap {
+		[#[id] string]: ([#[id] string] | #[id] string),
+	},
+	patterns?: [(#[id] string | struct FullPattern {
+		id: #[id] string,
+		required_mod?: string
+	})],
+	materials?: [(#[id] string | struct FullMaterial {
+		id: #[id] string,
+		overrides?: struct OverridesMap {
+			[#[id] string]: ([#[id] string] | #[id] string),
+		},
+		required_mod?: string
+	})]
+}

@@ -192,6 +192,15 @@
       "wiki": "https://github.com/Apollounknowndev/abridged/wiki/Adding-Bridge-Variants"
     },
     {
+      "id": "trimmable_tools:trimmable_tools",
+      "url": "trimmable_tools/trimmable-tools",
+      "path": "trimmable_tools/trimmable_tools",
+      "tags": ["trimmable_tools"],
+      "dependencies": ["trimmable_tools", "mod", "assets"],
+      "minVersion": "1.21.11",
+      "wiki": "https://github.com/Apollounknowndev/trimmable-tools/wiki/Adding-Mod-Compatibility"
+    },
+    {
       "id": "pack_mcmeta",
       "url": "pack-mcmeta",
       "wiki": "https://minecraft.wiki/w/Data_pack#pack.mcmeta"

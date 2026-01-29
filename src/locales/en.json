@@ -3,6 +3,7 @@
   "title.datapatched": "Datapatched Generators",
   "title.wikiful": "Wikiful Generators",
   "title.abridged": "Abridged Generators",
+  "title.trimmable_tools": "Trimmable Tools Generators",
 
   "generator.lithostitched:worldgen_modifier": "Worldgen Modifier",
   "generator.lithostitched:bandlands": "Bandlands",
@@ -14,12 +15,13 @@
   "generator.wikiful:page": "Page",
   "generator.wikiful:section": "Section",
   "generator.abridged:bridge_config": "Bridge Config",
+  "generator.trimmable_tools:trimmable_tools": "Trimmable Tools Config",
 
   "partner.lithostitched_base": "From Lithostitched",
   "partner.lithostitched_addons": "Enhanced by Lithostitched",
   "partner.datapatched": "Datapatched",
   "partner.wikiful": "Wikiful",
-  "partner.abridged": "Abridged",
+  "partner.trimmable_tools": "Trimmable Tools",
 
   "2d": "2D",
   "3d": "3D",

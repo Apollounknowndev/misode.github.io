@@ -37,6 +37,7 @@ export function App() {
 			<Mod path="/datapatched" />
 			<Mod path="/wikiful" />
 			<Mod path="/abridged" />
+			<Mod path="/trimmable_tools" />
 		</Router>
 	</>
 }

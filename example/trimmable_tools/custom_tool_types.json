@@ -1,0 +1,12 @@
+{
+  "tool_types": {
+    "example:dagger": [
+      "minecraft:wooden_dagger",
+      "minecraft:stone_dagger",
+      "minecraft:copper_dagger",
+      "minecraft:iron_dagger",
+      "minecraft:diamond_dagger",
+      "minecraft:netherite_dagger"
+    ]
+  }
+}

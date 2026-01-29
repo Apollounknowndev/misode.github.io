@@ -1,0 +1,19 @@
+{
+  "tool_types": {
+    "trimmable_tools:axe": [
+      "example:ruby_axe"
+    ],
+    "trimmable_tools:shovel": [
+      "example:ruby_shovel"
+    ],
+    "trimmable_tools:hoe": [
+      "example:ruby_hoe"
+    ],
+    "trimmable_tools:pickaxe": [
+      "example:ruby_pickaxe"
+    ],
+    "trimmable_tools:sword": [
+      "example:ruby_sword"
+    ]
+  }
+}

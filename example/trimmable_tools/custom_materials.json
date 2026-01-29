@@ -1,0 +1,17 @@
+{
+  "materials": [
+    "example:rose_gold",
+    {
+      "id": "example:ruby",
+      "overrides": {
+        "example:ruby_darker": [
+          "example:ruby_sword",
+          "example:ruby_pickaxe",
+          "example:ruby_axe",
+          "example:ruby_shovel",
+          "example:ruby_hoe"
+        ]
+      }
+    }
+  ]
+}

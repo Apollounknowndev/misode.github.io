@@ -8,6 +8,7 @@
   "generator.lithostitched:worldgen_modifier": "Worldgen Modifier",
   "generator.lithostitched:bandlands": "Bandlands",
   "generator.lithostitched:surface_rule": "Surface Rule",
+  "generator.lithostitched:biome_injector": "Biome Injector",
   "generator.lithostitched:structure": "Structure",
   "generator.datapatched:loot_modifier": "Data Modifier",
   "generator.wikiful:tip": "Tip",

@@ -370,3 +370,28 @@ dispatch lithostitched:band_type[lithostitched:wrapped] to struct {
 	wrapper_state: BlockState,
 	wrapped_state: BlockState,
 }
+
+
+
+
+
+// EXPERIMENTAL STUFF!!!!
+
+
+
+
+
+dispatch minecraft:resource[lithostitched:biome_injector] to struct BiomeInjector {
+	/// Biome injectors are EXPERIMENTAL. They will be highly altered if not removed in the future. Proceed with great caution!
+	notice_read_me?: struct {},
+	biome: #[id="worldgen/biome"] string,
+	dimension: #[id="dimension"] string,
+	/// A list of parameter names to their density function references. Vanilla parameter names (e.g. erosion, humidity, depth) are reserved and cannot be used as custom parameters.
+	parameters: struct ParameterMap {
+		[string]: DensityFunctionRef
+	},
+	/// A list of parameter names to their desired outputs. Vanilla parameter names (e.g. erosion, humidity, depth) will automatically use the correct functions from the noise router.
+	values: struct ValueMap {
+		[string]: InclusiveRange<double>
+	}
+}

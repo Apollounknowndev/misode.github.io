@@ -130,12 +130,20 @@
     },
     {
       "id": "lithostitched:surface_rule",
-      "url": "lithostitched/surface_rule",
+      "url": "lithostitched/surface-rule",
       "path": "lithostitched/surface_rule",
       "tags": ["lithostitched"],
       "dependencies": ["lithostitched_base", "lithostitched_addons", "mod"],
       "minVersion": "1.21",
       "wiki": "https://github.com/Apollounknowndev/lithostitched/wiki/Worldgen-Modifier-Types"
+    },
+    {
+      "id": "lithostitched:biome_injector",
+      "url": "lithostitched/biome-injector",
+      "path": "lithostitched/biome_injector",
+      "tags": ["experimental"],
+      "dependencies": ["lithostitched_base", "lithostitched_addons", "mod"],
+      "minVersion": "1.21"
     },
     {
       "id": "datapatched:loot_modifier",

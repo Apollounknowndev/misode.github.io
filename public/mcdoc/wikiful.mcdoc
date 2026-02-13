@@ -22,8 +22,9 @@ dispatch minecraft:resource[wikiful:event_trigger] to struct EventTrigger {
 
 enum(string) EventTriggerType {
 	AnyOf = "wikiful:any_of",
-	DestroyBlock = "wikiful:destroy_block",
-	HitBlock = "wikiful:hit_block",
+	BlockBroken = "wikiful:block_broken",
+	BlockHit = "wikiful:block_hit",
+	MenuOpened = "wikiful:menu_opened",
 	InventoryChanged = "wikiful:inventory_changed",
 	LocationChanged = "wikiful:location_changed"
 }
@@ -32,12 +33,17 @@ dispatch wikiful:event_trigger[wikiful:any_of] to struct {
 	triggers: [EventTrigger]
 }
 
-dispatch wikiful:event_trigger[wikiful:destroy_block, wikiful:hit_block] to struct {
+dispatch wikiful:event_trigger[wikiful:block_broken, wikiful:block_hit] to struct {
 	condition?: Predicate,
 	blocks?: (#[id(registry="block",tags="allowed")] string | [#[id="block"] string]),
 	properties?: struct {
 		[string]: string
 	},
+}
+
+dispatch wikiful:event_trigger[wikiful:menu_opened] to struct {
+	condition?: Predicate,
+	menu: #[id(registry="menu")] string
 }
 
 dispatch wikiful:event_trigger[wikiful:inventory_changed] to struct {
@@ -130,6 +136,7 @@ dispatch minecraft:resource[wikiful:tip] to struct Tip {
 	width?: int @ 1..,
 	padding?: int @ 0..,
 	display_time_multiplier?: float @ 0.01..,
+	cannot_dismiss?: boolean,
 	body: [BodyElement]
 }
 

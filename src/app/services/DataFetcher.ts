@@ -179,6 +179,17 @@ export const REGISTRY_ADDONS = new Map([
 		]
 	],
 	[
+		"wikiful:category", [
+			"wikiful:biomes",
+			"wikiful:blocks",
+			"wikiful:enchantments",
+			"wikiful:items",
+			"wikiful:mobs",
+			"wikiful:status_effects",
+			"wikiful:structures",
+		]
+	],
+	[
 		"trimmable_tools:trimmable_tools", [
 			"example:custom_materials",
 			"example:custom_patterns",

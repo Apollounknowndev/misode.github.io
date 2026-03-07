@@ -1,4 +1,6 @@
 use ::java::data::gametest::Rotation
+use ::java::data::worldgen::attribute::PositionalEnvironmentAttributeMap
+use ::java::data::worldgen::density_function::DensityFunctionRef
 use ::java::data::worldgen::feature::placement::PlacedFeatureRef
 use ::java::data::worldgen::feature::block_predicate::BlockPredicate
 use ::java::data::worldgen::feature::block_state_provider::BlockStateProvider
@@ -221,6 +223,61 @@ dispatch minecraft:feature_config["lithostitched:well"] to struct WellConfig {
 
 
 
+// DENSITY FUNCTIONS
+
+
+
+
+
+dispatch minecraft:density_function["lithostitched:ceil", "lithostitched:floor", "lithostitched:sin", "lithostitched:cos", "lithostitched:sqrt"] to struct {
+	argument: DensityFunctionRef
+}
+
+dispatch minecraft:density_function["lithostitched:axis"] to struct {
+	axis: Axis
+}
+
+enum(string) Axis {
+	X = "x",
+	Y = "y",
+	Z = "z",
+}
+
+dispatch minecraft:density_function["lithostitched:fast_noise"] to struct {
+	config: #[id="lithostitched:fast_noise_config"] string,
+	xz_scale?: double,
+	y_scale?: double,
+	shift_x?: DensityFunctionRef,
+	shift_y?: DensityFunctionRef,
+	shift_z?: DensityFunctionRef,
+}
+
+dispatch minecraft:density_function["lithostitched:mix"] to struct {
+	input: DensityFunctionRef,
+	argument1: DensityFunctionRef,
+	argument2: DensityFunctionRef,
+}
+
+dispatch minecraft:density_function["lithostitched:select"] to struct {
+	input: DensityFunctionRef,
+	fallback: DensityFunctionRef,
+	selections: [struct Selections {
+		range: InclusiveRange<double>,
+		function: DensityFunctionRef
+	}],
+}
+
+dispatch minecraft:density_function["lithostitched:shift"] to struct {
+	input: DensityFunctionRef,
+	shift_x: DensityFunctionRef,
+	shift_y: DensityFunctionRef,
+	shift_z: DensityFunctionRef,
+}
+
+
+
+
+
 // STRUCTURE TYPES
 
 
@@ -254,7 +311,9 @@ dispatch lithostitched:common_structure_options[%none,%unknown] to struct {
 
 dispatch minecraft:structure_config["lithostitched:delegating"] to struct DelegatingStructure {
 	delegate: StructureRef,
-	spawn_condition: PlacementCondition
+	spawn_condition?: PlacementCondition,
+	#[since="1.21.11"]
+	attributes?: PositionalEnvironmentAttributeMap
 }
 
 dispatch minecraft:structure_config["lithostitched:jigsaw"] to struct JigsawStructure {
@@ -494,3 +553,15 @@ dispatch minecraft:surface_condition["lithostitched:biome"] to struct BiomeMater
 dispatch minecraft:surface_condition["lithostitched:slope"] to struct SlopeMaterialCondition {
 	height_difference?: InclusiveRange<int>
 }
+
+
+
+
+
+// RANDOM NONSENSE IDK
+
+
+
+
+
+dispatch minecraft:environment_attribute["lithostitched:structure/reset_music"] to boolean

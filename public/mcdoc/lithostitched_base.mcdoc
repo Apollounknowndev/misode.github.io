@@ -20,7 +20,7 @@ use ::java::data::worldgen::surface_rule::SurfaceRule
 use ::java::data::worldgen::template_pool::WeightedElement
 use ::java::util::block_state::BlockState
 use ::java::util::particle::Particle
-use ::java::util::InclusiveRange
+use super::InclusiveRange
 use super::PlacementCondition
 
 
@@ -63,8 +63,7 @@ enum(string) NoiseRouterTarget {
 
 dispatch minecraft:resource[lithostitched:worldgen_modifier] to struct WorldgenModifier {
 	type: WorldgenModifierType,
-	#[until="1.21"]
-	predicate?: ModifierPredicate,
+	predicate?: LoadPredicate,
 	#[since="1.21"]
 	priority?: int,
 	...lithostitched:worldgen_modifier[[type]],
@@ -160,7 +159,13 @@ enum(string) TemplateList {
 
 dispatch lithostitched:worldgen_modifier[lithostitched:add_surface_rule] to struct {
 	levels: [#[id="dimension"] string],
+	injection_type?: InjectionType,
 	surface_rule: SurfaceRule
+}
+
+enum(string) InjectionType {
+	Prepend = "prepend",
+	Append = "append"
 }
 
 dispatch lithostitched:worldgen_modifier[lithostitched:add_template_pool_elements] to struct {
@@ -294,41 +299,6 @@ dispatch lithostitched:worldgen_modifier[lithostitched:wrap_noise_router] to str
 
 
 
-// MODIFIER PREDICATES
-
-
-
-
-
-struct ModifierPredicate {
-	type: ModifierPredicateType,
-	...lithostitched:modifier_predicate[[type]]
-}
-
-enum(string) ModifierPredicateType {
-	AllOf = "lithostitched:all_of",
-	AnyOf = "lithostitched:any_of",
-	ModLoaded = "lithostitched:mod_loaded",
-	Not = "lithostitched:not",
-	True = "lithostitched:true",
-}
-
-dispatch lithostitched:modifier_predicate[lithostitched:all_of, lithostitched:any_of] to struct MultipleOf {
-	predicates: [ModifierPredicate]
-}
-
-dispatch lithostitched:modifier_predicate[lithostitched:mod_loaded] to struct ModLoaded {
-	mod_id: string
-}
-
-dispatch lithostitched:modifier_predicate[lithostitched:not] to struct Not {
-	predicate: ModifierPredicate
-}
-
-
-
-
-
 // BANDLANDS
 
 
@@ -375,23 +345,199 @@ dispatch lithostitched:band_type[lithostitched:wrapped] to struct {
 
 
 
-// EXPERIMENTAL STUFF!!!!
+// FAST NOISE CONFIG
+
+
+
+
+
+dispatch minecraft:resource[lithostitched:fast_noise_config] to struct FastNoiseConfig {
+	type: FastNoiseConfigType,
+	frequency: float,
+	salt?: int,
+	...lithostitched:fast_noise_config[[type]],
+}
+
+enum(string) FastNoiseConfigType {
+	Cellular = "lithostitched:cellular",
+	Perlin = "lithostitched:perlin",
+	Simplex = "lithostitched:simplex",
+}
+
+dispatch lithostitched:fast_noise_config[lithostitched:cellular] to struct {
+	distance_function: enum(string) DistanceFunction {
+		Euclidean = "euclidean",
+		EuclideanSquared = "eucalidean_squared",
+		Manhattan = "manhattan",
+		Hybrid = "hybrid"
+	},
+	return_type: enum(string) ReturnType {
+		CellValue = "cell_value",
+		Distance = "distance",
+		Distance2 = "distance_2",
+		Distance2Add = "distance_2_add",
+		Distance2Sub = "distance_2_sub",
+		Distance2Mul = "distance_2_mul",
+		Distance2Div = "distance_2_div",
+	},
+	jitter: float @ -1..1
+}
+
+dispatch lithostitched:fast_noise_config[lithostitched:simplex] to struct {
+	fractal_type: enum(string) FractalType {
+		None = "none",
+		FBm = "fbm",
+		Ridged = "ridged",
+		PingPong = "ping_pong"
+	},
+	octaves: int @ 0..,
+	lacunarity?: float,
+	gain?: float
+}
+
+
+
+
+
+// BIOME INJECTORS
 
 
 
 
 
 dispatch minecraft:resource[lithostitched:biome_injector] to struct BiomeInjector {
-	/// Biome injectors are EXPERIMENTAL. They will be highly altered if not removed in the future. Proceed with great caution!
-	notice_read_me?: struct {},
-	biome: #[id="worldgen/biome"] string,
+	type: BiomeInjectorType,
+	predicate?: LoadPredicate,
 	dimension: #[id="dimension"] string,
-	/// A list of parameter names to their density function references. Vanilla parameter names (e.g. erosion, humidity, depth) are reserved and cannot be used as custom parameters.
-	parameters: struct ParameterMap {
-		[string]: DensityFunctionRef
-	},
-	/// A list of parameter names to their desired outputs. Vanilla parameter names (e.g. erosion, humidity, depth) will automatically use the correct functions from the noise router.
-	values: struct ValueMap {
-		[string]: InclusiveRange<double>
+	/// Default priority is 1000.
+	priority?: int,
+	...lithostitched:biome_injector[[type]]
+}
+
+enum(string) BiomeInjectorType {
+	AddPoints = "lithostitched:add_points",
+	ForcePlacement = "lithostitched:force_placement",
+	ReplaceFully = "lithostitched:replace_fully",
+	ReplacePartially = "lithostitched:replace_partially",
+}
+
+dispatch lithostitched:biome_injector[lithostitched:add_points] to struct {
+	points: [ParameterPoint]
+}
+
+dispatch lithostitched:biome_injector[lithostitched:force_placement] to struct {
+	parameters: ParameterMap,
+	region: #[id="lithostitched:region"] string
+}
+
+dispatch lithostitched:biome_injector[lithostitched:replace_fully] to struct {
+	targets: (#[id(registry="worldgen/biome",tags="allowed")] string | [#[id="worldgen/biome"] string]),
+	replacement: #[id="worldgen/biome"] string
+}
+
+dispatch lithostitched:biome_injector[lithostitched:replace_partially] to struct {
+	targets: (#[id(registry="worldgen/biome",tags="allowed")] string | [#[id="worldgen/biome"] string]),
+	replacement: #[id="worldgen/biome"] string,
+	parameters: ParameterMap,
+	region: #[id="lithostitched:region"] string
+}
+
+struct ParameterMap {
+	[(ClimateParameter | #[id="worldgen/density_function"] string)]: InclusiveRange<double>,
+}
+
+enum(string) ClimateParameter {
+	Continentalness = "continentalness",
+	Erosion = "erosion",
+	Weirdness = "weirdness",
+	Humidity = "humidity",
+	Temperature = "temperature",
+	Depth = "depth"
+}
+
+struct ParameterPoint {
+	biome: #[id="worldgen/biome"] string,
+	parameters: struct {
+		temperature: PointRange,
+		humidity: PointRange,
+		continentalness: PointRange,
+		erosion: PointRange,
+		weirdness: PointRange,
+		depth: PointRange,
+		offset: float @ 0..1,
 	}
+}
+
+type PointRange = (
+	float @ -2..2 |
+	#[since="1.18"]
+	[float @ -2..2] @ 2 |
+)
+
+
+
+
+
+// REGIONS
+
+
+
+
+
+dispatch minecraft:resource[lithostitched:region] to struct {
+	predicate?: LoadPredicate,
+	dimension: #[id="dimension"] string,
+	weight: int
+}
+
+
+
+
+
+// LOAD PREDICATES
+
+
+
+
+
+struct LoadPredicate {
+	type: LoadPredicateType,
+	...lithostitched:load_predicate[[type]]
+}
+
+enum(string) LoadPredicateType {
+	AllOf = "lithostitched:all_of",
+	AnyOf = "lithostitched:any_of",
+	#[since="1.21"]
+	Loader = "lithostitched:loader",
+	ModLoaded = "lithostitched:mod_loaded",
+	Not = "lithostitched:not",
+	#[since="1.21"]
+	PackFormat = "lithostitched:pack_format",
+	True = "lithostitched:true",
+}
+
+dispatch lithostitched:load_predicate[lithostitched:all_of, lithostitched:any_of] to struct {
+	predicates: [LoadPredicate]
+}
+
+dispatch lithostitched:load_predicate[lithostitched:loader] to struct {
+	loader: ModLoader
+}
+
+enum(string) ModLoader {
+	Fabric = "fabric",
+	Neoforge = "neoforge"
+}
+
+dispatch lithostitched:load_predicate[lithostitched:mod_loaded] to struct {
+	mod_id: string
+}
+
+dispatch lithostitched:load_predicate[lithostitched:not] to struct {
+	predicate: LoadPredicate
+}
+
+dispatch lithostitched:load_predicate[lithostitched:pack_format] to struct {
+	supported_formats: InclusiveRange<int>
 }

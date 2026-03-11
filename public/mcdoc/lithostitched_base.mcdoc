@@ -416,6 +416,7 @@ dispatch minecraft:resource[lithostitched:biome_injector] to struct BiomeInjecto
 
 enum(string) BiomeInjectorType {
 	AddPoints = "lithostitched:add_points",
+	DispatchAlternateLayout = "lithostitched:dispatch_alternate_layout",
 	ForcePlacement = "lithostitched:force_placement",
 	ReplaceFully = "lithostitched:replace_fully",
 	ReplacePartially = "lithostitched:replace_partially",
@@ -425,9 +426,15 @@ dispatch lithostitched:biome_injector[lithostitched:add_points] to struct {
 	points: [ParameterPoint]
 }
 
+dispatch lithostitched:biome_injector[lithostitched:dispatch_alternate_layout] to struct {
+	parameters: ParameterMap,
+	region?: #[id="lithostitched:region"] string,
+	points: [ParameterPoint]
+}
+
 dispatch lithostitched:biome_injector[lithostitched:force_placement] to struct {
 	parameters: ParameterMap,
-	region: #[id="lithostitched:region"] string
+	region?: #[id="lithostitched:region"] string
 }
 
 dispatch lithostitched:biome_injector[lithostitched:replace_fully] to struct {
@@ -439,7 +446,7 @@ dispatch lithostitched:biome_injector[lithostitched:replace_partially] to struct
 	targets: (#[id(registry="worldgen/biome",tags="allowed")] string | [#[id="worldgen/biome"] string]),
 	replacement: #[id="worldgen/biome"] string,
 	parameters: ParameterMap,
-	region: #[id="lithostitched:region"] string
+	region?: #[id="lithostitched:region"] string
 }
 
 struct ParameterMap {

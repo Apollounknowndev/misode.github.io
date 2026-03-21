@@ -20,7 +20,7 @@ const whatsNewUrl = 'https://whats-new.misode.workers.dev'
 
 export const REGISTRY_ADDONS = new Map([
 	[
-		"______environment_attribute", [
+		"environment_attribute", [
 			"lithostitched:structure/reset_music",
 			"minecraft:audio/ambient_sounds",
 			"audio/background_music",

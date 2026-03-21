@@ -269,9 +269,9 @@ dispatch minecraft:density_function["lithostitched:select"] to struct {
 
 dispatch minecraft:density_function["lithostitched:shift"] to struct {
 	input: DensityFunctionRef,
-	shift_x?: DensityFunctionRef,
-	shift_y?: DensityFunctionRef,
-	shift_z?: DensityFunctionRef,
+	shift_x: DensityFunctionRef,
+	shift_y: DensityFunctionRef,
+	shift_z: DensityFunctionRef,
 }
 
 

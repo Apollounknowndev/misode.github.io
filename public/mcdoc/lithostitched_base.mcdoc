@@ -433,7 +433,7 @@ dispatch lithostitched:biome_injector[lithostitched:dispatch_alternate_layout] t
 }
 
 dispatch lithostitched:biome_injector[lithostitched:force_placement] to struct {
-	biome: #[id="worldgen/biome"] string
+	biome: #[id="worldgen/biome"] string,
 	parameters: ParameterMap,
 	region?: #[id="lithostitched:region"] string
 }
@@ -496,6 +496,7 @@ dispatch minecraft:resource[lithostitched:region] to struct {
 	predicate?: LoadPredicate,
 	dimension: #[id="dimension"] string,
 	biomes: (#[id(registry="worldgen/biome",tags="allowed")] string | [#[id="worldgen/biome"] string]),
+	/// Default vanilla region weight is 100
 	weight: int
 }
 

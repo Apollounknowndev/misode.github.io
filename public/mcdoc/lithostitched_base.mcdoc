@@ -367,7 +367,7 @@ enum(string) FastNoiseConfigType {
 dispatch lithostitched:fast_noise_config[lithostitched:cellular] to struct {
 	distance_function: enum(string) DistanceFunction {
 		Euclidean = "euclidean",
-		EuclideanSquared = "eucalidean_squared",
+		EuclideanSquared = "euclidean_squared",
 		Manhattan = "manhattan",
 		Hybrid = "hybrid"
 	},

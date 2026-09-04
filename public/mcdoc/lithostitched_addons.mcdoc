@@ -13,8 +13,8 @@ use ::java::data::worldgen::structure::SpawnOverride
 use ::java::data::worldgen::structure::PoolAlias
 use ::java::data::worldgen::structure::LiquidSettings
 use ::java::data::worldgen::structure::TerrainAdaptation
-use ::java::data::worldgen::surface_rule::SurfaceRule
-use ::java::data::worldgen::surface_rule::SurfaceCondition
+use ::java::data::worldgen::material_rule::MaterialRuleRef
+use ::java::data::worldgen::material_condition::MaterialConditionRef
 use ::java::data::worldgen::DecorationStep
 use ::java::data::worldgen::IntProvider
 use ::java::data::worldgen::FloatProvider
@@ -528,29 +528,29 @@ dispatch minecraft:rule_block_entity_modifier["lithostitched:apply_random"] to s
 
 
 
-dispatch minecraft:resource["lithostitched:surface_rule"] to SurfaceRule
+dispatch minecraft:resource["lithostitched:surface_rule"] to MaterialRuleRef
 
-dispatch minecraft:surface_rule["lithostitched:bandlands"] to struct BandlandsRule {
+dispatch minecraft:material_rule["lithostitched:bandlands"] to struct BandlandsRule {
 	options: #[id="lithostitched:bandlands"] string,
 }
 
-dispatch minecraft:surface_rule["lithostitched:reference"] to struct ReferenceRule {
+dispatch minecraft:material_rule["lithostitched:reference"] to struct ReferenceRule {
 	rules: (#[id(registry="lithostitched:surface_rule",tags="allowed")] string | [#[id="lithostitched:surface_rule"] string]),
 }
 
-dispatch minecraft:surface_condition["lithostitched:all_of"] to struct AllOfMaterialCondition {
-	conditions: [SurfaceCondition]
+dispatch minecraft:material_condition["lithostitched:all_of"] to struct AllOfMaterialCondition {
+	conditions: [MaterialConditionRef]
 }
 
-dispatch minecraft:surface_condition["lithostitched:any_of"] to struct AnyOfMaterialCondition {
-	conditions: [SurfaceCondition]
+dispatch minecraft:material_condition["lithostitched:any_of"] to struct AnyOfMaterialCondition {
+	conditions: [MaterialConditionRef]
 }
 
-dispatch minecraft:surface_condition["lithostitched:biome"] to struct BiomeMaterialCondition {
+dispatch minecraft:material_condition["lithostitched:biome"] to struct BiomeMaterialCondition {
 	biomes: (#[id(registry="worldgen/biome",tags="allowed")] string | [#[id="worldgen/biome"] string]),
 }
 
-dispatch minecraft:surface_condition["lithostitched:slope"] to struct SlopeMaterialCondition {
+dispatch minecraft:material_condition["lithostitched:slope"] to struct SlopeMaterialCondition {
 	height_difference?: InclusiveRange<int>
 }
 

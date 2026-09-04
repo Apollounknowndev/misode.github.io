@@ -16,7 +16,7 @@ use ::java::data::worldgen::processor_list::Processor
 use ::java::data::worldgen::processor_list::ProcessorList
 use ::java::data::worldgen::structure::PoolAlias
 use ::java::data::worldgen::structure_set::StructureSetElement
-use ::java::data::worldgen::surface_rule::SurfaceRule
+use ::java::data::worldgen::material_rule::MaterialRuleRef
 use ::java::data::worldgen::template_pool::WeightedElement
 use ::java::util::block_state::BlockState
 use ::java::util::particle::Particle
@@ -160,7 +160,7 @@ enum(string) TemplateList {
 dispatch lithostitched:worldgen_modifier[lithostitched:add_surface_rule] to struct {
 	levels: [#[id="dimension"] string],
 	injection_type?: InjectionType,
-	surface_rule: SurfaceRule
+	surface_rule: MaterialRuleRef
 }
 
 enum(string) InjectionType {

@@ -14,6 +14,7 @@ import { marked } from 'marked'
 import { useCallback, useEffect, useMemo, useState } from 'preact/hooks'
 import config from '../../Config.js'
 import { useLocale } from '../../contexts/Locale.jsx'
+import { useVersion } from '../../contexts/Version.jsx'
 import { useFocus } from '../../hooks/useFocus.js'
 import { REGISTRY_ADDONS } from '../../services/DataFetcher.js'
 import { generateColor, hexId, intToHexRgb, randomInt, randomSeed } from '../../Utils.js'
@@ -35,7 +36,7 @@ interface Props<Type extends SimplifiedMcdocType = SimplifiedMcdocType> {
 	node: JsonNode | undefined
 	ctx: McdocContext
 }
-export function McdocRoot({ type, node, ctx } : Props) {
+export function McdocRoot({ type, node, ctx }: Props) {
 	const { locale } = useLocale()
 
 	if (type.kind === 'struct' && type.fields.length > 0 && JsonObjectNode.is(node)) {
@@ -139,6 +140,7 @@ const SPECIAL_UNSET = '__unset__'
 
 function StringHead({ type, optional, excludeStrings, node, ctx }: Props<StringType>) {
 	const { locale } = useLocale()
+	const { version } = useVersion()
 
 	const nodeValue = (JsonStringNode.is(node) ? node.value : undefined)?.replaceAll('\n', '\\n')
 	const [value, setValue] = useState(nodeValue)
@@ -156,7 +158,9 @@ function StringHead({ type, optional, excludeStrings, node, ctx }: Props<StringT
 	const idTags = idAttribute?.kind === 'tree' && idAttribute.values.tags?.kind === 'literal' && idAttribute.values.tags.value.kind === 'string'
 		? idAttribute.values.tags.value.value
 		: undefined
-	const isSelect = idRegistry && isSelectRegistry(idRegistry)
+	const isSelect = idRegistry && isSelectRegistry(idRegistry, version)
+
+	console.log(type, idAttribute, idRegistry, isSelect)
 
 	const onChangeValue = useCallback((newValue: string) => {
 		newValue = newValue.replaceAll('\\n', '\n')
@@ -181,7 +185,7 @@ function StringHead({ type, optional, excludeStrings, node, ctx }: Props<StringT
 		onChangeValue(value ?? '')
 	}, [value, onChangeValue])
 
- 	const completions = useMemo(() => {
+	const completions = useMemo(() => {
 		const values = getValues(type, { ...ctx, offset: node?.range.start ?? 0 })
 			.filter(c => c.kind === 'string' && c.value !== 'THIS')
 			.filter(c => !excludeStrings?.includes(c.value))
@@ -189,12 +193,12 @@ function StringHead({ type, optional, excludeStrings, node, ctx }: Props<StringT
 			let firstAttribute = type.attributes?.at(0)
 			let attribute = firstAttribute?.name == "id" ? firstAttribute : type.attributes?.at(1)
 			if (attribute?.name == "id" && attribute.value != null) {
-				const v = attribute.value as any;
-				const registryId = v?.values?.registry?.value?.value ?? v?.value?.value ?? "unknown";
+				const v = attribute.value as any
+				const registryId = v?.values?.registry?.value?.value ?? v?.value?.value ?? "unknown"
 				//console.debug("registryId: " + registryId)
 				for (const id of REGISTRY_ADDONS.get(registryId) ?? []) {
 					if (registryId == "environment_attribute" || !values.find(entry => entry.value.startsWith("lithostitched") || entry.value.startsWith("datapatched"))) {
-						values.push({value: id})
+						values.push({ value: id })
 					}
 				}
 			}
@@ -217,7 +221,7 @@ function StringHead({ type, optional, excludeStrings, node, ctx }: Props<StringT
 
 	return <>
 		{((idRegistry === 'item' || idRegistry === 'block') && idTags !== 'implicit' && value && !value.startsWith('#')) && <label>
-			<ItemDisplay item={new ItemStack(Identifier.parse(value), 1)} />	
+			<ItemDisplay item={new ItemStack(Identifier.parse(value), 1)} />
 		</label>}
 		{isSelect ? <>
 			<select value={value === undefined ? SPECIAL_UNSET : value} onInput={(e) => onChangeValue((e.target as HTMLInputElement).value)}>
@@ -229,7 +233,7 @@ function StringHead({ type, optional, excludeStrings, node, ctx }: Props<StringT
 			{completions.length > 0 && <datalist id={datalistId}>
 				{completions.map(c => <option>{c.value}</option>)}
 			</datalist>}
-			<input class={colorKind === 'hex_rgb' ? 'short-input' : idRegistry ? 'long-input' : ''} value={value ?? ''} onInput={(e) => setValue((e.target as HTMLInputElement).value)} onBlur={onCommitValue} onSubmit={onCommitValue} onKeyDown={(e) => {if (e.key === 'Enter') onCommitValue()}} list={completions.length > 0 ? datalistId : undefined} />
+			<input class={colorKind === 'hex_rgb' ? 'short-input' : idRegistry ? 'long-input' : ''} value={value ?? ''} onInput={(e) => setValue((e.target as HTMLInputElement).value)} onBlur={onCommitValue} onSubmit={onCommitValue} onKeyDown={(e) => { if (e.key === 'Enter') onCommitValue() }} list={completions.length > 0 ? datalistId : undefined} />
 			{value && gen && <a href={`/${gen.url}/?preset=${value?.replace(/^minecraft:/, '')}`} class="tooltipped tip-se" aria-label={locale('follow_reference')}>
 				{Octicon.link_external}
 			</a>}
@@ -281,7 +285,7 @@ function EnumHead({ type, optional, excludeStrings, node, ctx }: Props<Simplifie
 
 	const color = type.attributes?.find(a => a.name === 'color')?.value
 	const colorKind = color?.kind === 'literal' && color.value.kind === 'string' ? color.value.value : undefined
-	const nodeColor = node?.color ? (Array.isArray(node.color) ? node.color : node.color.value ) : undefined
+	const nodeColor = node?.color ? (Array.isArray(node.color) ? node.color : node.color.value) : undefined
 	const inputColor = nodeColor ? core.ColorPresentation.fromColorFormat(ColorFormat.HexRGB, nodeColor, core.Range.create(0)).text : undefined
 
 	return <>
@@ -355,7 +359,7 @@ function NumericHead({ type, node, ctx }: Props<NumericType>) {
 	}, [type, onChangeValue])
 
 	return <>
-		<input class="short-input" type="number" value={value} onInput={(e) => setValue((e.target as HTMLInputElement).value)} onBlur={onCommitValue} onSubmit={onCommitValue} onKeyDown={(e) => {if (e.key === 'Enter') onCommitValue()}} />
+		<input class="short-input" type="number" value={value} onInput={(e) => setValue((e.target as HTMLInputElement).value)} onBlur={onCommitValue} onSubmit={onCommitValue} onKeyDown={(e) => { if (e.key === 'Enter') onCommitValue() }} />
 		{colorKind && <>
 			<input class="short-input" type="color" value={intToHexRgb(nodeValue)} onChange={(e) => onChangeColor((e.target as HTMLInputElement).value)} />
 			<button class="tooltipped tip-se" aria-label={locale('generate_new_color')} onClick={onRandomColor}>{Octicon.sync}</button>
@@ -380,7 +384,7 @@ function BooleanHead({ node, ctx }: Props) {
 				value: newValue,
 			}
 		})
-	}, [node, ctx, value]) 
+	}, [node, ctx, value])
 
 	return <>
 		<button class={value === false ? 'selected' : ''} onClick={() => onSelect(false)}>False</button>
@@ -557,7 +561,7 @@ function StructBody({ type: outerType, node, ctx }: Props<SimplifiedStructType>)
 			if (!field || (field.key.kind === 'any' && field.type.kind === 'any')) {
 				return <UnknownField key={key} pair={pair} index={index} fieldKey={key} type={type} node={node} ctx={ctx} />
 			}
-			return <DynamicField key={key} pair={pair} index={index} field={field} fieldKey={key} isToggled={isToggled(key)} expand={expand(key)} collapse={collapse(key)}type={type} node={node} ctx={ctx} />
+			return <DynamicField key={key} pair={pair} index={index} field={field} fieldKey={key} isToggled={isToggled(key)} expand={expand(key)} collapse={collapse(key)} type={type} node={node} ctx={ctx} />
 		})}
 	</>
 }
@@ -729,7 +733,7 @@ function DynamicField({ pair, index, field, fieldKey, isToggled, expand, collaps
 	const isCollapsed = canToggle && (isToggled === false || (isToggled === undefined && (node.children.length - node.children.length) > 20))
 	const childType = simplifyType(field.type, ctx, { key: pair.key, parent: node })
 	const category = getCategory(field.type)
-	
+
 	const makeFieldEdit = useCallback<MakeEdit>((edit) => {
 		ctx.makeEdit(() => {
 			const newChild = edit(child?.range ?? core.Range.create(pair.range.end))
@@ -750,7 +754,7 @@ function DynamicField({ pair, index, field, fieldKey, isToggled, expand, collaps
 	const fieldCtx = useMemo(() => {
 		return { ...ctx, makeEdit: makeFieldEdit }
 	}, [ctx, makeFieldEdit])
-	
+
 	return <div class="node" data-category={category}>
 		<div class="node-header">
 			<Errors type={childType} node={child} ctx={ctx} />
@@ -999,7 +1003,7 @@ function ListItem({ item, index, category, type, isToggled, expand, collapse, no
 			</div>}
 			{active && <div class="node-menu">
 				<div class="menu-item">
-					<Btn icon="duplicate" onClick={onDuplicate}/>
+					<Btn icon="duplicate" onClick={onDuplicate} />
 					<span>{locale('duplicate')}</span>
 				</div>
 			</div>}
@@ -1143,7 +1147,7 @@ const ANY_TYPES: SimplifiedMcdocType[] = [
 	{ kind: 'double' },
 	{ kind: 'string' },
 	{ kind: 'list', item: { kind: 'any' } },
-	{ kind: 'struct', fields: [ { kind: 'pair', key: { kind: 'string' }, type: { kind: 'any' } }] },
+	{ kind: 'struct', fields: [{ kind: 'pair', key: { kind: 'string' }, type: { kind: 'any' } }] },
 ]
 
 function AnyHead({ optional, node, ctx }: Props) {
@@ -1238,7 +1242,7 @@ function Errors({ type, node, ctx }: ErrorsProps) {
 	}, [type, node, ctx])
 
 	return <>
-		{errors.map(e => <ErrorIndicator error={e} />)}	
+		{errors.map(e => <ErrorIndicator error={e} />)}
 	</>
 }
 
@@ -1275,7 +1279,7 @@ function useToggles() {
 			setToggleState(state => new Map(state.set(key, false)))
 		}
 	}, [])
-	
+
 	const isToggled = useCallback((key: string) => {
 		if (!(toggleState instanceof Map)) return false
 		return toggleState.get(key) ?? toggleAll

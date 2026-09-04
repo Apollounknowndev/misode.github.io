@@ -189,6 +189,7 @@
   "generator.worldgen/biome": "Biome",
   "generator.worldgen/configured_carver": "Configured Carver",
   "generator.worldgen/configured_feature": "Configured Feature",
+  "generator.worldgen/feature": "Feature",
   "generator.worldgen/configured_structure_feature": "Structure Feature",
   "generator.worldgen/configured_surface_builder": "Surface Builder",
   "generator.worldgen/density_function": "Density Function",

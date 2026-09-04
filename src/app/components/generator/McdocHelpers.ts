@@ -7,6 +7,7 @@ import { NumericRange, RangeKind } from '@spyglassmc/mcdoc'
 import type { McdocCheckerContext, SimplifiedMcdocType, SimplifiedMcdocTypeNoUnion, SimplifyValueNode } from '@spyglassmc/mcdoc/lib/runtime/checker/index.js'
 import { simplify } from '@spyglassmc/mcdoc/lib/runtime/checker/index.js'
 import config from '../../Config.js'
+import { checkVersion, VersionId } from '../../services/Versions.js'
 import { randomInt, randomSeed } from '../../Utils.js'
 
 export function getRootType(id: string): McdocType {
@@ -372,10 +373,13 @@ const selectRegistries = new Set([
 	'worldgen/chunk_generator',
 	'worldgen/density_function_type',
 	'worldgen/feature',
+	'worldgen/feature_type',
 	'worldgen/feature_size_type',
 	'worldgen/foliage_placer_type',
 	'worldgen/material_condition',
+	'worldgen/material_condition_type',
 	'worldgen/material_rule',
+	'worldgen/material_rule_type',
 	'worldgen/placement_modifier_type',
 	'worldgen/pool_alias_binding',
 	'worldgen/root_placer_type',
@@ -387,7 +391,12 @@ const selectRegistries = new Set([
 	'worldgen/trunk_placer_type',
 ])
 
-export function isSelectRegistry(registry: string) {
+export function isSelectRegistry(registry: string, version: VersionId) {
+	if (!checkVersion(version, '26.3') && []) {
+		if (['worldgen/feature', 'worldgen/material_condition', 'worldgen/material_rule'].includes(registry)) {
+			return true
+		}
+	}
 	return selectRegistries.has(registry)
 }
 

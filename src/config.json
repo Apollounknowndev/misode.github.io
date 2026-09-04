@@ -107,6 +107,20 @@
       "name": "26.1",
       "pack_format": 101,
       "show": true
+    },
+    {
+      "id": "26.2",
+      "ref": "26.2",
+      "name": "26.2",
+      "pack_format": 107,
+      "show": true
+    },
+    {
+      "id": "26.3",
+      "dynamic": true,
+      "name": "26.3",
+      "pack_format": 113,
+      "show": true
     }
   ],
   "generators": [
@@ -231,10 +245,17 @@
     },
     {
       "id": "worldgen/configured_feature",
-      "url": "worldgen/feature",
-      "tags": ["lithostitched"],
+      "url": "worldgen/configured-feature",
+      "tags": ["worldgen"],
       "minVersion": "1.16",
-      "dependencies": ["lithostitched_addons", "mod"],
+      "maxVersion": "26.2",
+      "wiki": "https://minecraft.wiki/w/Configured_feature"
+    },
+    {
+      "id": "worldgen/feature",
+      "url": "worldgen/feature",
+      "tags": ["worldgen"],
+      "minVersion": "26.3",
       "wiki": "https://minecraft.wiki/w/Configured_feature"
     },
     {

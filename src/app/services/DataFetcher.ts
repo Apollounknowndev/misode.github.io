@@ -129,10 +129,12 @@ export const REGISTRY_ADDONS = new Map([
 			"lithostitched:shift",
 			"lithostitched:sin",
 			"lithostitched:sqrt",
+
+			"lithostitched:cellular",
 		]
 	],
 	[
-		"worldgen/feature", [
+		"worldgen/feature_type", [
 			"lithostitched:composite",
 			"lithostitched:dungeon",
 			"lithostitched:large_dripstone",

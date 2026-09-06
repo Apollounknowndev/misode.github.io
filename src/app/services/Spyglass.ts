@@ -311,6 +311,28 @@ export class SpyglassService {
 							world: {
 								category: 'world',
 							},
+							// Temporary until spyglass core is updated
+							sulfur_cube_archetype : {
+								category: 'sulfur_cube_archetype',
+							},
+							slot_source : {
+								category: 'slot_source',
+							},
+							decorated_pot_pattern : {
+								category: 'decorated_pot_pattern',
+							},
+							'worldgen/carver' : {
+								category: 'worldgen/carver',
+							},
+							'worldgen/feature' : {
+								category: 'worldgen/feature',
+							},
+							'worldgen/material_condition' : {
+								category: 'worldgen/material_condition',
+							},
+							'worldgen/material_rule' : {
+								category: 'worldgen/material_rule',
+							},
 							// Partner resources
 							...Object.fromEntries(siteConfig.generators.filter(gen => gen.dependencies).map(gen =>
 								[gen.path ?? gen.id, {
@@ -421,20 +443,12 @@ const initialize: core.ProjectInitializer = async (ctx) => {
 // Duplicate these from spyglass for now, until they are exported separately
 function registerAttributes(meta: core.MetaRegistry, release: ReleaseVersion, versions: VersionMeta[]) {
 	mcdoc.runtime.registerAttribute(meta, 'since', mcdoc.runtime.attribute.validator.string, {
-		filterElement: (config, ctx) => {
-			if (!config.startsWith('1.')) {
-				ctx.logger.warn(`Invalid mcdoc attribute for "since": ${config}`)
-				return true
-			}
+		filterElement: (config, _) => {
 			return ReleaseVersion.cmp(release, config as ReleaseVersion) >= 0
 		},
 	})
 	mcdoc.runtime.registerAttribute(meta, 'until', mcdoc.runtime.attribute.validator.string, {
-		filterElement: (config, ctx) => {
-			if (!config.startsWith('1.')) {
-				ctx.logger.warn(`Invalid mcdoc attribute for "until": ${config}`)
-				return true
-			}
+		filterElement: (config, _) => {
 			return ReleaseVersion.cmp(release, config as ReleaseVersion) < 0
 		},
 	})
@@ -443,13 +457,9 @@ function registerAttributes(meta: core.MetaRegistry, release: ReleaseVersion, ve
 		'deprecated',
 		mcdoc.runtime.attribute.validator.optional(mcdoc.runtime.attribute.validator.string),
 		{
-			mapField: (config, field, ctx) => {
+			mapField: (config, field, _) => {
 				if (config === undefined) {
 					return { ...field, deprecated: true }
-				}
-				if (!config.startsWith('1.')) {
-					ctx.logger.warn(`Invalid mcdoc attribute for "deprecated": ${config}`)
-					return field
 				}
 				if (ReleaseVersion.cmp(release, config as ReleaseVersion) >= 0) {
 					return { ...field, deprecated: true }
@@ -486,7 +496,7 @@ function customSymbolRegistrar(summary: McmetaSummary, release: ReleaseVersion):
 
 		// Temporary until spyglass core is updated
 		for (const [registryId, registry] of Object.entries(summary.registries)) {
-			if (['worldgen/feature_type', 'worldgen/material_condition_type', 'worldgen/material_rule_type'].includes(registryId)) {
+			if (['worldgen/carver_type', 'worldgen/feature_type', 'worldgen/material_condition_type', 'worldgen/material_rule_type'].includes(registryId)) {
 				for (const entryId of registry) {
 					symbols.query(McmetaSummaryUri, registryId, core.ResourceLocation.lengthen(entryId))
 						.enter({ usage: { type: 'declaration' } })

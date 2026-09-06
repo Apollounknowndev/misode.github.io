@@ -233,6 +233,26 @@ dispatch minecraft:density_function["lithostitched:ceil", "lithostitched:floor",
 	argument: DensityFunctionRef
 }
 
+dispatch minecraft:density_function["lithostitched:cellular"] to struct {
+	condition?: struct CellCondition {
+		function: DensityFunctionRef,
+		range: InclusiveRange<double>,
+		fallback_value: double
+	},
+	grid_size: int @ 1..,
+	jitter: float @ 0..1,
+	return_type: enum(string) ReturnType {
+		CellValue = "cell_value",
+		Distance1 = "distance_1",
+		Distance2 = "distance_2",
+		Distance2Add = "distance_2_add",
+		Distance2Sub = "distance_2_sub",
+		Distance2Mul = "distance_2_mul",
+		Distance2Div = "distance_2_div",
+	},
+	salt: int
+}
+
 dispatch minecraft:density_function["lithostitched:axis"] to struct {
 	axis: Axis
 }

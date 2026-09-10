@@ -1,0 +1,38 @@
+dispatch minecraft:resource[bedrock:features] to struct Features {
+	format_version: "1.21.0",
+	[FeatureType]: struct {
+		description: struct {
+			identifier: #[id] string
+		},
+		...bedrock:feature[[%key]]
+	}
+}
+
+enum(string) FeatureType {
+	Aggregate = "minecraft:aggregate_feature",
+	CaveCarver = "minecraft:cave_carver_feature",
+	Fossil = "minecraft:fossil_feature",
+	Geode = "minecraft:geode_feature",
+	GrowingPlant = "minecraft:growing_plant_feature",
+	MultiBlock = "minecraft:multi_block_feature",
+	Multiface = "minecraft:multiface_feature",
+	NetherCaveCarver = "minecraft:nether_cave_carver_feature",
+	Ore = "minecraft:ore_feature",
+	PartiallyExposedBlob = "minecraft:parially_exposed_blob_feature",
+	Scatter = "minecraft:scatter_feature",
+	SculkPatch = "minecraft:sculk_patch_feature",
+	Search = "minecraft:search_feature",
+	Sequence = "minecraft:sequence_feature",
+	SingleBlock = "minecraft:single_block_feature",
+	SnapToSurface = "minecraft:snap_to_surface_feature",
+	StructureTemplate = "minecraft:structure_template_feature",
+	SurfaceRelativeThreshold = "minecraft:surface_relative_threshold_feature",
+	Tree = "minecraft:tree_feature",
+	UnderwaterCaveCarver = "minecraft:underwater_cave_carver_feature",
+	VegetationPatch = "minecraft:vegetation_patch_feature",
+	WeightedRandom = "minecraft:weighted_random_feature",
+}
+
+dispatch bedrock:feature[minecraft:aggregate_feature] to struct {
+	funny_number: int
+}

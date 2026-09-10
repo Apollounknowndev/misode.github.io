@@ -1,4 +1,6 @@
 {
+  "generator.bedrock:features": "🪨 Features",
+  "generator.bedrock:feature_rules": "🪨 Feature Rules",
   "2d": "2D",
   "3d": "3D",
   "add": "Add",

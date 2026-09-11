@@ -33,6 +33,152 @@ enum(string) FeatureType {
 	WeightedRandom = "minecraft:weighted_random_feature",
 }
 
+type FeatureRef = string
+type BlockRef = string
+type Molang = string
+type FloatRange = float
+
 dispatch bedrock:feature[minecraft:aggregate_feature] to struct {
-	funny_number: int
+	features: [FeatureRef],
+	early_out: enum(string) {
+		None = "none",
+		FirstFailure = "first_failure",
+		FirstSuccess = "first_success"
+	},
+}
+
+dispatch bedrock:feature[minecraft:cave_carver_feature] to struct {
+	fill_with: BlockRef,
+	width_modifier: Molang,
+	skip_carve_chance: int @ 1..,
+	height_limit: int,
+	y_scale: FloatRange,
+	horizontal_radius_multiplier: FloatRange,
+	vertical_radius_multiplier: FloatRange,
+	floor_level: FloatRange,
+}
+
+dispatch bedrock:feature[minecraft:fossil_feature] to struct {
+	ore_block: BlockRef,
+	max_empty_corners: int,
+}
+
+dispatch bedrock:feature[minecraft:geode_feature] to struct {
+	filler: BlockRef,
+	inner_layer: BlockRef,
+	alternate_inner_layer: BlockRef,
+	middle_layer: BlockRef,
+	outer_layer: BlockRef,
+	inner_placements?: [BlockRef],
+	min_outer_wall_distance: int @ 1..10,
+	max_outer_wall_distance: int @ 1..10,
+	min_distribution_points: int @ 1..20,
+	max_distribution_points: int @ 1..20,
+	min_point_offset: int @ 1..10,
+	max_point_offset: int @ 1..10,
+	max_radius: int,
+	crack_point_offset: int @ 1..10,
+	generate_crack_chance: float @ 0..1,
+	base_crack_size: float @ 0..5,
+	noise_multiplier: float,
+	use_potential_placements_chance: float @ 0..1,
+	use_alternate_layer0_chance: float @ 0..1,
+	placements_require_layer0_alternative: boolean,
+	invalid_blocks_threshold: int,
+}
+
+dispatch bedrock:feature[minecraft:growing_plant_feature] to struct {
+	height_distribution: [struct {
+		// TODO: Implement
+	}],
+	growth_direction: enum(string) { Up = "up", Down = "down" },
+	age: int,
+	body_blocks: [struct {
+		// TODO: Implement
+	}],
+	head_blocks: [struct {
+		// TODO: Implement
+	}],
+	allow_water: boolean
+}
+
+dispatch bedrock:feature[minecraft:multiface_feature] to struct {
+	places_block: BlockRef,
+	search_range: int @ 1..64,
+	can_place_on_floor: boolean,
+	can_place_on_ceiling: boolean,
+	can_place_on_wall: boolean,
+	chance_of_spreading: int @ 0..1,
+	can_place_on: [BlockRef]
+}
+
+dispatch bedrock:feature[minecraft:nether_cave_carver_feature] to struct {
+	fill_width: BlockRef,
+	width_modifier: Molang,
+	skip_carve_chance: int @ 1..,
+	height_limit: int,
+	y_scale: FloatRange,
+	horizontal_radius_multiplier: FloatRange,
+	vertical_radius_multiplier: FloatRange,
+	floor_level: FloatRange,
+}
+
+dispatch bedrock:feature[minecraft:ore_feature] to struct {
+	count: int @ 1..,
+	discard_chance_on_air_exposure: float @ 0..1,
+	replace_rules: [struct {
+		places_block: BlockRef,
+		may_replace: [BlockRef]
+	}]
+}
+
+dispatch bedrock:feature[minecraft:partially_exposed_blob_feature] to struct {
+	placement_radius_around_floor: int @ 1..8,
+	placement_probability_per_valid_position: float @ 0..1,
+	exposed_face: string, // TODO: Implement
+	places_block: BlockRef,
+}
+
+dispatch bedrock:feature[minecraft:_feature] to struct {
+
+}
+
+dispatch bedrock:feature[minecraft:_feature] to struct {
+
+}
+
+dispatch bedrock:feature[minecraft:_feature] to struct {
+
+}
+
+dispatch bedrock:feature[minecraft:_feature] to struct {
+
+}
+
+dispatch bedrock:feature[minecraft:_feature] to struct {
+
+}
+
+dispatch bedrock:feature[minecraft:_feature] to struct {
+
+}
+
+dispatch bedrock:feature[minecraft:_feature] to struct {
+
+}
+
+dispatch bedrock:feature[minecraft:_feature] to struct {
+
+}
+
+dispatch bedrock:feature[minecraft:_feature] to struct {
+
+}
+
+dispatch bedrock:feature[minecraft:_feature] to struct {
+
+}
+
+dispatch bedrock:feature[minecraft:_feature] to struct {
+
 }

@@ -47,7 +47,7 @@ export function FileCreation({ docAndNode, gen, method }: Props) {
 			? `${projectRoot}pack.mcmeta`
 			: gen.id === 'sounds'
 				? `${projectRoot}assets/${id.namespace}/sounds.json`
-				: `${projectRoot}${pack}/${id.namespace}/${genPath(gen, version)}/${id.path}${gen.ext ?? '.json'}`
+				: `${projectRoot}${genPath(gen, version)}/${id.path}${gen.ext ?? '.json'}`
 		Analytics.saveProjectFile(method)
 		const text = docAndNode.doc.getText()
 		client.fs.writeFile(uri, text).then(() => {

@@ -13,8 +13,7 @@ import { checkVersion, fetchDependencyMcdoc, fetchPreset, fetchRegistries, getSn
 import { DEPENDENCY_URI } from '../../services/Spyglass.js'
 import { Store } from '../../Store.js'
 import { cleanUrl, genPath } from '../../Utils.js'
-import { FancyMenu } from '../FancyMenu.jsx'
-import { Ad, Btn, BtnMenu, ErrorPanel, FileCreation, FileView, Footer, HasPreview, Octicon, PreviewPanel, ProjectPanel, SourcePanel, TextInput, VersionSwitcher } from '../index.js'
+import { Ad, Btn, ErrorPanel, FileCreation, FileView, Footer, HasPreview, Octicon, PreviewPanel, ProjectPanel, SourcePanel, TextInput } from '../index.js'
 import { getRootDefault } from './McdocHelpers.js'
 
 export const SHARE_KEY = 'share'
@@ -388,17 +387,7 @@ export function SchemaGenerator({ gen, allowedVersions }: Props) {
 					{Octicon.mortar_board}
 					<span>{locale('wiki')}</span>
 				</a>}
-				<FancyMenu placeholder={locale('search')} getResults={getPresets} relative={false} class="right-0 mt-2">
-					<Btn icon="archive" label={locale('presets')} />
-				</FancyMenu>
-				<VersionSwitcher value={version} onChange={selectVersion} allowed={allowedVersions} />
-				<BtnMenu icon="kebab_horizontal" tooltip={locale('more')}>
-					<Btn icon="history" label={locale('reset_default')} onClick={reset} />
-					<Btn icon="arrow_left" label={locale('undo')} onClick={undo} />
-					<Btn icon="arrow_right" label={locale('redo')} onClick={redo} />
-					<Btn icon="plus_circle" label={locale('project.new_file')} onClick={newEmptyFile} />
-					<Btn icon="file" label={locale('project.save')} onClick={() => saveFile('menu')} />
-				</BtnMenu>
+				<Btn icon="file" label={locale('project.save')} onClick={() => saveFile('menu')} />
 			</div>
 			{error && <ErrorPanel error={error} onDismiss={() => setError(null)} />}
 			{docError

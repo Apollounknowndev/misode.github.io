@@ -1,5 +1,136 @@
+type FeatureRef = #[id="bedrock:features"] string
+
+type BlockId = #[id="block"] string
+type BlockState = (BlockId | struct Full {
+	name: BlockId,
+	states: struct {
+		[string]: string
+	}
+} | struct Tags {
+	tags: string
+})
+type Molang = string
+type FloatRange = float
+
+type CoordinateRange = struct {
+	distribution: enum(string) {
+		Uniform = "uniform",
+		Gaussian = "gaussian",
+		InverseGaussian = "inverse_gaussian",
+		Triangle = "triangle",
+		FixedGrid = "fixed_grid",
+		JitteredGrid = "jittered_grid",
+	},
+	extent: [float] @ 2,
+	grid_offset?: int,
+	step_size?: int,
+}
+
+type ScatterParams = struct {
+	iterations: (Molang | int),
+	scatter_chance?: (Molang | struct {
+		numerator: int,
+		denominator: int,
+	}),
+	coordinate_eval_order?: enum(string) {
+		XYZ = "xyz",
+		XZY = "xzy",
+		YXZ = "yxz",
+		YZX = "yzx",
+		ZXY = "zxy",
+		ZYX = "zyx",
+	},
+	x: (Molang | CoordinateRange | int),
+	y: (enum(string) {
+		OnHeightmap = "query.heightmap(v.worldx, v.worldz)"
+	} | Molang | CoordinateRange | int),
+	z: (Molang | CoordinateRange | int),
+}
+
+enum(string) VerticalDirection {
+	Up = "up",
+	Down = "down",
+}
+
+enum(string) Direction {
+	Up = "up",
+	Down = "down",
+	North = "north",
+	South = "south",
+	East = "east",
+	West = "west"
+}
+
+enum(string) PlacementPass {
+	First = "first_pass",
+	BeforeUnderground = "before_underground_pass",
+	Underground = "underground_pass",
+	AfterUnderground = "after_underground_pass",
+	BeforeSurface = "before_surface_pass",
+	Surface = "surface_pass",
+	AfterSurface = "after_surface_pass",
+	BeforeSky = "before_sky_pass",
+	Sky = "sky_pass",
+	AfterSky = "after_sky_pass",
+	Final = "final_pass",
+}
+
+
+
+// FEATURE RULES
+
+
+
+dispatch minecraft:resource[bedrock:feature_rules] to struct FeatureRules {
+	format_version: ("1.26.40" | string),
+	"minecraft:feature_rules": struct {
+		description: struct {
+			identifier: #[id] string,
+			places_feature: FeatureRef,
+		},
+		conditions: struct {
+			placement_pass: PlacementPass,
+			"minecraft:biome_filter": (FeatureCondition | [FeatureCondition])
+		},
+		distribution?: ScatterParams
+	}
+}
+
+type FeatureCondition = struct {
+	type?: FeatureConditionType,
+	...apollo:feature_condition[[type]]
+}
+
+enum(string) FeatureConditionType {
+	AnyOf = "any_of",
+	AllOf = "all_of",
+}
+
+dispatch apollo:feature_condition[%none] to struct SimpleCondition {
+	test: "has_biome_tag",
+	operator: enum(string) {
+		Equals = "==",
+		NotEquals = "!="
+	},
+	value: string
+}
+
+dispatch apollo:feature_condition["any_of"] to struct AnyOfCondition {
+	any_of: [FeatureCondition]
+}
+
+dispatch apollo:feature_condition["all_of"] to struct AllOfCondition {
+	all_of: [FeatureCondition]
+}
+
+
+
+// FEATURES
+
+
+
 dispatch minecraft:resource[bedrock:features] to struct Features {
-	format_version: "1.21.0",
+	format_version: ("1.26.40" | string),
 	[FeatureType]: struct {
 		description: struct {
 			identifier: #[id] string
@@ -11,16 +142,18 @@ dispatch minecraft:resource[bedrock:features] to struct Features {
 enum(string) FeatureType {
 	Aggregate = "minecraft:aggregate_feature",
 	CaveCarver = "minecraft:cave_carver_feature",
+	ConditionalList = "minecraft:conditional_list_feature",
 	Fossil = "minecraft:fossil_feature",
 	Geode = "minecraft:geode_feature",
 	GrowingPlant = "minecraft:growing_plant_feature",
+	HeightDifferenceFilter = "minecraft:height_difference_filter_feature",
 	MultiBlock = "minecraft:multi_block_feature",
 	Multiface = "minecraft:multiface_feature",
+	MultipartBlockColumn = "minecraft:multipart_block_column_feature",
 	NetherCaveCarver = "minecraft:nether_cave_carver_feature",
 	Ore = "minecraft:ore_feature",
-	PartiallyExposedBlob = "minecraft:parially_exposed_blob_feature",
+	PartiallyExposedBlob = "minecraft:partially_exposed_blob_feature",
 	Scatter = "minecraft:scatter_feature",
-	SculkPatch = "minecraft:sculk_patch_feature",
 	Search = "minecraft:search_feature",
 	Sequence = "minecraft:sequence_feature",
 	SingleBlock = "minecraft:single_block_feature",
@@ -33,12 +166,8 @@ enum(string) FeatureType {
 	WeightedRandom = "minecraft:weighted_random_feature",
 }
 
-type FeatureRef = string
-type BlockRef = string
-type Molang = string
-type FloatRange = float
-
 dispatch bedrock:feature[minecraft:aggregate_feature] to struct {
+	/// Features are placed in arbitrary order. All features use same input position.
 	features: [FeatureRef],
 	early_out: enum(string) {
 		None = "none",
@@ -48,7 +177,7 @@ dispatch bedrock:feature[minecraft:aggregate_feature] to struct {
 }
 
 dispatch bedrock:feature[minecraft:cave_carver_feature] to struct {
-	fill_with: BlockRef,
+	fill_with: BlockState,
 	width_modifier: Molang,
 	skip_carve_chance: int @ 1..,
 	height_limit: int,
@@ -58,18 +187,31 @@ dispatch bedrock:feature[minecraft:cave_carver_feature] to struct {
 	floor_level: FloatRange,
 }
 
+dispatch bedrock:feature[minecraft:conditional_list_feature] to struct {
+	conditional_features: [struct {
+		places_feature: FeatureRef,
+		condition?: Molang,
+	}],
+	/// Defaults to none.
+	early_out_scheme?: enum(string) {
+		ConditionSuccess = "condition_success",
+		PlacementSuccess = "placement_success",
+		None = "none",
+	}
+}
+
 dispatch bedrock:feature[minecraft:fossil_feature] to struct {
-	ore_block: BlockRef,
+	ore_block: BlockState,
 	max_empty_corners: int,
 }
 
 dispatch bedrock:feature[minecraft:geode_feature] to struct {
-	filler: BlockRef,
-	inner_layer: BlockRef,
-	alternate_inner_layer: BlockRef,
-	middle_layer: BlockRef,
-	outer_layer: BlockRef,
-	inner_placements?: [BlockRef],
+	filler: BlockState,
+	inner_layer: BlockState,
+	alternate_inner_layer: BlockState,
+	middle_layer: BlockState,
+	outer_layer: BlockState,
+	inner_placements?: [BlockState],
 	min_outer_wall_distance: int @ 1..10,
 	max_outer_wall_distance: int @ 1..10,
 	min_distribution_points: int @ 1..20,
@@ -88,32 +230,52 @@ dispatch bedrock:feature[minecraft:geode_feature] to struct {
 }
 
 dispatch bedrock:feature[minecraft:growing_plant_feature] to struct {
-	height_distribution: [struct {
-		// TODO: Implement
-	}],
-	growth_direction: enum(string) { Up = "up", Down = "down" },
-	age: int,
-	body_blocks: [struct {
-		// TODO: Implement
-	}],
-	head_blocks: [struct {
-		// TODO: Implement
-	}],
-	allow_water: boolean
+	height_distribution: [[struct {
+		range_min: int,
+		range_max: int,
+	}, int]],
+	growth_direction: enum(string) { Up = "UP", Down = "DOWN" },
+	age?: int,
+	body_blocks: [[BlockState, int]],
+	head_blocks: [[BlockState, int]],
+	allow_water?: boolean
+}
+
+dispatch bedrock:feature[minecraft:height_difference_filter_feature] to struct {
+	places_feature: FeatureRef,
+	search_radius: int @ 1..64,
+	min_required_upward_height_diff: int,
+	min_required_downward_height_diff: int,
+	max_allowed_upward_height_diff: int,
+	max_allowed_downward_height_diff: int,
 }
 
 dispatch bedrock:feature[minecraft:multiface_feature] to struct {
-	places_block: BlockRef,
+	places_block: BlockState,
 	search_range: int @ 1..64,
 	can_place_on_floor: boolean,
 	can_place_on_ceiling: boolean,
 	can_place_on_wall: boolean,
 	chance_of_spreading: int @ 0..1,
-	can_place_on: [BlockRef]
+	can_place_on: [BlockState]
+}
+
+dispatch bedrock:feature[minecraft:multipart_block_column_feature] to struct {
+	tip_block: BlockState,
+	frustum_block: BlockState,
+	middle_block: BlockState,
+	base_block: BlockState,
+	height_range: struct {
+		range_min: int,
+		range_max: int,
+	},
+	direction: enum(string) { Up = "UP", Down = "DOWN" },
+	may_replace?: [BlockId],
+	may_place_on?: [BlockId]
 }
 
 dispatch bedrock:feature[minecraft:nether_cave_carver_feature] to struct {
-	fill_width: BlockRef,
+	fill_width: BlockState,
 	width_modifier: Molang,
 	skip_carve_chance: int @ 1..,
 	height_limit: int,
@@ -127,58 +289,168 @@ dispatch bedrock:feature[minecraft:ore_feature] to struct {
 	count: int @ 1..,
 	discard_chance_on_air_exposure: float @ 0..1,
 	replace_rules: [struct {
-		places_block: BlockRef,
-		may_replace: [BlockRef]
+		places_block: BlockState,
+		may_replace: [BlockState]
 	}]
 }
 
 dispatch bedrock:feature[minecraft:partially_exposed_blob_feature] to struct {
 	placement_radius_around_floor: int @ 1..8,
 	placement_probability_per_valid_position: float @ 0..1,
-	exposed_face: string, // TODO: Implement
-	places_block: BlockRef,
+	exposed_face: VerticalDirection,
+	places_block: BlockState,
 }
 
-dispatch bedrock:feature[minecraft:_feature] to struct {
-
+dispatch bedrock:feature[minecraft:scatter_feature] to struct {
+	places_feature: FeatureRef,
+	/// Defaults to false.
+	project_input_to_floor?: boolean,
+	distribution: ScatterParams
 }
 
-dispatch bedrock:feature[minecraft:_feature] to struct {
-
+dispatch bedrock:feature[minecraft:search_feature] to struct {
+	places_feature: FeatureRef,
+	search_volume: struct {
+		min: [float] @ 3,
+		max: [float] @ 3,
+	},
+	search_axis: enum(string) {
+		Up = "+y",
+		Down = "-y",
+		North = "-z",
+		South = "+z",
+		East = "+x",
+		West = "-x"
+	},
+	required_successes: int @ 1..,
 }
 
-dispatch bedrock:feature[minecraft:_feature] to struct {
-
+dispatch bedrock:feature[minecraft:sequence_feature] to struct {
+	/// Features are placed in order, with placement position moving with the output position of the previous feature in the sequence. If a feature fails to place, subsequence features aren't placed.
+	features: [FeatureRef]
 }
 
-dispatch bedrock:feature[minecraft:_feature] to struct {
-
+dispatch bedrock:feature[minecraft:single_block_feature] to struct {
+	places_block: (BlockState | [struct {
+		block: BlockState,
+		weight: int @ 1..
+	}]),
+	enforce_placement_rules: boolean,
+	enforce_survivabililty_rules: boolean,
+	randomize_rotation?: boolean,
+	may_attach_to?: struct {
+		min_sides_must_attach?: int @ 1..4,
+		auto_rotate?: boolean,
+		top?: [BlockState],
+		bottom?: [BlockState],
+		north?: [BlockState],
+		south?: [BlockState],
+		east?: [BlockState],
+		west?: [BlockState],
+		all?: [BlockState],
+		sides?: [BlockState],
+		diagonal?: [BlockState],
+	},
+	may_not_attach_to?: struct {
+		top?: [BlockState],
+		bottom?: [BlockState],
+		north?: [BlockState],
+		south?: [BlockState],
+		east?: [BlockState],
+		west?: [BlockState],
+		all?: [BlockState],
+		sides?: [BlockState],
+		diagonal?: [BlockState],
+	},
+	may_replace: [BlockState]
 }
 
-dispatch bedrock:feature[minecraft:_feature] to struct {
-
+dispatch bedrock:feature[minecraft:snap_to_surface_feature] to struct {
+	feature_to_snap: FeatureRef,
+	search_range: int @ 1..,
+	surface?: enum(string) {
+		Ceiling = "ceiling",
+		Floor = "floor",
+		Wall = "wall",
+		RandomHorizontal = "random_horizontal"
+	},
+	allow_non_air_placement?: boolean,
+	allow_air_placement?: boolean,
+	allow_underwater_placement?: boolean,
+	allowed_surface_blocks: [BlockState],
 }
 
-dispatch bedrock:feature[minecraft:_feature] to struct {
-
+dispatch bedrock:feature[minecraft:structure_template_feature] to struct {
+	structure_name: #[id] string,
+	adjustment_radius?: int @ 0..16,
+	/// Defaults to false.
+	rotate_around_center?: boolean,
+	facing_direction?: enum(string) {
+		North = "north",
+		South = "south",
+		East = "east",
+		West = "west",
+		Random = "random",
+	},
+	// The y-coord in the template that is considered it's "ground level" for placement offseting and constraint purposes.
+	ground_level?: int @ 0..,
+	constraints: struct {
+		grounded?: struct {},
+		unburied?: struct {},
+		leveled?: struct {
+			/// Defaults to 2.
+			max_steepness: int
+		},
+		block_intersection?: struct {
+			/// Defaults to true.
+			only_check_intersection_for_motion_blocking_blocks?: boolean,
+			block_allowlist?: [BlockState],
+			block_denylist?: [BlockState],
+		},
+	}
 }
 
-dispatch bedrock:feature[minecraft:_feature] to struct {
-
+dispatch bedrock:feature[minecraft:surface_relative_threshold_feature] to struct {
+	feature_to_place: FeatureRef,
+	minimum_distance_below_surface?: int
 }
 
-dispatch bedrock:feature[minecraft:_feature] to struct {
-
+dispatch bedrock:feature[minecraft:underwater_cave_carver_feature] to struct {
+	fill_with: BlockState,
+	width_modifier: Molang,
+	skip_carve_chance: int @ 1..,
+	height_limit: int,
+	y_scale: FloatRange,
+	horizontal_radius_multiplier: FloatRange,
+	vertical_radius_multiplier: FloatRange,
+	floor_level: FloatRange,
+	replace_air_with?: BlockState
 }
 
-dispatch bedrock:feature[minecraft:_feature] to struct {
-
+dispatch bedrock:feature[minecraft:vegetation_patch_feature] to struct {
+	replaceable_blocks: [BlockId],
+	ground_block: BlockState,
+	vegetation_feature: FeatureRef,
+	surface?: enum(string) {
+		Ceiling = "ceiling",
+		Floor = "floor"
+	},
+	depth: int,
+	extra_deep_block_chance?: float,
+	vertical_range: int,
+	vegetation_chance: float @ 0..1,
+	horizontal_radius: int,
+	extra_edge_column_chance: float @ 0..1,
+	waterlogged: boolean
 }
 
-dispatch bedrock:feature[minecraft:_feature] to struct {
-
+dispatch bedrock:feature[minecraft:weighted_random_feature] to struct {
+	features: [[FeatureRef, int]]
 }
 
-dispatch bedrock:feature[minecraft:_feature] to struct {
-
+dispatch bedrock:feature[minecraft:multi_block_feature] to struct {
+	places_block: BlockState,
+	enforce_placement_rules: boolean,
+	randomize_rotation?: boolean,
+	may_replace: [BlockState]
 }

@@ -97,7 +97,7 @@ export function ProjectProvider({ children }: { children: ComponentChildren }) {
 							?	`${projectRoot}data/pack.mcmeta`
 							: type === 'sounds'
 								? `${projectRoot}assets/${namespace}/sounds.json`
-								: `${projectRoot}data/${namespace}/${type}/${path}${gen.ext ?? '.json'}`
+								: `${projectRoot}${type}/${path}${gen.ext ?? '.json'}`
 						return SpyglassClient.FS.writeFile(uri, JSON.stringify(file.data, null, 2))
 					}))
 				}

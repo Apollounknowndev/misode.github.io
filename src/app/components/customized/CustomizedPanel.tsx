@@ -42,7 +42,7 @@ export function CustomizedPanel({ tab }: Props) {
 		try {
 			const pack = await generateCustomized(model, version)
 			const entries = Object.entries(pack).flatMap(([type, files]) => {
-				const prefix = `data/minecraft/${type}/`
+				const prefix = `${type}/`
 				return [...files.entries()].map(([name, data]) => {
 					const text = stringifySource(JSON.stringify(data, null, 2), 'json')
 					return [prefix + name + '.json', new TextEncoder().encode(text)] as [string, Uint8Array]

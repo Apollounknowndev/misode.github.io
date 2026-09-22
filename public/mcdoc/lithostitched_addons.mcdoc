@@ -239,7 +239,10 @@ dispatch minecraft:density_function["lithostitched:cellular"] to struct {
 		range: InclusiveRange<double>,
 		fallback_value: double
 	},
-	grid_size: int @ 1..,
+	grid_dimensions: (int @ 1.. | struct {
+		horizontal: int @ 1..,
+		vertical?: int @ 1..
+	}),
 	jitter: float @ 0..1,
 	return_type: enum(string) ReturnType {
 		CellValue = "cell_value",

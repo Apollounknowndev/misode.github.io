@@ -14,7 +14,6 @@ use ::java::data::worldgen::processor_list::Processor
 use ::java::data::worldgen::processor_list::ProcessorList
 use ::java::data::worldgen::structure::PoolAlias
 use ::java::data::worldgen::structure_set::StructureSetElement
-use ::java::data::worldgen::surface_rule::SurfaceRule
 use ::java::data::worldgen::template_pool::WeightedElement
 use ::java::util::block_state::BlockState
 use ::java::util::particle::Particle

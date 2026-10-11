@@ -7,11 +7,11 @@ use ::java::data::worldgen::attribute::GlobalEnvironmentAttributeMap
 use ::java::data::worldgen::attribute::PositionalEnvironmentAttributeMap
 use ::java::data::worldgen::biome::BiomeMusic
 use ::java::data::worldgen::biome::GrassColorModifier
-use ::java::data::worldgen::biome::SpawnerData
 use ::java::data::worldgen::biome::TemperatureModifier
 use ::java::data::worldgen::density_function::DensityFunction
 use ::java::data::worldgen::density_function::DensityFunctionRef
 use ::java::data::worldgen::feature::placement::PlacedFeatureRef
+use ::java::data::worldgen::feature::tree::TreeDecorator
 use ::java::data::worldgen::processor_list::Processor
 use ::java::data::worldgen::processor_list::ProcessorList
 use ::java::data::worldgen::structure::PoolAlias
@@ -21,35 +21,9 @@ use ::java::data::worldgen::template_pool::WeightedElement
 use ::java::util::block_state::BlockState
 use ::java::util::particle::Particle
 use super::InclusiveRange
+use super::AquiferTarget
+use super::NoiseRouterTarget
 use super::PlacementCondition
-
-
-
-
-
-// UTILS
-
-
-
-
-
-enum(string) NoiseRouterTarget {
-	FinalDensity = "final_density",
-	InitialDensityWithoutJaggedness = "initial_density_without_jaggedness",
-	Temperature = "temperature",
-	Vegetation = "vegetation",
-	Continents = "continents",
-	Erosion = "erosion",
-	Depth = "depth",
-	Ridges = "ridges",
-	Barrier = "barrier",
-	FluidLevelFloodedness = "fluid_level_floodedness",
-	FluidLevelSpread = "fluid_level_spread",
-	Lava = "lava",
-	VeinToggle = "vein_toggle",
-	VeinRidged = "vein_ridged",
-	VeinGap = "vein_gap",
-}
 
 
 
@@ -73,55 +47,93 @@ enum(string) WorldgenModifierType {
 	AddBiomeSpawns = "lithostitched:add_biome_spawns",
 	AddFeatures = "lithostitched:add_features",
 	AddProcessorListProcessors = "lithostitched:add_processor_list_processors",
+	AddSpawnCosts = "lithostitched:add_spawn_costs",
 	AddStructureSetEntries = "lithostitched:add_structure_set_entries",
 	#[since="1.21"]
 	AddStructureTemplates = "lithostitched:add_structure_templates",
+	#[until="26.3"]
 	AddSurfaceRule = "lithostitched:add_surface_rule",
 	AddTemplatePoolElements = "lithostitched:add_template_pool_elements",
 	Nothing = "lithostitched:no_op",
 	RemoveBiomeSpawns = "lithostitched:remove_biome_spawns",
 	RemoveFeatures = "lithostitched:remove_features",
 	RemoveStructureSetEntries = "lithostitched:remove_structure_set_entries",
+	#[until="26.3"]
 	ReplaceClimate = "lithostitched:replace_climate",
+	#[until="26.3"]
 	ReplaceEffects = "lithostitched:replace_effects",
 	#[since="1.21.11"]
 	SetBiomeAttributes = "lithostitched:set_biome_attributes",
+	#[since="26.3"]
+	SetBiomeClimate = "lithostitched:set_biome_climate",
+	#[since="26.3"]
+	SetBiomeEffects = "lithostitched:set_biome_effects",
+	#[since="26.1"]
+	SetBiomeTimeline = "lithostitched:set_biome_timeline",
 	#[since="1.21.11"]
 	SetDimensionAttributes = "lithostitched:set_dimension_attributes",
+	#[since="26.3"]
+	SetMaterialRule = "lithostitched:set_material_rule",
 	#[since="1.21"]
 	SetPoolAliases = "lithostitched:set_pool_aliases",
 	SetPoolElementProcessors = "lithostitched:set_pool_element_processors",
+	#[since="26.1"]
+	SetStructureAttributes = "lithostitched:set_structure_attributes",
 	SetStructureSpawnCondition = "lithostitched:set_structure_spawn_condition",
 	#[since="1.21.11"]
 	SetTimelineTracks = "lithostitched:set_timeline_tracks",
+	SetTreeDecorators = "lithostitched:set_tree_decorators",
 	StackFeature = "lithostitched:stack_feature",
+	#[since="26.3"]
+	WrapAquifers = "lithostitched:wrap_aquifers",
 	WrapDensityFunction = "lithostitched:wrap_density_function",
 	WrapNoiseRouter = "lithostitched:wrap_noise_router",
 }
 
+struct WeightedSpawnerData {
+	type: #[id="entity_type"] string,
+	weight: int,
+	#[until="26.3"]
+	minCount: int,
+	#[until="26.3"]
+	maxCount: int,
+	#[since="26.3"]
+	count: IntProvider<int>,
+}
+
 dispatch lithostitched:worldgen_modifier[lithostitched:add_biome_spawns] to struct {
-	biomes: (#[id(registry="worldgen/biome",tags="allowed")] string | [#[id="worldgen/biome"] string]),
-	spawners: (SpawnerData | [SpawnerData])
+	biomes: (#[id(registry="worldgen/biome",tags="allowed")] string | [#[id="worldgen/biome"] string] | HolderTarget),
+	spawners: (WeightedSpawnerData | [WeightedSpawnerData])
 }
 
 dispatch lithostitched:worldgen_modifier[lithostitched:add_features] to struct {
-	biomes: (#[id(registry="worldgen/biome",tags="allowed")] string | [#[id="worldgen/biome"] string]),
+	biomes: (#[id(registry="worldgen/biome",tags="allowed")] string | [#[id="worldgen/biome"] string] | HolderTarget),
 	features: (#[id(registry="worldgen/placed_feature",tags="allowed")] string | [#[id="worldgen/placed_feature"] string]),
 	step: DecorationStep
 }
 
 dispatch lithostitched:worldgen_modifier[lithostitched:add_processor_list_processors] to struct {
-	processor_lists: (#[id(registry="worldgen/processor_list",tags="allowed")] string | [#[id="worldgen/processor_list"] string]),
+	processor_lists: (#[id(registry="worldgen/processor_list",tags="allowed")] string | [#[id="worldgen/processor_list"] string] | HolderTarget),
 	processors: [Processor]
 }
 
+dispatch lithostitched:worldgen_modifier[lithostitched:add_spawn_costs] to struct {
+	biomes: (#[id(registry="worldgen/biome",tags="allowed")] string | [#[id="worldgen/biome"] string] | HolderTarget),
+	spawn_costs: struct {
+		[#[id="entity_type"] string]: struct {
+			energy_budget: double,
+			charge: double
+		}
+	}
+}
+
 dispatch lithostitched:worldgen_modifier[lithostitched:add_structure_set_entries] to struct {
-	structure_sets: (#[id(registry="worldgen/structure_set",tags="allowed")] string | [#[id="worldgen/structure_set"] string]),
+	structure_sets: (#[id(registry="worldgen/structure_set",tags="allowed")] string | [#[id="worldgen/structure_set"] string] | HolderTarget),
 	entries: [StructureSetElement]
 }
 
 dispatch lithostitched:worldgen_modifier[lithostitched:add_structure_templates] to struct {
-	targets: (TemplateList | [TemplateList]),
+	targets: (TemplateList | [TemplateList] | HolderTarget),
 	templates: (#[id="structure"] string | [#[id="structure"] string])
 }
 
@@ -169,28 +181,28 @@ enum(string) InjectionType {
 }
 
 dispatch lithostitched:worldgen_modifier[lithostitched:add_template_pool_elements] to struct {
-	template_pools: (#[id(registry="worldgen/template_pool",tags="allowed")] string | [#[id="worldgen/template_pool"] string]),
+	template_pools: (#[id(registry="worldgen/template_pool",tags="allowed")] string | [#[id="worldgen/template_pool"] string] | HolderTarget),
 	elements: [WeightedElement]
 }
 
 dispatch lithostitched:worldgen_modifier[lithostitched:remove_biome_spawns] to struct {
-	biomes: (#[id(registry="worldgen/biome",tags="allowed")] string | [#[id="worldgen/biome"] string]),
+	biomes: (#[id(registry="worldgen/biome",tags="allowed")] string | [#[id="worldgen/biome"] string] | HolderTarget),
 	mobs: (#[id(registry="entity_type",tags="allowed")] string | [#[id="entity_type"] string])
 }
 
 dispatch lithostitched:worldgen_modifier[lithostitched:remove_features] to struct {
-	biomes: (#[id(registry="worldgen/biome",tags="allowed")] string | [#[id="worldgen/biome"] string]),
+	biomes: (#[id(registry="worldgen/biome",tags="allowed")] string | [#[id="worldgen/biome"] string] | HolderTarget),
 	features: (#[id(registry="worldgen/placed_feature",tags="allowed")] string | [#[id="worldgen/placed_feature"] string]),
 	step: DecorationStep
 }
 
 dispatch lithostitched:worldgen_modifier[lithostitched:remove_structure_set_entries] to struct {
-	structure_sets: (#[id(registry="worldgen/structure_set",tags="allowed")] string | [#[id="worldgen/structure_set"] string]),
+	structure_sets: (#[id(registry="worldgen/structure_set",tags="allowed")] string | [#[id="worldgen/structure_set"] string] | HolderTarget),
 	structures: [#[id="worldgen/structure"] string]
 }
 
-dispatch lithostitched:worldgen_modifier[lithostitched:replace_climate] to struct {
-	biomes: (#[id(registry="worldgen/biome",tags="allowed")] string | [#[id="worldgen/biome"] string]),
+dispatch lithostitched:worldgen_modifier[lithostitched:replace_climate,lithostitched:set_biome_climate] to struct {
+	biomes: (#[id(registry="worldgen/biome",tags="allowed")] string | [#[id="worldgen/biome"] string] | HolderTarget),
 	climate: struct Climate {
 		temperature?: float,
 		downfall?: float,
@@ -200,7 +212,7 @@ dispatch lithostitched:worldgen_modifier[lithostitched:replace_climate] to struc
 }
 
 dispatch lithostitched:worldgen_modifier[lithostitched:replace_effects] to struct {
-	biomes: (#[id(registry="worldgen/biome",tags="allowed")] string | [#[id="worldgen/biome"] string]),
+	biomes: (#[id(registry="worldgen/biome",tags="allowed")] string | [#[id="worldgen/biome"] string] | HolderTarget),
 	effects: struct Effects {
 		sky_color?: #[color="composite_rgb"] int,
 		fog_color?: #[color="composite_rgb"] int,
@@ -235,44 +247,89 @@ dispatch lithostitched:worldgen_modifier[lithostitched:replace_effects] to struc
 }
 
 dispatch lithostitched:worldgen_modifier[lithostitched:set_biome_attributes] to struct {
-	biomes: (#[id(registry="worldgen/biome",tags="allowed")] string | [#[id="worldgen/biome"] string]),
+	biomes: (#[id(registry="worldgen/biome",tags="allowed")] string | [#[id="worldgen/biome"] string] | HolderTarget),
 	attributes: PositionalEnvironmentAttributeMap,
 	append?: boolean
 }
 
+dispatch lithostitched:worldgen_modifier[lithostitched:set_biome_effects] to struct {
+	biomes: (#[id(registry="worldgen/biome",tags="allowed")] string | [#[id="worldgen/biome"] string] | HolderTarget),
+	effects: struct {
+		water_color?: #[color="composite_rgb"] int,
+		grass_color?: #[color="composite_rgb"] int,
+		foliage_color?: #[color="composite_rgb"] int,
+		dry_foliage_color?: #[color="composite_rgb"] int,
+		grass_color_modifier?: GrassColorModifier,
+	}
+}
+
+dispatch lithostitched:worldgen_modifier[lithostitched:set_biome_timeline] to struct {
+	biomes: (#[id(registry="worldgen/biome",tags="allowed")] string | [#[id="worldgen/biome"] string] | HolderTarget),
+	timeline: #[id="timeline"] string,
+	append?: boolean
+}
+
 dispatch lithostitched:worldgen_modifier[lithostitched:set_dimension_attributes] to struct {
-	dimension_types: (#[id(registry="dimension_type",tags="allowed")] string | [#[id="dimension_type"] string]),
+	dimension_types: (#[id(registry="dimension_type",tags="allowed")] string | [#[id="dimension_type"] string] | HolderTarget),
 	attributes: GlobalEnvironmentAttributeMap,
 	append?: boolean
 }
 
+dispatch lithostitched:worldgen_modifier[lithostitched:set_material_rule] to struct {
+	target_rules: (#[id(registry="worldgen/material_rule",tags="allowed")] string | [#[id="worldgen/material_rule"] string] | HolderTarget),
+	material_rule: MaterialRuleRef,
+	injection_type?: enum(string) {
+		Prepend = "prepend",
+		Append = "append",
+		Replace = "replace"
+	}
+}
+
 dispatch lithostitched:worldgen_modifier[lithostitched:set_pool_aliases] to struct {
-	structures: (#[id(registry="worldgen/structure",tags="allowed")] string | [#[id="worldgen/structure"] string]),
+	structures: (#[id(registry="worldgen/structure",tags="allowed")] string | [#[id="worldgen/structure"] string] | HolderTarget),
 	pool_aliases: [PoolAlias],
 	append?: boolean
 }
 
 dispatch lithostitched:worldgen_modifier[lithostitched:set_pool_element_processors] to struct {
-	template_pools: (#[id(registry="worldgen/template_pool",tags="allowed")] string | [#[id="worldgen/template_pool"] string]),
+	template_pools: (#[id(registry="worldgen/template_pool",tags="allowed")] string | [#[id="worldgen/template_pool"] string] | HolderTarget),
 	locations?: (#[id="structure"] string | [#[id="structure"] string]),
 	processor_list: (#[id="worldgen/processor_list"] string | ProcessorList),
 	append?: boolean
 }
 
+dispatch lithostitched:worldgen_modifier[lithostitched:set_structure_attributes] to struct {
+	structures: (#[id(registry="worldgen/structure",tags="allowed")] string | [#[id="worldgen/structure"] string] | HolderTarget),
+	attributes: GlobalEnvironmentAttributeMap,
+	append?: boolean
+}
+
 dispatch lithostitched:worldgen_modifier[lithostitched:set_structure_spawn_condition] to struct {
-	structures: (#[id(registry="worldgen/structure",tags="allowed")] string | [#[id="worldgen/structure"] string]),
+	structures: (#[id(registry="worldgen/structure",tags="allowed")] string | [#[id="worldgen/structure"] string] | HolderTarget),
 	spawn_condition: PlacementCondition,
 	append?: boolean
 }
 
 dispatch lithostitched:worldgen_modifier[lithostitched:set_timeline_tracks] to struct {
-	timelines: (#[id(registry="timeline",tags="allowed")] string | [#[id="timeline"] string]),
+	timelines: (#[id(registry="timeline",tags="allowed")] string | [#[id="timeline"] string] | HolderTarget),
 	tracks: EnvironmentAttributeTrackMap,
 	append?: boolean
 }
 
+dispatch lithostitched:worldgen_modifier[lithostitched:set_tree_decorators] to struct {
+	#[until="26.3"]
+	features: (#[id(registry="worldgen/configured_feature",tags="allowed")] string | [#[id="worldgen/configured_feature"] string] | HolderTarget),
+	#[since="26.3"]
+	features: (#[id(registry="worldgen/feature",tags="allowed")] string | [#[id="worldgen/feature"] string] | HolderTarget),
+	decorators: [TreeDecorator],
+	append?: boolean
+}
+
 dispatch lithostitched:worldgen_modifier[lithostitched:stack_feature] to struct {
-	base_features: (#[id(registry="worldgen/configured_feature",tags="allowed")] string | [#[id="worldgen/configured_feature"] string]),
+	#[until="26.3"]
+	base_features: (#[id(registry="worldgen/configured_feature",tags="allowed")] string | [#[id="worldgen/configured_feature"] string] | HolderTarget),
+	#[since="26.3"]
+	base_features: (#[id(registry="worldgen/feature",tags="allowed")] string | [#[id="worldgen/feature"] string] | HolderTarget),
 	stacked_feature: PlacedFeatureRef,
 	#[since="1.21"]
 	placement_type?: PlacementType
@@ -282,6 +339,12 @@ enum(string) PlacementType {
 	NeverCancel = "never_cancel",
 	CancelOnFailure = "cancel_on_failure",
 	CancelOnSuccess = "cancel_on_success",
+}
+
+dispatch lithostitched:worldgen_modifier[lithostitched:wrap_aquifers] to struct {
+	dimension: #[id="dimension"] string,
+	target: AquiferTarget,
+	wrapper_function: DensityFunction
 }
 
 dispatch lithostitched:worldgen_modifier[lithostitched:wrap_density_function] to struct {
@@ -550,4 +613,41 @@ dispatch lithostitched:load_predicate[lithostitched:not] to struct {
 
 dispatch lithostitched:load_predicate[lithostitched:pack_format] to struct {
 	supported_formats: InclusiveRange<int>
+}
+
+
+
+
+
+// HOLDER TARGETS
+
+
+
+
+
+struct HolderTarget {
+	type: HolderTargetType,
+	...lithostitched:holder_target[[type]]
+}
+
+enum(string) HolderTargetType {
+	Any = "lithostitched:any",
+	Regex = "lithostitched:regex",
+	BiomeClimate = "lithostitched:biome/climate",
+	BiomeHasFeature = "lithostitched:biome/has_feature"
+}
+
+dispatch lithostitched:holder_target[lithostitched:regex] to struct {
+	pattern: #[regex_pattern] string
+}
+
+dispatch lithostitched:holder_target[lithostitched:biome/climate] to struct {
+	temperature?: InclusiveRange<float>,
+	downfall?: InclusiveRange<float>,
+	has_precipitation?: boolean,
+	temperature_modifier?: TemperatureModifier,
+}
+
+dispatch lithostitched:holder_target[lithostitched:biome/has_feature] to struct {
+	feature: #[id="worldgen/placed_feature"] string
 }

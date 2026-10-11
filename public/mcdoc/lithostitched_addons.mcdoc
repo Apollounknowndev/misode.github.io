@@ -1,4 +1,4 @@
-use ::java::data::gametest::Rotation
+use ::java::util::Rotation
 use ::java::data::worldgen::attribute::PositionalEnvironmentAttributeMap
 use ::java::data::worldgen::density_function::DensityFunctionRef
 use ::java::data::worldgen::feature::placement::PlacedFeatureRef

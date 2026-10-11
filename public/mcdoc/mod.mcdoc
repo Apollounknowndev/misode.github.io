@@ -10,15 +10,8 @@ type InclusiveRange<T> = (
 	T |
 	[T] @ 2 |
 	struct ExplicitInclusiveRange {
-		#[until="1.21"]
 		min_inclusive?: T,
-		#[until="1.21"]
-		max_inclusive?: T,
-
-		#[since="1.21"]
-		min_inclusive?: T,
-		#[since="1.21"]
-		max_inclusive?: T,
+		max_inclusive?: T
 	}
 )
 
@@ -32,20 +25,41 @@ type SquareBaseBox<T> = (
 
 enum(string) NoiseRouterTarget {
 	FinalDensity = "final_density",
+	#[until="26.1"]
 	InitialDensityWithoutJaggedness = "initial_density_without_jaggedness",
+	#[since="26.1"] #[until="26.3"]
+	PreliminarySurfaceLevel = "preliminary_surface_level",
+	#[since="26.3"]
+	ChunkSurfaceLevel = "chunk_surface_level",
 	Temperature = "temperature",
 	Vegetation = "vegetation",
 	Continents = "continents",
 	Erosion = "erosion",
 	Depth = "depth",
 	Ridges = "ridges",
+	#[until="26.3"]
+	Barrier = "barrier",
+	#[until="26.3"]
+	FluidLevelFloodedness = "fluid_level_floodedness",
+	#[until="26.3"]
+	FluidLevelSpread = "fluid_level_spread",
+	#[until="26.3"]
+	Lava = "lava",
+	#[until="26.3"]
+	VeinToggle = "vein_toggle",
+	#[until="26.3"]
+	VeinRidged = "vein_ridged",
+	#[until="26.3"]
+	VeinGap = "vein_gap",
+}
+
+enum(string) AquiferTarget {
 	Barrier = "barrier",
 	FluidLevelFloodedness = "fluid_level_floodedness",
 	FluidLevelSpread = "fluid_level_spread",
 	Lava = "lava",
-	VeinToggle = "vein_toggle",
-	VeinRidged = "vein_ridged",
-	VeinGap = "vein_gap",
+	Exclusion = "exclusion",
+	PreliminarySurfaceLevel = "preliminary_surface_level",
 }
 
 dispatch minecraft:resource[lithostitched:placement_condition] to struct PlacementCondition {

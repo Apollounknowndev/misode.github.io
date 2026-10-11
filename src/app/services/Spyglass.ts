@@ -397,7 +397,7 @@ async function decompressBall(buffer: Uint8Array, options?: { stripLevel?: numbe
 	const reader = new zip.ZipReader(new zip.BlobReader(new Blob([buffer])))
 	const entries = await reader.getEntries()
 	return await Promise.all(entries.map(async e => {
-		const data = await e.getData?.(new zip.Uint8ArrayWriter())
+		const data = !e.directory? await e.getData(new zip.Uint8ArrayWriter()): undefined;
 		const path = options?.stripLevel === 1 ? e.filename.substring(e.filename.indexOf('/') + 1) : e.filename
 		const type = e.directory ? 'dir' : 'file'
 		return { data, path, mtime: '', type, mode: 0 }

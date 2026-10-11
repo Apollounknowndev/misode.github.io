@@ -187,6 +187,12 @@ export const REGISTRY_ADDONS = new Map([
 		]
 	],
 	[
+		"tag/block", [
+			"lithostitched:supports_mineshaft_extension",
+			"lithostitched:supports_ruined_portal_leaves",
+		]
+	],
+	[
 		"tag/worldgen/processor_list", [
 			"lithostitched:shipwreck_palettes",
 		]
@@ -205,9 +211,17 @@ export const REGISTRY_ADDONS = new Map([
 	],
 	[
 		"worldgen/processor_list", [
+			"lithostitched:buried_treasure",
+			"lithostitched:desert_temple",
 			"lithostitched:end_city",
 			"lithostitched:igloo",
+			"lithostitched:jungle_temple",
+			"lithostitched:mineshaft",
+			"lithostitched:nether_fortress",
 			"lithostitched:nether_fossil",
+			"lithostitched:ocean_monument",
+			"lithostitched:ocean_ruin_cold",
+			"lithostitched:ocean_ruin_warm",
 			"lithostitched:ruined_portal",
 			"lithostitched:shipwreck",
 			"lithostitched:shipwreck_palette/dark_oak_and_jungle",
@@ -218,6 +232,8 @@ export const REGISTRY_ADDONS = new Map([
 			"lithostitched:shipwreck_palette/spruce_and_dark_oak",
 			"lithostitched:shipwreck_palette/spruce_and_jungle",
 			"lithostitched:shipwreck_palette/spruce_and_oak",
+			"lithostitched:stronghold",
+			"lithostitched:swamp_hut",
 			"lithostitched:woodland_mansion",
 		]
 	],
